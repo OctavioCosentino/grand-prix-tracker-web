@@ -15,6 +15,7 @@ export interface NavbarProps {
 };
 
 import { isLogged } from "@/utils/mockData/isLogged";
+import { NotificationBell } from "./NotificationBell";
 
 export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
     const router = useRouter();
@@ -44,7 +45,8 @@ export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
                 ))}
             </nav>
 
-            <div className="hidden md:block">
+            <div className="hidden md:flex items-center gap-4">
+                {isLogged && <NotificationBell />}
                 <ProfileCircle 
                     isLoggedIn={isLogged} 
                     name="Octavio Cosentino" 
@@ -53,17 +55,20 @@ export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
                 />
             </div>
 
-            <button
-                aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-                onClick={() => setMenuOpen((v) => !v)}
-                className="text-[#F3F1EA] md:hidden"
-            >
-                {menuOpen ? (
-                    <IconClose className="h-6 w-6" />
-                    ) : (
-                    <IconMenu className="h-6 w-6" />
-                )}
-            </button>
+            <div className="flex items-center gap-3 md:hidden">
+                {isLogged && <NotificationBell />}
+                <button
+                    aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+                    onClick={() => setMenuOpen((v) => !v)}
+                    className="text-[#F3F1EA]"
+                >
+                    {menuOpen ? (
+                        <IconClose className="h-6 w-6" />
+                        ) : (
+                        <IconMenu className="h-6 w-6" />
+                    )}
+                </button>
+            </div>
             </div>
 
             {/* Menu */}
