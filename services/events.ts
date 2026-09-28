@@ -70,26 +70,23 @@ export async function getEvents(): Promise<BackendEvent[]> {
 
 /**
  * Obtiene un evento específico por su ID directamente desde la API en Render.
+ * Devuelve null si el evento no existe (404) o el id no es un UUID (400).
+ * Ante otros errores lanza, para que TanStack Query reintente (cold-start de Render).
  */
 export async function getEventById(id: string): Promise<BackendEvent | null> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/events/${encodeURIComponent(id)}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    });
+  const res = await fetch(`${API_BASE_URL}/events/${encodeURIComponent(id)}`, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
-    if (!res.ok) {
-      if (res.status === 404) return null;
-      throw new Error(`Error ${res.status}: ${res.statusText}`);
-    }
-
-    const json: ApiResponse<BackendEvent> = await res.json();
-    if (!json.success || !json.data) return null;
-
-    return json.data;
-  } catch (error) {
-    console.error("Error al obtener evento por ID:", error);
-    return null;
+  if (res.status === 404 || res.status === 400) return null;
+  if (!res.ok) {
+    throw new Error(`Error ${res.status}: ${res.statusText}`);
   }
+
+  const json: ApiResponse<BackendEvent> = await res.json();
+  if (!json.success || !json.data) return null;
+
+  return json.data;
 }

@@ -277,6 +277,23 @@ function formatBadgeDate(dateString: string): string {
   return dateString;
 }
 
+/** Nombre del Gran Premio para mostrar, igual en el calendario y en las reservas. */
+export function getRaceName(
+  circuitName: string,
+  cityName: string,
+  countryName: string,
+): string {
+  const meta = findCircuitMeta(circuitName, cityName, countryName);
+  return (
+    meta?.name ||
+    (countryName
+      ? `${countryName} GP`
+      : cityName
+        ? `${cityName} GP`
+        : circuitName)
+  );
+}
+
 export function mapBackendEventToRace(event: BackendEvent): Race {
   const circuit = event.circuito;
   const city = circuit?.ciudad;
@@ -305,13 +322,7 @@ export function mapBackendEventToRace(event: BackendEvent): Race {
     "Internacional";
 
   // Nombre de la carrera
-  const name =
-    meta?.name ||
-    (countryName
-      ? `${countryName} GP`
-      : cityName
-        ? `${cityName} GP`
-        : circuitName);
+  const name = getRaceName(circuitName, cityName, countryName);
 
   // Imagen
   const img = meta?.img || "/races/madrid.png";

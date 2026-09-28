@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useRouter } from "next/dist/client/components/navigation";
 import WarningModal from "@/components/WarningModal";
 import DatosView from "./DatosView";
@@ -11,8 +11,17 @@ import TabButton from "@/components/TabButton";
 
 type TabType = "datos" | "reservas" | "pagos";
 
-export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState<TabType>("datos");
+const TABS: TabType[] = ["datos", "reservas", "pagos"];
+
+export default function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  // Permite abrir una pestaña desde un link, ej. /profile?tab=reservas después de comprar
+  const { tab } = use(searchParams);
+  const initialTab = TABS.find((t) => t === tab) ?? "datos";
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [isWarningOpen, setIsWarningOpen] = useState(false);
   const router = useRouter();
 

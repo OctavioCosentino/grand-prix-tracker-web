@@ -18,7 +18,7 @@ export default function RaceBookingSidebar({ id, name, hasPassed }: RaceBookingS
     if (!isLogged) {
       router.push("/login");
     } else {
-      router.push(`/booking/${id}/hotels`);
+      router.push(`/booking/${id}`);
     }
   };
 

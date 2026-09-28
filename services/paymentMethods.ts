@@ -1,0 +1,18 @@
+import { apiFetch, getClientAuthHeaders } from "@/services/http";
+
+export type TipoTarjeta = "Credito" | "Debito";
+
+export interface MetodoPago {
+  idMetodoPago: string;
+  tipo: TipoTarjeta;
+  ultimos4Digitos: string;
+  fechaExpiracion: string; // "MM/AA"
+  vencida: boolean; // el checkout rechaza las vencidas
+}
+
+/** Tarjetas guardadas del cliente, de la más nueva a la más vieja. */
+export function getPaymentMethods(): Promise<MetodoPago[]> {
+  return apiFetch<MetodoPago[]>("/payment-methods", {
+    headers: getClientAuthHeaders(),
+  });
+}

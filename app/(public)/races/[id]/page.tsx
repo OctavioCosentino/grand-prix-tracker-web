@@ -1,9 +1,9 @@
 "use client";
 
 import { notFound, useRouter } from "next/navigation";
-import React, { use, useState, useEffect } from "react";
-import { F1_CALENDAR_2026, Race } from "@/utils/races";
-import { fetchEventByIdFromBackend } from "@/utils/events";
+import React, { use, useState } from "react";
+import { useEvent } from "@/hooks/useEvents";
+import { hasEventEnded } from "@/utils/booking";
 import WarningModal from "@/components/WarningModal";
 import RaceHero from "@/components/RaceHero";
 import RaceDetailsPanel from "@/components/RaceDetailsPanel";
@@ -17,31 +17,8 @@ export default function RaceDetailPage({
   const router = useRouter();
   const { id } = use(params);
 
-  const mockRace = F1_CALENDAR_2026.find((r) => r.id === id);
-  const [race, setRace] = useState<Race | null>(mockRace || null);
-  const [isLoading, setIsLoading] = useState(!mockRace);
+  const { event, race, isPending: isLoading } = useEvent(id);
   const [isWarningDismissed, setIsWarningDismissed] = useState(false);
-
-  useEffect(() => {
-    if (!mockRace) {
-      let isMounted = true;
-      fetchEventByIdFromBackend(id)
-        .then((data) => {
-          if (isMounted) {
-            setRace(data);
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {
-          if (isMounted) {
-            setIsLoading(false);
-          }
-        });
-      return () => {
-        isMounted = false;
-      };
-    }
-  }, [id, mockRace]);
 
   if (isLoading) {
     return (
@@ -56,12 +33,12 @@ export default function RaceDetailPage({
     );
   }
 
-  if (!race) {
+  if (!event || !race) {
     notFound();
   }
 
-  const raceDate = new Date(race.date);
-  const hasPassed = raceDate < new Date();
+  // Se usa fechaFin y no `estado`, que puede estar desactualizado en la base
+  const hasPassed = hasEventEnded(event.fechaFin);
   const showWarning = hasPassed && !isWarningDismissed;
 
   return (
