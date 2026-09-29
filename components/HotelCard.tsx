@@ -21,22 +21,32 @@ export default function HotelCard({
   onRoomChange,
   conflictIds = [],
 }: HotelCardProps) {
-  const { nombre, estrellas, distanciaCircuitoKm, ofreceTraslado, imagenPrincipalUrl } = hotel;
+  const {
+    nombre,
+    estrellas,
+    distanciaCircuitoKm,
+    ofreceTraslado,
+    imagenPrincipalUrl,
+  } = hotel;
   const stars = estrellas ?? 0;
   const available = hotel.habitaciones.filter((h) => h.stockDisponible > 0);
   const fromPrice = Math.min(
-    ...(available.length ? available : hotel.habitaciones).map((h) => h.precioPorNocheUsd),
+    ...(available.length ? available : hotel.habitaciones).map(
+      (h) => h.precioPorNocheUsd,
+    ),
   );
   const hasSelection = hotel.habitaciones.some((h) => selected[h.idHabitacion]);
 
   return (
     <div
       className={`flex flex-col overflow-hidden rounded-md border bg-[#0E0E13] transition-all hover:shadow-lg md:flex-row ${
-        hasSelection ? "border-[#33343D]" : "border-[#1C1D24] hover:border-[#33343D]"
+        hasSelection
+          ? "border-[#33343D]"
+          : "border-[#1C1D24] hover:border-[#33343D]"
       }`}
     >
       <div className="relative h-48 w-full shrink-0 md:h-auto md:w-56">
-        {imagenPrincipalUrl ? (
+        {imagenPrincipalUrl && imagenPrincipalUrl.trim() !== "" ? (
           <Image
             src={imagenPrincipalUrl}
             alt={nombre}
@@ -139,14 +149,20 @@ export default function HotelCard({
               <li
                 key={room.idHabitacion}
                 className={`flex items-center justify-between gap-4 py-3 ${
-                  hasConflict ? "-mx-2 rounded-sm border border-[#E10600] px-2" : ""
+                  hasConflict
+                    ? "-mx-2 rounded-sm border border-[#E10600] px-2"
+                    : ""
                 } ${soldOut && cantidad === 0 ? "opacity-50" : ""}`}
               >
                 <div>
                   <p className="font-display text-sm font-bold text-[#F3F1EA]">
                     {room.tipo}
                   </p>
-                  <StockLabel stock={room.stockDisponible} unit="disponibles" lowThreshold={2} />
+                  <StockLabel
+                    stock={room.stockDisponible}
+                    unit="disponibles"
+                    lowThreshold={2}
+                  />
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
@@ -154,7 +170,8 @@ export default function HotelCard({
                       {formatUsd(room.precioPorNocheUsd)}
                     </span>
                     <span className="block font-mono text-[10px] text-[#5C5D66]">
-                      {formatUsd(room.precioPorNocheUsd * nights)} por {nights} noches
+                      {formatUsd(room.precioPorNocheUsd * nights)} por {nights}{" "}
+                      noches
                     </span>
                   </div>
                   <QuantityStepper

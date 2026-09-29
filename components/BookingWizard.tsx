@@ -116,11 +116,15 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
     return (
       <div className="mx-auto max-w-2xl px-6 py-24">
         <BookingNotice severity="warning" title="Reservas cerradas">
-          El {race.name} terminó el {formatDateES(event.fechaFin)}. No es posible reservar
-          paquetes para eventos pasados.
+          El {race.name} terminó el {formatDateES(event.fechaFin)}. No es
+          posible reservar paquetes para eventos pasados.
         </BookingNotice>
         <div className="mt-6">
-          <ButtonChecker href="/calendar" className="px-6 py-3 text-xs" showArrow>
+          <ButtonChecker
+            href="/calendar"
+            className="px-6 py-3 text-xs"
+            showArrow
+          >
             Ver próximas carreras
           </ButtonChecker>
         </div>
@@ -172,10 +176,18 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
       );
       setReserva(result);
       // La compra descontó stock y puede haber guardado una tarjeta nueva
-      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.hotels(eventId) });
-      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.tickets(eventId) });
-      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.flights(eventId) });
-      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.paymentMethods });
+      queryClient.invalidateQueries({
+        queryKey: bookingQueryKeys.hotels(eventId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: bookingQueryKeys.tickets(eventId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: bookingQueryKeys.flights(eventId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: bookingQueryKeys.paymentMethods,
+      });
       queryClient.invalidateQueries({ queryKey: bookingQueryKeys.bookings });
       window.scrollTo({ top: 0 });
     } catch (error) {
@@ -207,7 +219,8 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
     }
   };
 
-  const conflictOnThisStep = state.conflict && state.conflict.step === state.step;
+  const conflictOnThisStep =
+    state.conflict && state.conflict.step === state.step;
   const city = event.circuito.ciudad.nombre;
 
   return (
@@ -224,22 +237,18 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
         <p className="mt-4 max-w-2xl text-[#93949F]">
           Paso {stepIndex + 1}: {STEP_INTRO[state.step]}
         </p>
-        <BookingStepper current={state.step} isStepEnabled={isStepEnabled} onStepClick={goTo} />
+        <BookingStepper
+          current={state.step}
+          isStepEnabled={isStepEnabled}
+          onStepClick={goTo}
+        />
       </div>
-
-      {!clientReady && (
-        <div className="mt-6">
-          <BookingNotice severity="danger" title="Compra deshabilitada">
-            No hay un usuario identificado, así que podés armar el paquete pero no confirmarlo.
-          </BookingNotice>
-        </div>
-      )}
 
       {conflictOnThisStep && (
         <div className="mt-6">
           <BookingNotice severity="warning" title="Bandera amarilla">
-            {state.conflict!.message}. Ajustá los ítems marcados en rojo; el resto de tu
-            paquete sigue igual.
+            {state.conflict!.message}. Ajustá los ítems marcados en rojo; el
+            resto de tu paquete sigue igual.
           </BookingNotice>
         </div>
       )}
@@ -271,10 +280,18 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
               />
             )}
             {state.step === "entradas" && (
-              <BookingTicketsStep ticketsQuery={ticketsQuery} state={state} dispatch={dispatch} />
+              <BookingTicketsStep
+                ticketsQuery={ticketsQuery}
+                state={state}
+                dispatch={dispatch}
+              />
             )}
             {state.step === "vuelos" && (
-              <BookingFlightsStep flightsQuery={flightsQuery} state={state} dispatch={dispatch} />
+              <BookingFlightsStep
+                flightsQuery={flightsQuery}
+                state={state}
+                dispatch={dispatch}
+              />
             )}
             {state.step === "pago" && (
               <BookingPaymentStep
