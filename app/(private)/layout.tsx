@@ -1,18 +1,19 @@
 import React from "react";
-import BookingNavbar from "@/components/BookingNavbar";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-export default function BookingLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="relative min-h-screen bg-[#0B0B10] text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
-      {/* Grilla de fondo temática F1 */}
-      <div className="gpt-hud-grid pointer-events-none fixed inset-0 opacity-20" />
-      
-      <BookingNavbar />
-      
-      <main className="relative z-10 pt-24">
-        {children}
-      </main>
-    </div>
-  );
+/**
+ * Todo lo que esté dentro de app/(private) requiere sesión.
+ * getClaims valida el JWT (no confía solo en la cookie). El proxy ya redirige
+ * antes con ?next=; esto cubre cualquier ruta nueva que no esté en su lista.
+ */
+export default async function PrivateLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getClaims();
+
+  if (!data?.claims) {
+    redirect("/login");
+  }
+
+  return <>{children}</>;
 }
-

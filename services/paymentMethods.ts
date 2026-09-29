@@ -1,4 +1,4 @@
-import { apiFetch, getClientAuthHeaders } from "@/services/http";
+import { authFetch } from "@/services/http";
 
 export type TipoTarjeta = "Credito" | "Debito";
 
@@ -12,7 +12,5 @@ export interface MetodoPago {
 
 /** Tarjetas guardadas del cliente, de la más nueva a la más vieja. */
 export function getPaymentMethods(): Promise<MetodoPago[]> {
-  return apiFetch<MetodoPago[]>("/payment-methods", {
-    headers: getClientAuthHeaders(),
-  });
+  return authFetch<MetodoPago[]>("/payment-methods");
 }

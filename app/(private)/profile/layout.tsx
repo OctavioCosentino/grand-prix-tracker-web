@@ -1,7 +1,7 @@
 import React from "react";
 import SiteLayout from "@/components/SiteLayout";
 
-export default function MainLayout({
+export default function ProfileLayout({
   children,
 }: {
   children: React.ReactNode;

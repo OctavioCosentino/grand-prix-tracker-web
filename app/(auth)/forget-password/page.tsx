@@ -1,23 +1,48 @@
 "use client";
 
 import React, { useState } from "react";
-import Home from "@/components/Home"; 
-import PasswordInput from "@/components/PasswordInput"; 
-import ButtonChecker from "@/components/ButtonChecker"; 
+import { useRouter } from "next/navigation";
+import Home from "@/components/Home";
+import PasswordInput from "@/components/PasswordInput";
+import ButtonChecker from "@/components/ButtonChecker";
 import PasswordRequirements from "@/utils/passwordRequirements";
+import { createClient } from "@/lib/supabase/client";
+import { authErrorMessage } from "@/utils/auth";
 
+/**
+ * Se llega desde el link del correo de recuperación: /auth/callback ya abrió
+ * una sesión temporal, así que alcanza con updateUser.
+ */
 export default function RecoverPage() {
+  const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const { requirements, score, getLightColor } = PasswordRequirements({ password });
   const passwordsMatch = password.length > 0 && password === confirmPassword;
-  const canSubmit = score === 4 && passwordsMatch;
+  const canSubmit = score === 4 && passwordsMatch && !isSubmitting;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return; 
-    console.log("Password reset intent successful");
+    if (!canSubmit) return;
+    setIsSubmitting(true);
+    setError(null);
+
+    const { error } = await createClient().auth.updateUser({ password });
+    if (error) {
+      setError(
+        error.name === "AuthSessionMissingError"
+          ? "El enlace venció o ya fue usado. Pedí uno nuevo desde el login."
+          : authErrorMessage(error),
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
+    router.replace("/");
+    router.refresh();
   };
 
   return (
@@ -97,13 +122,19 @@ export default function RecoverPage() {
               </div>
             </div>
 
-            <ButtonChecker 
-              type="submit" 
-              className={`mt-2 w-full py-3.5 ${!canSubmit ? "opacity-50 grayscale" : ""}`} 
-              showArrow={true}
+            {error && (
+              <span role="alert" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]">
+                ✕ {error}
+              </span>
+            )}
+
+            <ButtonChecker
+              type="submit"
+              className={`mt-2 w-full py-3.5 ${!canSubmit ? "opacity-50 grayscale" : ""}`}
+              showArrow={!isSubmitting}
             >
-              Guardar y arrancar
-            </ButtonChecker> 
+              {isSubmitting ? "Guardando..." : "Guardar y arrancar"}
+            </ButtonChecker>
           </form>
 
           <div className="mt-8 border-t border-[#1C1D24] pt-6 text-center text-sm text-[#93949F]">

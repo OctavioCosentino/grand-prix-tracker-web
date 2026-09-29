@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import WarningModal from "./WarningModal";
 import Image from "next/image";
 import Home from "./Home";
+import { clearBookingDraft } from "@/utils/bookingDraft";
 
 export default function BookingNavbar() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export default function BookingNavbar() {
 
   const confirmLeave = () => {
     setShowWarning(false);
+    // El aviso dice que se pierde el progreso: que no reaparezca al volver
+    clearBookingDraft();
     router.back();
   };
 

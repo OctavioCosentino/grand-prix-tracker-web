@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import EmailInput from "@/components/EmailInput";
 import ButtonChecker from "@/components/ButtonChecker";
+import { createClient } from "@/lib/supabase/client";
+import { authErrorMessage } from "@/utils/auth";
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
@@ -10,13 +12,26 @@ interface ForgotPasswordModalProps {
 export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Conectar con Supabase para el reseteo de clave
-    console.log("Send reset link to:", email);
+    setIsSubmitting(true);
+    setError(null);
+
+    // El link del correo pasa por /auth/callback, que abre la sesión y sigue a /forget-password
+    const { error } = await createClient().auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth/callback?next=/forget-password`,
+    });
+
+    setIsSubmitting(false);
+    if (error) {
+      setError(authErrorMessage(error));
+      return;
+    }
     setSubmitted(true);
   };
 
@@ -51,12 +66,18 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
                 setEmail={setEmail}
                 placeholder="piloto@escuderia.com"
               />
-              <ButtonChecker 
-                type="submit" 
-                className="w-full py-3.5" 
-                showArrow={true}
+              {error && (
+                <span role="alert" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]">
+                  ✕ {error}
+                </span>
+              )}
+              <ButtonChecker
+                type="submit"
+                className="w-full py-3.5"
+                showArrow={!isSubmitting}
+                disabled={isSubmitting}
               >
-                Enviar enlace
+                {isSubmitting ? "Enviando..." : "Enviar enlace"}
               </ButtonChecker>
             </form>
           </>

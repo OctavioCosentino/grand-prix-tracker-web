@@ -3,17 +3,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { NotificationItem, NotificationType } from "../app/types/notification";
-import { isLogged as mockIsLogged } from "@/utils/mockData/isLogged";
+import { useAuth } from "./providers/AuthProvider";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
-export interface NotificationBellProps {
-  isLoggedIn?: boolean;
-}
-
-export function NotificationBell({
-  isLoggedIn = mockIsLogged,
-}: NotificationBellProps) {
+export function NotificationBell() {
+  const { user } = useAuth();
+  const userId = user?.id;
+  const isLoggedIn = Boolean(user);
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
@@ -32,7 +29,10 @@ export function NotificationBell({
 
   const fetchNotifications = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/notifications`);
+      // Trae las del usuario más las globales (ofertas)
+      const res = await fetch(
+        `${API_BASE_URL}/notifications?userId=${encodeURIComponent(userId ?? "")}`,
+      );
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
@@ -73,11 +73,11 @@ export function NotificationBell({
   };
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!userId) return;
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 15000);
     return () => clearInterval(interval);
-  }, [isLoggedIn]);
+  }, [userId]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

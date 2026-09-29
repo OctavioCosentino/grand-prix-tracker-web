@@ -14,11 +14,15 @@ export interface NavbarProps {
     setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-import { isLogged } from "@/utils/mockData/isLogged";
 import { NotificationBell } from "./NotificationBell";
+import { useAuth } from "./providers/AuthProvider";
+import { getDisplayName } from "@/utils/auth";
 
 export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
     const router = useRouter();
+    const { user, isLoading } = useAuth();
+    const isLogged = Boolean(user);
+    const name = user ? getDisplayName(user) : undefined;
 
     return (
         <header
@@ -47,12 +51,15 @@ export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
 
             <div className="hidden md:flex items-center gap-4">
                 {isLogged && <NotificationBell />}
-                <ProfileCircle 
-                    isLoggedIn={isLogged} 
-                    name="Octavio Cosentino" 
-                    onLoginClick={() => router.push("/login")}
-                    onProfileClick={() => router.push("/profile")}
-                />
+                {/* Sin esperar la sesión, se vería "Iniciar sesión" un instante aunque estés logueado */}
+                {!isLoading && (
+                    <ProfileCircle 
+                        isLoggedIn={isLogged} 
+                        name={name} 
+                        onLoginClick={() => router.push("/login")}
+                        onProfileClick={() => router.push("/profile")}
+                    />
+                )}
             </div>
 
             <div className="flex items-center gap-3 md:hidden">
@@ -85,12 +92,14 @@ export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
                         {link.label}
                     </a>
                     ))}
-                    <ProfileCircle 
-                        isLoggedIn={isLogged} 
-                        name="Octavio Cosentino" 
-                        onLoginClick={() => router.push("/login")}
-                        onProfileClick={() => router.push("/profile")}
-                    />
+                    {!isLoading && (
+                        <ProfileCircle 
+                            isLoggedIn={isLogged} 
+                            name={name} 
+                            onLoginClick={() => router.push("/login")}
+                            onProfileClick={() => router.push("/profile")}
+                        />
+                    )}
                 </nav>
                 </div>
             )}

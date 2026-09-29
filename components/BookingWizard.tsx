@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { notFound } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEvent } from "@/hooks/useEvents";
@@ -12,7 +12,8 @@ import {
   useEventTickets,
   usePaymentMethods,
 } from "@/hooks/useBooking";
-import { ApiError, hasClientIdentity } from "@/services/http";
+import { ApiError } from "@/services/http";
+import { useAuth } from "@/components/providers/AuthProvider";
 import { Reserva } from "@/services/bookings";
 import {
   BOOKING_STEPS,
@@ -30,6 +31,7 @@ import {
   todayUtcISO,
   validateBooking,
 } from "@/utils/booking";
+import { clearBookingDraft, loadBookingDraft, saveBookingDraft } from "@/utils/bookingDraft";
 import Eyebrow from "./EyeBrow";
 import ButtonChecker from "./ButtonChecker";
 import ButtonOutline from "./ButtonOutline";
@@ -74,31 +76,57 @@ function getSubmitErrorMessage(error: unknown): string {
   return "No pudimos conectar con el servidor. Antes de reintentar, revisá en tu perfil que la reserva no se haya creado.";
 }
 
+function WizardLoading() {
+  return (
+    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 text-[#F3F1EA]">
+      <span className="h-8 w-8 rounded-full border-2 border-[#E10600] border-t-transparent animate-spin" />
+      <p className="font-mono text-xs uppercase tracking-widest text-[#93949F]">
+        Preparando tu paquete...
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Espera la sesión antes de montar el wizard: el estado inicial sale del borrador
+ * del usuario (si volvió de loguearse en medio del checkout), y las tarjetas
+ * guardadas se piden recién cuando hay token.
+ */
 export default function BookingWizard({ eventId }: { eventId: string }) {
+  const { user, isLoading } = useAuth();
+
+  // Sin usuario después de cargar solo pasa si la sesión venció: authFetch ya está redirigiendo
+  if (isLoading || !user) return <WizardLoading />;
+
+  return <BookingWizardContent key={user.id} eventId={eventId} userId={user.id} />;
+}
+
+function BookingWizardContent({ eventId, userId }: { eventId: string; userId: string }) {
   const queryClient = useQueryClient();
-  const clientReady = hasClientIdentity();
 
   const { event, race, isPending: isEventPending } = useEvent(eventId);
   const hotelsQuery = useEventHotels(eventId);
   const ticketsQuery = useEventTickets(eventId);
   const flightsQuery = useEventFlights(eventId);
-  const paymentQuery = usePaymentMethods(clientReady);
+  const paymentQuery = usePaymentMethods();
   const createBooking = useCreateBooking();
 
-  const [state, dispatch] = useReducer(bookingReducer, initialBookingState);
+  const [state, dispatch] = useReducer(
+    bookingReducer,
+    null,
+    () => loadBookingDraft(userId, eventId) ?? initialBookingState,
+  );
   const [reserva, setReserva] = useState<Reserva | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isResolvingConflict, setIsResolvingConflict] = useState(false);
 
+  // Si hay que volver a loguearse en medio del checkout, el paquete no se pierde
+  useEffect(() => {
+    if (!reserva) saveBookingDraft(userId, eventId, state);
+  }, [userId, eventId, state, reserva]);
+
   if (isEventPending) {
-    return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 text-[#F3F1EA]">
-        <span className="h-8 w-8 rounded-full border-2 border-[#E10600] border-t-transparent animate-spin" />
-        <p className="font-mono text-xs uppercase tracking-widest text-[#93949F]">
-          Preparando tu paquete...
-        </p>
-      </div>
-    );
+    return <WizardLoading />;
   }
 
   if (!event || !race) {
@@ -175,6 +203,7 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
         buildCheckoutRequest(event.idEvento, state, stay),
       );
       setReserva(result);
+      clearBookingDraft();
       // La compra descontó stock y puede haber guardado una tarjeta nueva
       queryClient.invalidateQueries({
         queryKey: bookingQueryKeys.hotels(eventId),
@@ -298,7 +327,6 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
                 paymentQuery={paymentQuery}
                 state={state}
                 dispatch={dispatch}
-                clientReady={clientReady}
               />
             )}
           </div>

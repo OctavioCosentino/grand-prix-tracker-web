@@ -1,7 +1,7 @@
 import React from "react";
 import ButtonChecker from "./ButtonChecker";
-import { isLogged } from "@/utils/mockData/isLogged";
 import { useRouter } from "next/navigation";
+import { useAuth } from "./providers/AuthProvider";
 
 interface RaceBookingSidebarProps {
   id: string;
@@ -11,12 +11,15 @@ interface RaceBookingSidebarProps {
 
 export default function RaceBookingSidebar({ id, name, hasPassed }: RaceBookingSidebarProps) {
   const router = useRouter();
+  const { user } = useAuth();
+  const isLogged = Boolean(user);
 
   const handleBookingClick = () => {
     if (hasPassed) return;
     
     if (!isLogged) {
-      router.push("/login");
+      // Después del login vuelve directo a la reserva
+      router.push(`/login?next=${encodeURIComponent(`/booking/${id}`)}`);
     } else {
       router.push(`/booking/${id}`);
     }

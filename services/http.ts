@@ -1,4 +1,5 @@
 import { API_BASE_URL, ApiResponse } from "@/services/events";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * Error de la API con el código HTTP y el `message` del envoltorio ApiResponse.
@@ -20,24 +21,72 @@ export class ApiError extends Error {
   }
 }
 
-/**
- * Headers que identifican al cliente.
- * TEMPORAL: hasta integrar Supabase Auth se manda `X-Cliente-Id` desde una variable
- * de entorno. Al integrar auth, reemplazar por `Authorization: Bearer <jwt>` acá.
- */
-export function getClientAuthHeaders(): Record<string, string> {
-  const clienteId = process.env.NEXT_PUBLIC_CLIENTE_ID_DEV;
-  if (!clienteId) {
-    throw new ApiError(
-      0,
-      "No hay un cliente identificado para operar. Configurá NEXT_PUBLIC_CLIENTE_ID_DEV.",
-    );
-  }
-  return { "X-Cliente-Id": clienteId };
+export function isUnauthorized(error: unknown): boolean {
+  return error instanceof ApiError && error.status === 401;
 }
 
-export function hasClientIdentity(): boolean {
-  return Boolean(process.env.NEXT_PUBLIC_CLIENTE_ID_DEV);
+/** Headers que identifican al cliente: el back toma el cliente del claim `sub` del JWT. */
+export function getClientAuthHeaders(accessToken: string): Record<string, string> {
+  return { Authorization: `Bearer ${accessToken}` };
+}
+
+/**
+ * Fetch a un endpoint que requiere sesión (/bookings, /payment-methods).
+ * Ante un 401 refresca la sesión una sola vez y reintenta. Reintentar un POST es
+ * seguro: el back rechaza el token antes de procesar nada. Si vuelve a dar 401,
+ * o no hay sesión, cierra la sesión y manda al login.
+ */
+export async function authFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const supabase = createClient();
+  const withToken = (accessToken: string): RequestInit => ({
+    ...init,
+    headers: { ...init.headers, ...getClientAuthHeaders(accessToken) },
+  });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) return redirectToLogin();
+
+  try {
+    return await apiFetch<T>(path, withToken(session.access_token));
+  } catch (error) {
+    if (!isUnauthorized(error)) throw error;
+  }
+
+  const {
+    data: { session: refreshed },
+  } = await supabase.auth.refreshSession();
+  if (!refreshed) return redirectToLogin();
+
+  try {
+    return await apiFetch<T>(path, withToken(refreshed.access_token));
+  } catch (error) {
+    if (isUnauthorized(error)) return redirectToLogin();
+    throw error;
+  }
+}
+
+let isRedirectingToLogin = false;
+
+/**
+ * Sesión vencida sin arreglo: cierra la sesión local y manda al login con la URL
+ * actual en ?next=. El checkout no se pierde porque el wizard guarda su borrador.
+ * Lanza igual el 401 para que la query o mutación quede en error y no reintente.
+ */
+async function redirectToLogin(): Promise<never> {
+  // Si fallan varias queries a la vez, redirige una sola
+  if (!isRedirectingToLogin) {
+    isRedirectingToLogin = true;
+    // scope local: no cierra las sesiones del usuario en otros dispositivos
+    await createClient().auth.signOut({ scope: "local" });
+    const next = `${window.location.pathname}${window.location.search}`;
+    // Navegación completa a propósito: esto corre fuera de React (sin router) y así
+    // arranca de cero el cache de React Query del usuario anterior.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+    window.location.assign(`/login?next=${encodeURIComponent(next)}`);
+  }
+  throw new ApiError(401, "Tu sesión expiró. Volvé a iniciar sesión para continuar.");
 }
 
 /**

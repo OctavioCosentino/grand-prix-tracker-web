@@ -5,13 +5,12 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { MetodoPago } from "@/services/paymentMethods";
 import { BookingAction, BookingState } from "@/utils/booking";
 import NewCardForm from "./NewCardForm";
-import BookingNotice, { QueryStatus } from "./BookingNotice";
+import { QueryStatus } from "./BookingNotice";
 
 interface BookingPaymentStepProps {
   paymentQuery: UseQueryResult<MetodoPago[], Error>;
   state: BookingState;
   dispatch: React.Dispatch<BookingAction>;
-  clientReady: boolean;
 }
 
 export function describeCardType(tipo: MetodoPago["tipo"]): string {
@@ -22,18 +21,9 @@ export default function BookingPaymentStep({
   paymentQuery,
   state,
   dispatch,
-  clientReady,
 }: BookingPaymentStepProps) {
   const [showNewCard, setShowNewCard] = useState(false);
   const pago = state.pago;
-
-  if (!clientReady) {
-    return (
-      <BookingNotice severity="danger" title="Sin cliente identificado">
-        No hay un usuario identificado para realizar la compra.
-      </BookingNotice>
-    );
-  }
 
   return (
     <div className="flex flex-col gap-8">

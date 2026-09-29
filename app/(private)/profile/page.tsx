@@ -8,6 +8,8 @@ import ReservasView from "./ReservasView";
 import PagosView from "./PagosView";
 import ProfileCircle from "@/components/ProfileCircle";
 import TabButton from "@/components/TabButton";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { getDisplayName } from "@/utils/auth";
 
 type TabType = "datos" | "reservas" | "pagos";
 
@@ -24,6 +26,8 @@ export default function ProfilePage({
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [isWarningOpen, setIsWarningOpen] = useState(false);
   const router = useRouter();
+  const { user, signOut } = useAuth();
+  const displayName = user ? getDisplayName(user) : "";
 
   return (
     <div className="relative min-h-screen bg-[#0B0B10] pt-24 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
@@ -33,9 +37,9 @@ export default function ProfilePage({
         <aside className="flex w-full flex-col gap-2 md:w-72 md:flex-shrink-0">
           <div className="mb-6 rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
             <div className="mb-4 flex items-center gap-4">
-              <ProfileCircle isLoggedIn={true} name="Octavio Cosentino"/>
+              <ProfileCircle isLoggedIn={true} name={displayName || "Piloto"}/>
               <div>
-                <h2 className="font-display text-lg font-900 tracking-tight">Octavio</h2>
+                <h2 className="font-display text-lg font-900 tracking-tight">{displayName}</h2>
                 <span className="font-mono text-[10px] tracking-[0.15em] text-[#34D399]">
                   PILOTO ACTIVO
                 </span>
@@ -91,10 +95,11 @@ export default function ProfilePage({
         message="¿Estás seguro de que quieres cerrar sesión?"
         confirmText="Sí, cerrar sesión"
         cancelText="Cancelar"
-        onConfirm={() => {
-          // Lógica de Supabase auth.signOut()
-          router.replace("/");
+        onConfirm={async () => {
+          await signOut();
           setIsWarningOpen(false);
+          router.replace("/");
+          router.refresh();
         }}
         onCancel={() => setIsWarningOpen(false)}
       />

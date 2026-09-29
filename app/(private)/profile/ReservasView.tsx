@@ -5,7 +5,7 @@ import ReservationCard from "@/components/ReservationCard";
 import BookingNotice, { QueryStatus } from "@/components/BookingNotice";
 import ButtonChecker from "@/components/ButtonChecker";
 import { useMyBookings } from "@/hooks/useBooking";
-import { hasClientIdentity } from "@/services/http";
+import { useAuth } from "@/components/providers/AuthProvider";
 import { Reserva } from "@/services/bookings";
 import { getReservationEndDate, isReservationPast } from "@/utils/booking";
 
@@ -22,10 +22,11 @@ function Group({ title, reservas }: { title: string; reservas: Reserva[] }) {
 }
 
 export default function ReservasView() {
-  const clientReady = hasClientIdentity();
-  const bookingsQuery = useMyBookings(clientReady);
+  const { user, isLoading } = useAuth();
+  // Sin token el back responde 401: se pide recién cuando la sesión terminó de cargar
+  const bookingsQuery = useMyBookings(!isLoading && Boolean(user));
 
-  if (!clientReady) {
+  if (!isLoading && !user) {
     return (
       <BookingNotice severity="warning" title="Sin usuario">
         No hay un usuario identificado para mostrar sus reservas.
@@ -33,10 +34,10 @@ export default function ReservasView() {
     );
   }
 
-  if (bookingsQuery.isPending || bookingsQuery.isError) {
+  if (isLoading || bookingsQuery.isPending || bookingsQuery.isError) {
     return (
       <QueryStatus
-        isPending={bookingsQuery.isPending}
+        isPending={isLoading || bookingsQuery.isPending}
         error={bookingsQuery.error}
         onRetry={() => bookingsQuery.refetch()}
         loadingText="Cargando tu historial de pista..."

@@ -1,4 +1,4 @@
-import { apiFetch, getClientAuthHeaders } from "@/services/http";
+import { authFetch } from "@/services/http";
 import { TipoEntrada } from "@/services/tickets";
 import { TipoHabitacion } from "@/services/hotels";
 import { TipoTarjeta } from "@/services/paymentMethods";
@@ -96,9 +96,7 @@ export interface Reserva {
 
 /** Reservas del cliente, de la más nueva a la más vieja (fechaCompra descendente). */
 export function getBookings(): Promise<Reserva[]> {
-  return apiFetch<Reserva[]>("/bookings", {
-    headers: getClientAuthHeaders(),
-  });
+  return authFetch<Reserva[]>("/bookings");
 }
 
 /**
@@ -106,12 +104,9 @@ export function getBookings(): Promise<Reserva[]> {
  * si falla, el backend no descuenta stock ni crea la reserva.
  */
 export function createBooking(body: CheckoutRequest): Promise<Reserva> {
-  return apiFetch<Reserva>("/bookings", {
+  return authFetch<Reserva>("/bookings", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...getClientAuthHeaders(),
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
 }

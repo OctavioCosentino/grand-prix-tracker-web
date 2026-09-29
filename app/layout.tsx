@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Titillium_Web, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/providers/QueryProvider";
+import AuthProvider from "@/components/providers/AuthProvider";
 
 const fontDisplay = Titillium_Web({
   subsets: ["latin"],
@@ -40,7 +41,9 @@ export default function RootLayout({
       className={`${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body bg-[#0B0B10] text-[#F3F1EA]">
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

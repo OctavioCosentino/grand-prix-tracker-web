@@ -1,20 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
-import Home from "@/components/Home"; 
-import EmailInput from "@/components/EmailInput"; 
-import PasswordInput from "@/components/PasswordInput"; 
-import ButtonChecker from "@/components/ButtonChecker"; 
+import React, { use, useState } from "react";
+import { useRouter } from "next/navigation";
+import Home from "@/components/Home";
+import EmailInput from "@/components/EmailInput";
+import PasswordInput from "@/components/PasswordInput";
+import ButtonChecker from "@/components/ButtonChecker";
 import ForgotPasswordModal from "@/components/ForgotPasswordModal";
+import { createClient } from "@/lib/supabase/client";
+import { authErrorMessage, safeNextPath } from "@/utils/auth";
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  // ?next= lo pone el proxy al rebotar de una ruta privada; ?error= el callback de auth
+  const params = use(searchParams);
+  const next = safeNextPath(typeof params.next === "string" ? params.next : null);
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(
+    params.error === "link_invalido"
+      ? "El enlace venció o ya fue usado. Pedí uno nuevo."
+      : null,
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login intent:", { email, password });
+    setIsSubmitting(true);
+    setError(null);
+
+    const { error } = await createClient().auth.signInWithPassword({ email, password });
+    if (error) {
+      setError(authErrorMessage(error));
+      setIsSubmitting(false);
+      return;
+    }
+
+    router.replace(next);
+    router.refresh();
   };
 
   const handleGoogleLogin = () => {
@@ -96,13 +124,20 @@ export default function LoginPage() {
               /> 
             </div>
 
-            <ButtonChecker 
-              type="submit" 
-              className="mt-4 w-full py-3.5" 
-              showArrow={true}
+            {error && (
+              <span role="alert" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]">
+                ✕ {error}
+              </span>
+            )}
+
+            <ButtonChecker
+              type="submit"
+              className="mt-4 w-full py-3.5"
+              showArrow={!isSubmitting}
+              disabled={isSubmitting}
             >
-              Entrar al box
-            </ButtonChecker> 
+              {isSubmitting ? "Entrando..." : "Entrar al box"}
+            </ButtonChecker>
           </form>
 
           <div className="mt-8 border-t border-[#1C1D24] pt-6 text-center text-sm text-[#93949F]">

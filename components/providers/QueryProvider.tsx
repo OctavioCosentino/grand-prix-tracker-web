@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEvents } from "@/hooks/useEvents";
+import { isUnauthorized } from "@/services/http";
 
 /**
  * Componente interno que se monta una única vez al cargar la aplicación.
@@ -26,7 +27,8 @@ export default function QueryProvider({
           queries: {
             staleTime: Infinity,
             gcTime: 1000 * 60 * 60 * 24, // 24 horas en memoria cache
-            retry: 4,
+            // Los reintentos son para el cold start de Render; un 401 no se arregla reintentando
+            retry: (failureCount, error) => !isUnauthorized(error) && failureCount < 4,
             retryDelay: (attemptIndex) =>
               Math.min(2000 * (attemptIndex + 1), 10000),
             refetchOnWindowFocus: false,

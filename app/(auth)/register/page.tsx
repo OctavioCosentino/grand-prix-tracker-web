@@ -1,23 +1,58 @@
 "use client";
 
 import React, { useState } from "react";
-import Home from "@/components/Home"; 
-import EmailInput from "@/components/EmailInput"; 
-import PasswordInput from "@/components/PasswordInput"; 
-import ButtonChecker from "@/components/ButtonChecker"; 
+import { useRouter } from "next/navigation";
+import Home from "@/components/Home";
+import EmailInput from "@/components/EmailInput";
+import PasswordInput from "@/components/PasswordInput";
+import ButtonChecker from "@/components/ButtonChecker";
 import PasswordRequirements from "@/utils/passwordRequirements";
+import { createClient } from "@/lib/supabase/client";
+import { authErrorMessage } from "@/utils/auth";
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
+  const router = useRouter();
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
- 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
+
   const { requirements, score, getLightColor } = PasswordRequirements({ password });
-  
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (score < 4) return; 
-    console.log("Register intent:", { name, email, password });
+    if (score < 4) return;
+    setIsSubmitting(true);
+    setError(null);
+
+    // nombre y apellido viajan en user_metadata: el trigger de la base los copia a `clientes`
+    const { data, error } = await createClient().auth.signUp({
+      email,
+      password,
+      options: {
+        data: { nombre: nombre.trim(), apellido: apellido.trim() },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setError(authErrorMessage(error));
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Con la confirmación de email activada, Supabase no devuelve sesión todavía
+    if (!data.session) {
+      setAwaitingConfirmation(true);
+      setIsSubmitting(false);
+      return;
+    }
+
+    router.replace("/");
+    router.refresh();
   };
 
   const handleGoogleRegister = () => {
@@ -74,19 +109,34 @@ export default function RegisterPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Nombre */}
-            <div className="flex flex-col gap-2">
-              <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
-                Nombre completo
-              </label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Ayrton Senna"
-                className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3.5 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
-              />
+            {/* Nombre y apellido */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-2">
+                <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="Ayrton"
+                  className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3.5 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+                  Apellido
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={apellido}
+                  onChange={(e) => setApellido(e.target.value)}
+                  placeholder="Senna"
+                  className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3.5 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
+                />
+              </div>
             </div>
 
             {/* Email */}
@@ -135,13 +185,26 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <ButtonChecker 
-              type="submit" 
-              className={`mt-4 w-full py-3.5 ${score < 4 ? "opacity-50 grayscale" : ""}`} 
-              showArrow={true}
+            {error && (
+              <span role="alert" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]">
+                ✕ {error}
+              </span>
+            )}
+
+            {awaitingConfirmation && (
+              <span role="status" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#34D399]">
+                ✓ Te mandamos un correo para confirmar tu cuenta
+              </span>
+            )}
+
+            <ButtonChecker
+              type="submit"
+              className={`mt-4 w-full py-3.5 ${score < 4 ? "opacity-50 grayscale" : ""}`}
+              showArrow={!isSubmitting}
+              disabled={isSubmitting}
             >
-              Confirmar registro
-            </ButtonChecker> 
+              {isSubmitting ? "Registrando..." : "Confirmar registro"}
+            </ButtonChecker>
           </form>
 
           <div className="mt-8 border-t border-[#1C1D24] pt-6 text-center text-sm text-[#93949F]">
