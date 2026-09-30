@@ -8,6 +8,8 @@ export interface MetodoPago {
   ultimos4Digitos: string;
   fechaExpiracion: string; // "MM/AA"
   vencida: boolean; // el checkout rechaza las vencidas
+  marca?: string; // e.g. Visa, Mastercard
+  nombre_titular?: string;
 }
 
 /** Tarjetas guardadas del cliente, de la más nueva a la más vieja. */

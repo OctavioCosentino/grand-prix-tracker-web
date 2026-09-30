@@ -1,13 +1,28 @@
 import CountdownBoxes from "@/components/CoutdownBoxes";
 import StatusDot from "./StatusDot";
-import { F1_CALENDAR_2026 } from "@/utils/races";
+import { useEvents } from "@/hooks/useEvents";
 
 export default function CountdownGp() {
+  const { races, isPending } = useEvents();
   const today = new Date();
-  
-  const nextRace = 
-    F1_CALENDAR_2026.find((race) => new Date(race.date) > today) || 
-    F1_CALENDAR_2026[F1_CALENDAR_2026.length - 1];
+
+  const nextRace =
+    races.find((race) => new Date(race.date) > today) ||
+    races[races.length - 1];
+
+  if (isPending || !nextRace) {
+    return (
+      <div className="gpt-hud-grid relative overflow-hidden rounded-md border border-[#1C1D24] bg-[#131318]/80 p-6 md:p-8 animate-pulse">
+        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+          <div className="space-y-3">
+            <div className="h-3 w-40 rounded-sm bg-[#1C1D24]" />
+            <div className="h-6 w-64 rounded-sm bg-[#23242E]" />
+          </div>
+          <div className="h-16 w-full max-w-sm rounded-sm bg-[#1C1D24] md:w-80" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="gpt-hud-grid relative overflow-hidden rounded-md border border-[#1C1D24] bg-[#131318]/80 p-6 md:p-8">

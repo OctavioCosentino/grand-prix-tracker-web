@@ -22,7 +22,7 @@ import { SERVICES, SERVICE_ICONS } from "../../utils/services";
 import { STEPS } from "@/utils/mockData/steps";
 import { DESTINATIONS } from "@/utils/mockData/destinations";
 import { SYSTEM_PANELS } from "@/utils/mockData/systemPanels";
-import { F1_CALENDAR_2026 } from "@/utils/races";
+import { useEvents } from "@/hooks/useEvents";
 import ButtonChecker from "../../components/ButtonChecker";
 import ButtonOutline from "../../components/ButtonOutline";
 import FeedbackSection from "@/components/FeedbackSection";
@@ -32,6 +32,7 @@ import StepsCard from "@/components/StepsCard";
 import Eyebrow from "@/components/EyeBrow";
 import ServicesCard from "@/components/ServicesCard";
 import DestinationCard from "@/components/DestinationsCard";
+import { DestinationCardSkeleton } from "@/components/CalendarSkeleton";
 import SystemPanelCard from "@/components/SystemPanelCard";
 import EmailInput from "@/components/EmailInput";
 import CountdownGp from "@/components/CountdownGp";
@@ -44,15 +45,14 @@ import Link from "next/dist/client/link";
 /* ======== DATA =============== */
 /* Aca irian futuros, igual en lo posible separlos en su respectiva carpeta (NO a la gilada)*/
 
-/* ======= HOOKS =========== */
-/* Aca irian futuros, igual en lo posible separlos en su respectiva carpeta (NO a la gilada)*/
-
-/* ======= PÁGINA =========== */
+/* ======== PÁGINA =========== */
 export default function Page() {
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { races, isPending } = useEvents();
+
   const today = new Date();
-  const nextRace = F1_CALENDAR_2026.find(race => new Date(race.date) >= today) || F1_CALENDAR_2026[0];
+  const nextRace = races.find((race) => new Date(race.date) >= today);
 
   return (
     <div
@@ -61,7 +61,11 @@ export default function Page() {
       }
     >
       {/* ================= HEADER ================= */}
-      <Navbar scrolled={scrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <Navbar
+        scrolled={scrolled}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+      />
 
       {/* ================= Banner principal ================= */}
       <section
@@ -119,9 +123,7 @@ export default function Page() {
               >
                 Empieza y reservá tu paquete!
               </ButtonChecker>
-              <ButtonOutline
-                href="#como-funciona"
-              >
+              <ButtonOutline href="#como-funciona">
                 Ver cómo funciona
               </ButtonOutline>
             </div>
@@ -129,11 +131,11 @@ export default function Page() {
 
           {/* ---- Countdown / HUD de telemetría ---- */}
           <Reveal delay={320} className="mt-16">
-             <CountdownGp />
+            <CountdownGp />
           </Reveal>
         </div>
       </section>
-      
+
       <RacesCarrousel />
 
       {/* ================= CÓMO FUNCIONA ================= */}
@@ -179,7 +181,7 @@ export default function Page() {
               Lo que coordinamos por vos.
             </h2>
           </Reveal>
-          
+
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {SERVICES.map((service, i) => {
               const Icon = SERVICE_ICONS[service.icon];
@@ -212,13 +214,17 @@ export default function Page() {
               className="group inline-flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-widest text-[#93949F] transition-colors hover:text-[#F3F1EA]"
             >
               Ver calendario completo
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="currentColor" 
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
                 className="h-4 w-4 text-white transition-transform duration-300 group-hover:translate-x-1"
               >
-                <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+                <path
+                  fillRule="evenodd"
+                  d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z"
+                  clipRule="evenodd"
+                />
               </svg>
             </Link>
           </Reveal>
@@ -227,25 +233,29 @@ export default function Page() {
         <div className="mt-14 grid gap-6 md:grid-cols-3">
           {/* Próxima Parada (Card 1) */}
           <Reveal delay={0}>
-            <DestinationCard 
-              id={nextRace.id}
-              name={nextRace.name} 
-              img={nextRace.img} 
-              circuit={nextRace.circuit} 
-              badge="PRÓXIMA PARADA" 
-              blurb={nextRace.blurb} 
-            />
+            {isPending || !nextRace ? (
+              <DestinationCardSkeleton />
+            ) : (
+              <DestinationCard
+                id={nextRace.id}
+                name={nextRace.name}
+                img={nextRace.img}
+                circuit={nextRace.circuit}
+                badge="PRÓXIMA PARADA"
+                blurb={nextRace.blurb}
+              />
+            )}
           </Reveal>
 
           {/* Cards from DESTINATIONS (Cards 2 & 3) */}
           {DESTINATIONS.map((dest, i) => (
             <Reveal key={dest.name} delay={(i + 1) * 120}>
-              <DestinationCard 
-                name={dest.name} 
-                img={dest.img} 
-                circuit={dest.circuit} 
-                badge={dest.badge} 
-                blurb={dest.blurb} 
+              <DestinationCard
+                name={dest.name}
+                img={dest.img}
+                circuit={dest.circuit}
+                badge={dest.badge}
+                blurb={dest.blurb}
               />
             </Reveal>
           ))}
@@ -299,8 +309,8 @@ export default function Page() {
                   <>
                     Un patrón <span className="text-[#F3F1EA]">Facade</span>{" "}
                     orquesta hoteles y ticketeras durante el checkout. Evaluamos
-                    sumar <span className="text-[#F3F1EA]">Strategy</span> para el
-                    precio dinámico según la cercanía de la fecha de carrera.
+                    sumar <span className="text-[#F3F1EA]">Strategy</span> para
+                    el precio dinámico según la cercanía de la fecha de carrera.
                   </>
                 }
               />
