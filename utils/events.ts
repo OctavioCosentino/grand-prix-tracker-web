@@ -361,6 +361,13 @@ export function mapBackendEventToRace(event: BackendEvent): Race {
     date: isoDate,
     region,
     raced: isFinished,
+    longitud_km: circuit?.longitud_km ?? circuit?.longitudKm ?? "-",
+    curvas: circuit?.curvas ?? "-",
+    vueltas: circuit?.vueltas ?? "-",
+    capacidad: circuit?.capacidad ?? "-",
+    record: circuit?.record ?? "-",
+    velocidad_maxima: circuit?.velocidad_maxima ?? "-",
+    maximo_ganador: circuit?.maximo_ganador ?? "-",
   };
 }
 

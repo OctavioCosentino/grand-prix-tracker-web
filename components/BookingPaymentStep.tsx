@@ -4,8 +4,12 @@ import React, { useState } from "react";
 import { UseQueryResult } from "@tanstack/react-query";
 import { MetodoPago } from "@/services/paymentMethods";
 import { BookingAction, BookingState } from "@/utils/booking";
-import NewCardForm from "./NewCardForm";
 import { QueryStatus } from "./BookingNotice";
+import PaymentCard from "./PaymentCard";
+import AddPaymentModal from "./AddPaymentModal";
+import { getBrandFromLast4 } from "@/utils/banksImages";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { getDisplayName } from "@/utils/auth";
 
 interface BookingPaymentStepProps {
   paymentQuery: UseQueryResult<MetodoPago[], Error>;
@@ -22,8 +26,11 @@ export default function BookingPaymentStep({
   state,
   dispatch,
 }: BookingPaymentStepProps) {
-  const [showNewCard, setShowNewCard] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const pago = state.pago;
+  
+  const { user } = useAuth();
+  const defaultName = user ? getDisplayName(user) : "Piloto";
 
   return (
     <div className="flex flex-col gap-8">
@@ -42,53 +49,32 @@ export default function BookingPaymentStep({
         ) : paymentQuery.data.length === 0 ? (
           <p className="text-sm text-[#93949F]">No tenés tarjetas guardadas.</p>
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {paymentQuery.data.map((card) => {
               const selected =
                 pago?.kind === "guardada" && pago.idMetodoPago === card.idMetodoPago;
+              
+              // Import helpers in the component or file level, see below
               return (
-                <button
-                  key={card.idMetodoPago}
-                  type="button"
-                  disabled={card.vencida}
-                  aria-pressed={selected}
-                  onClick={() =>
-                    dispatch({
-                      type: "setPayment",
-                      pago: { kind: "guardada", idMetodoPago: card.idMetodoPago },
-                    })
-                  }
-                  className={`relative flex h-32 flex-col justify-between overflow-hidden rounded-md border bg-gradient-to-br from-[#1C1D24] to-[#0B0B10] p-5 text-left transition-all ${
-                    selected
-                      ? "border-[#E10600]"
-                      : "border-[#1C1D24] enabled:hover:-translate-y-0.5 enabled:hover:border-[#33343D]"
-                  } ${card.vencida ? "cursor-not-allowed opacity-40" : "cursor-pointer"}`}
-                >
-                  <div className="flex justify-between">
-                    <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#93949F]">
-                      {describeCardType(card.tipo)}
-                    </span>
-                    <span
-                      className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                        selected ? "border-[#E10600] bg-[#E10600]" : "border-[#33343D]"
-                      }`}
-                    >
-                      {selected && <span className="h-2 w-2 rounded-full bg-white" />}
-                    </span>
-                  </div>
-                  <div className="flex items-end justify-between">
-                    <span className="font-display text-lg font-bold tracking-widest text-[#F3F1EA]">
-                      •••• {card.ultimos4Digitos}
-                    </span>
-                    <span
-                      className={`font-mono text-[10px] uppercase tracking-wider ${
-                        card.vencida ? "text-[#E10600]" : "text-[#5C5D66]"
-                      }`}
-                    >
-                      {card.vencida ? "Vencida" : `Vence ${card.fechaExpiracion}`}
-                    </span>
-                  </div>
-                </button>
+                <div key={card.idMetodoPago} className={card.vencida ? "opacity-40 cursor-not-allowed" : ""}>
+                  <PaymentCard
+                    brand={card.marca || getBrandFromLast4(card.ultimos4Digitos)}
+                    last4={card.ultimos4Digitos}
+                    holderName={card.nombre_titular || defaultName}
+                    tipo={card.tipo}
+                    selected={selected}
+                    editable={false}
+                    onClick={() => {
+                      if (!card.vencida) {
+                        dispatch({
+                          type: "setPayment",
+                          pago: selected ? null : { kind: "guardada", idMetodoPago: card.idMetodoPago },
+                        });
+                      }
+                    }}
+                  />
+                  {card.vencida && <p className="mt-1 text-xs text-[#E10600]">Tarjeta vencida</p>}
+                </div>
               );
             })}
           </div>
@@ -101,46 +87,52 @@ export default function BookingPaymentStep({
         </h2>
 
         {pago?.kind === "nueva" ? (
-          <div className="flex items-center justify-between rounded-md border border-[#E10600] bg-[#0E0E13] p-5">
-            <div>
-              <p className="font-display text-lg font-bold tracking-widest text-[#F3F1EA]">
-                •••• {pago.tarjeta.ultimos4Digitos}
-              </p>
-              <p className="font-mono text-[10px] uppercase tracking-wider text-[#5C5D66]">
-                {describeCardType(pago.tarjeta.tipo)} · Vence {pago.tarjeta.fechaExpiracion} ·
-                Se guarda al confirmar la compra
-              </p>
-            </div>
+          <div className="flex flex-col gap-2">
+            <PaymentCard
+              brand={getBrandFromLast4(pago.tarjeta.ultimos4Digitos)}
+              last4={pago.tarjeta.ultimos4Digitos}
+              holderName={pago.tarjeta.nombre_titular || defaultName}
+              tipo={pago.tarjeta.tipo}
+              selected={true}
+              editable={false}
+              onClick={() => dispatch({ type: "setPayment", pago: null })}
+            />
             <button
               type="button"
               onClick={() => {
                 dispatch({ type: "setPayment", pago: null });
-                setShowNewCard(true);
+                setShowAddModal(true);
               }}
-              className="text-sm font-bold text-[#E10600] hover:underline cursor-pointer"
+              className="mt-2 text-sm font-bold text-[#E10600] hover:underline cursor-pointer self-start"
             >
-              Cambiar
+              Cambiar tarjeta nueva
             </button>
-          </div>
-        ) : showNewCard ? (
-          <div className="rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6">
-            <NewCardForm
-              onConfirm={(tarjeta) => {
-                dispatch({ type: "setPayment", pago: { kind: "nueva", tarjeta } });
-                setShowNewCard(false);
-              }}
-            />
           </div>
         ) : (
           <button
-            type="button"
-            onClick={() => setShowNewCard(true)}
-            className="rounded-md border border-dashed border-[#33343D] bg-[#0E0E13] p-5 text-left font-mono text-xs uppercase tracking-widest text-[#93949F] transition-colors hover:border-[#E10600] hover:text-[#F3F1EA] cursor-pointer"
+            onClick={() => setShowAddModal(true)}
+            className="flex h-40 flex-col items-center justify-center gap-3 rounded-md border border-dashed border-[#33343D] bg-transparent transition-colors hover:border-[#E10600] hover:bg-[#131318] cursor-pointer sm:w-1/2"
           >
-            + Usar una tarjeta nueva
+            <span className="text-2xl text-[#5C5D66]">+</span>
+            <span className="font-mono text-[10px] tracking-widest text-[#93949F]">
+              USAR TARJETA NUEVA
+            </span>
           </button>
         )}
       </section>
+
+      <AddPaymentModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        mode="add"
+        onConfirm={(cardData) => {
+          dispatch({ 
+            type: "setPayment", 
+            pago: { kind: "nueva", tarjeta: cardData } 
+          });
+          setShowAddModal(false);
+        }}
+      />
     </div>
   );
 }

@@ -28,7 +28,6 @@ export default function BookingHotelStep({
 }: BookingHotelStepProps) {
   const [priceRange, setPriceRange] = useState(MAX_PRICE);
   const [minStars, setMinStars] = useState(3);
-  const [transferOnly, setTransferOnly] = useState(false);
 
   if (checkInPassed) {
     return (
@@ -61,7 +60,7 @@ export default function BookingHotelStep({
       cheapest <= priceRange &&
       // Sin clasificación cargada no se filtra por estrellas
       (h.estrellas === null || h.estrellas >= minStars) &&
-      (transferOnly ? h.ofreceTraslado === true : true)
+      (state.traslado ? h.ofreceTraslado === true : true)
     );
   });
 
@@ -78,8 +77,8 @@ export default function BookingHotelStep({
           setPriceRange={setPriceRange}
           minStars={minStars}
           setMinStars={setMinStars}
-          transferOnly={transferOnly}
-          setTransferOnly={setTransferOnly}
+          transferOnly={state.traslado}
+          setTransferOnly={(val) => dispatch({ type: "setTraslado", incluye: val })}
         />
 
         <div className="flex flex-col gap-4">
@@ -111,7 +110,7 @@ export default function BookingHotelStep({
                     onClick={() => {
                       setPriceRange(MAX_PRICE);
                       setMinStars(3);
-                      setTransferOnly(false);
+                      dispatch({ type: "setTraslado", incluye: false });
                     }}
                     className="mt-4 text-base font-bold text-[#f10b03] hover:underline cursor-pointer"
                   >

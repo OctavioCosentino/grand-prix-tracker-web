@@ -142,6 +142,7 @@ export interface BookingState {
   pasajeros: number | null;
   pago: PaymentSelection | null;
   conflict: StockConflict | null;
+  traslado: boolean;
 }
 
 export const initialBookingState: BookingState = {
@@ -153,6 +154,7 @@ export const initialBookingState: BookingState = {
   pasajeros: null,
   pago: null,
   conflict: null,
+  traslado: false,
 };
 
 export type BookingAction =
@@ -163,7 +165,8 @@ export type BookingAction =
   | { type: "setPassengers"; cantidad: number }
   | { type: "setPayment"; pago: PaymentSelection | null }
   | { type: "stockConflict"; conflict: StockConflict }
-  | { type: "clearConflict" };
+  | { type: "clearConflict" }
+  | { type: "setTraslado"; incluye: boolean };
 
 function setQuantity(
   map: Record<string, number>,
@@ -205,6 +208,8 @@ export function bookingReducer(
       return { ...state, step: action.conflict.step, conflict: action.conflict };
     case "clearConflict":
       return { ...state, conflict: null };
+    case "setTraslado":
+      return { ...state, traslado: action.incluye };
   }
 }
 
@@ -285,6 +290,16 @@ export function buildSummaryLines(
       label: `${flight.sentido === "IDA" ? "Ida" : "Vuelta"} · ${flight.aerolinea}`,
       detail: `${pasajeros} pasajero${pasajeros > 1 ? "s" : ""} × ${formatUsd(flight.precioUsd)}`,
       subtotal: flight.precioUsd * pasajeros,
+    });
+  }
+
+  if (state.traslado) {
+    lines.push({
+      id: "traslado",
+      step: "hotel",
+      label: "Traslado Incluido",
+      detail: "Servicio de transporte al circuito (pesos argentinos)",
+      subtotal: 10000,
     });
   }
 

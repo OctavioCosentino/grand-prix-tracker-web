@@ -65,7 +65,7 @@ export default function RaceDetailPage({
       />
 
       <div className="relative z-10 mx-auto mt-8 flex max-w-7xl flex-col gap-8 px-6 pb-24 lg:flex-row">
-        <RaceDetailsPanel blurb={race.blurb} />
+        <RaceDetailsPanel race={race} />
         <RaceBookingSidebar
           id={race.id}
           name={race.name}

@@ -13,7 +13,7 @@ export default function BookingSummary({ lines, stay, children }: BookingSummary
 
   return (
     <aside className="w-full">
-      <div className="sticky top-28 rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
+      <div className="sticky top-28 rounded-md border border-[#33343D] bg-[#181920] p-8 shadow-xl">
         <h2 className="font-display text-xl font-bold tracking-tight text-[#F3F1EA]">
           Tu paquete
         </h2>

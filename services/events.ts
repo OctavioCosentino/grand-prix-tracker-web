@@ -14,9 +14,14 @@ export interface EventCircuitCity {
 export interface EventCircuit {
   idCircuito: string;
   nombre: string;
-  longitudKm: number;
-  curvas: number;
-  vueltas: number;
+  longitudKm?: number;
+  longitud_km?: number;
+  curvas?: number;
+  vueltas?: number;
+  capacidad?: string;
+  record?: string;
+  velocidad_maxima?: string;
+  maximo_ganador?: string;
   mapaSvgUrl: string;
   ciudad: EventCircuitCity;
 }

@@ -7,6 +7,7 @@ interface AddPaymentModalProps {
   onClose: () => void;
   mode?: "add" | "edit";
   initialData?: MetodoPago | null;
+  onConfirm?: (cardData: any) => void;
 }
 
 export default function AddPaymentModal({
@@ -14,6 +15,7 @@ export default function AddPaymentModal({
   onClose,
   mode = "add",
   initialData,
+  onConfirm,
 }: AddPaymentModalProps) {
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
@@ -44,13 +46,20 @@ export default function AddPaymentModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(mode === "add" ? "Guardando tarjeta:" : "Editando tarjeta:", {
-      cardNumber,
-      cardName,
-      expiry,
-      cvc,
+    const digits = cardNumber.replace(/\D/g, "");
+    const cardData = {
       tipo,
-    });
+      ultimos4Digitos: digits.slice(-4),
+      fechaExpiracion: expiry,
+      proveedorToken: "tok_simulado_123", // simulate token
+      nombre_titular: cardName,
+    };
+    
+    console.log(mode === "add" ? "Guardando tarjeta:" : "Editando tarjeta:", cardData);
+    
+    if (onConfirm) {
+      onConfirm(cardData);
+    }
     onClose();
   };
 
