@@ -243,6 +243,20 @@ const KNOWN_CIRCUITS_META: Record<string, CircuitMeta> = {
     blurb: "El Templo de la Velocidad. Acelerador a fondo frente a los Tifosi.",
     regionFallback: "Europa",
   },
+  portugal: {
+    name: "Portuguese GP",
+    img: "/races/portugal.jpg",
+    blurb:
+      "Una montaña rusa de asfalto con impresionantes cambios de elevación.",
+    regionFallback: "Europa",
+  },
+  portimao: {
+    name: "Portuguese GP",
+    img: "/races/portugal.jpg",
+    blurb:
+      "Una montaña rusa de asfalto con impresionantes cambios de elevación.",
+    regionFallback: "Europa",
+  },
 };
 
 function findCircuitMeta(
