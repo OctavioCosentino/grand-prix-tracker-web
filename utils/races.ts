@@ -15,4 +15,5 @@ export interface Race {
   record?: string;
   velocidad_maxima?: string;
   maximo_ganador?: string;
+  circuit_svg_url?: string;
 }

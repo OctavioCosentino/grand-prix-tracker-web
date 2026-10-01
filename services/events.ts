@@ -23,6 +23,7 @@ export interface EventCircuit {
   velocidad_maxima?: string;
   maximo_ganador?: string;
   mapaSvgUrl: string;
+  circuit_svg_url?: string;
   ciudad: EventCircuitCity;
 }
 
@@ -51,6 +52,7 @@ export const API_BASE_URL =
  */
 export async function getEvents(): Promise<BackendEvent[]> {
   const res = await fetch(`${API_BASE_URL}/events`, {
+    cache: "no-store",
     headers: {
       Accept: "application/json",
     },
@@ -80,6 +82,7 @@ export async function getEvents(): Promise<BackendEvent[]> {
  */
 export async function getEventById(id: string): Promise<BackendEvent | null> {
   const res = await fetch(`${API_BASE_URL}/events/${encodeURIComponent(id)}`, {
+    cache: "no-store",
     headers: {
       Accept: "application/json",
     },

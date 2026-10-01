@@ -361,13 +361,14 @@ export function mapBackendEventToRace(event: BackendEvent): Race {
     date: isoDate,
     region,
     raced: isFinished,
-    longitud_km: circuit?.longitud_km ?? circuit?.longitudKm ?? "-",
-    curvas: circuit?.curvas ?? "-",
-    vueltas: circuit?.vueltas ?? "-",
-    capacidad: circuit?.capacidad ?? "-",
-    record: circuit?.record ?? "-",
-    velocidad_maxima: circuit?.velocidad_maxima ?? "-",
-    maximo_ganador: circuit?.maximo_ganador ?? "-",
+    longitud_km: circuit?.longitud_km ?? circuit?.longitudKm ?? (event as any).longitud_km ?? "-",
+    curvas: circuit?.curvas ?? (event as any).curvas ?? "-",
+    vueltas: circuit?.vueltas ?? (event as any).vueltas ?? "-",
+    capacidad: circuit?.capacidad ?? (event as any).capacidad ?? "-",
+    record: circuit?.record ?? (event as any).record ?? "-",
+    velocidad_maxima: circuit?.velocidad_maxima ?? (event as any).velocidad_maxima ?? "-",
+    maximo_ganador: circuit?.maximo_ganador ?? (event as any).maximo_ganador ?? "-",
+    circuit_svg_url: circuit?.circuit_svg_url ?? (event as any).circuit_svg_url ?? circuit?.mapaSvgUrl ?? "",
   };
 }
 

@@ -68,11 +68,11 @@ export default function HotelCard({
       </div>
 
       {/* Hotel Info */}
-      <div className="flex flex-grow flex-col justify-between p-6">
+      <div className="flex flex-grow flex-col justify-between p-6 min-w-0">
         <div>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h3 className="font-display text-xl font-bold text-[#F3F1EA]">
+          <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <h3 className="font-display text-xl font-bold text-[#F3F1EA] break-words">
                 {nombre}
               </h3>
               {estrellas !== null && (
@@ -97,7 +97,7 @@ export default function HotelCard({
                 </div>
               )}
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right shrink-0">
               <span className="font-mono text-[10px] uppercase text-[#93949F]">
                 Desde
               </span>
@@ -114,7 +114,7 @@ export default function HotelCard({
             <div className="mt-4 flex flex-wrap gap-4 font-mono text-xs text-[#93949F]">
               <div className="flex items-center gap-1.5">
                 <svg
-                  className="h-4 w-4 text-[#7C4DFF]"
+                  className="h-4 w-4 shrink-0 text-[#7C4DFF]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -148,14 +148,14 @@ export default function HotelCard({
             return (
               <li
                 key={room.idHabitacion}
-                className={`flex items-center justify-between gap-4 py-3 ${
+                className={`flex flex-wrap sm:flex-nowrap items-center justify-between gap-4 py-3 ${
                   hasConflict
                     ? "-mx-2 rounded-sm border border-[#E10600] px-2"
                     : ""
                 } ${soldOut && cantidad === 0 ? "opacity-50" : ""}`}
               >
-                <div>
-                  <p className="font-display text-sm font-bold text-[#F3F1EA]">
+                <div className="min-w-0 flex-1">
+                  <p className="font-display text-sm font-bold text-[#F3F1EA] truncate">
                     {room.tipo}
                   </p>
                   <StockLabel
@@ -164,8 +164,8 @@ export default function HotelCard({
                     lowThreshold={2}
                   />
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
+                <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 shrink-0">
+                  <div className="text-left sm:text-right">
                     <span className="font-mono text-sm font-bold text-[#F3F1EA]">
                       {formatUsd(room.precioPorNocheUsd)}
                     </span>
