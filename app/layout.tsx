@@ -3,6 +3,7 @@ import { Inter, Titillium_Web, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/providers/QueryProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const fontDisplay = Titillium_Web({
   subsets: ["latin"],
@@ -43,6 +44,23 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-body bg-[#0B0B10] text-[#F3F1EA]">
         <QueryProvider>
           <AuthProvider>{children}</AuthProvider>
+          <Toaster 
+            position="bottom-right" 
+            toastOptions={{
+              success: {
+                style: {
+                  background: "#dcfce7",
+                  color: "#14532d",
+                },
+              },
+              error: {
+                style: {
+                  background: "#fee2e2",
+                  color: "#7f1d1d",
+                },
+              },
+            }}
+          />
         </QueryProvider>
       </body>
     </html>
