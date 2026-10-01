@@ -7,6 +7,7 @@ interface HotelFiltersProps {
   setMinStars: (val: number) => void;
   transferOnly: boolean;
   setTransferOnly: (val: boolean) => void;
+  disabledTransfer?: boolean;
 }
 
 export default function HotelFilters({
@@ -16,6 +17,7 @@ export default function HotelFilters({
   setMinStars,
   transferOnly,
   setTransferOnly,
+  disabledTransfer = false,
 }: HotelFiltersProps) {
   return (
     <aside className="w-full">
@@ -78,14 +80,15 @@ export default function HotelFilters({
           </div>
 
           {/* Filtro Traslado */}
-          <div className="flex shrink-0 items-center md:h-10">
-            <label className="flex cursor-pointer items-center gap-3">
+          <div className={`flex shrink-0 items-center md:h-10 ${disabledTransfer ? 'opacity-50 pointer-events-none' : ''}`}>
+            <label className={`flex items-center gap-3 ${disabledTransfer ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
               <div className="relative">
                 <input
                   type="checkbox"
                   className="peer sr-only"
                   checked={transferOnly}
                   onChange={(e) => setTransferOnly(e.target.checked)}
+                  disabled={disabledTransfer}
                 />
                 <div className="h-5 w-9 rounded-full bg-[#1C1D24] transition-colors peer-checked:bg-[#E10600]"></div>
                 <div className="absolute left-[2px] top-[2px] h-4 w-4 rounded-full bg-[#F3F1EA] transition-transform peer-checked:translate-x-full"></div>

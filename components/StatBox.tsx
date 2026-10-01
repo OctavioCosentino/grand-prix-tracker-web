@@ -1,6 +1,6 @@
-export default function StatBox({ label, value, unit }: { label: string; value: string; unit?: string }) {
+export default function StatBox({ label, value, unit, className }: { label: string; value: string; unit?: string, className?: string }) {
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-sm border border-[#1C1D24] bg-[#131318] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#E10600]/50 hover:shadow-[0_0_15px_rgba(225,6,0,0.15)]">
+    <div className={`group relative flex flex-col overflow-hidden rounded-sm border border-[#1C1D24] bg-[#131318] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#E10600]/50 hover:shadow-[0_0_15px_rgba(225,6,0,0.15)] ${className || ''}`}>
       <div className="absolute bottom-0 left-0 top-0 w-1 origin-bottom scale-y-0 bg-[#E10600] transition-transform duration-300 ease-out group-hover:scale-y-100 cursor-f1" />
       <div className="absolute inset-0 bg-gradient-to-r from-[#E10600]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 cursor-f1" />
 

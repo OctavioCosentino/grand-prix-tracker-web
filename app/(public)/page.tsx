@@ -167,9 +167,21 @@ export default function Page() {
       {/* ================= SERVICIOS ================= */}
       <section
         id="servicios"
-        className="relative border-t border-[#1C1D24] bg-[#0E0E13] py-24 md:py-32"
+        className="relative overflow-hidden border-t border-[#1C1D24] bg-[#0E0E13] py-24 md:py-32"
       >
-        <div className="mx-auto max-w-7xl px-6">
+        {/* VIDEO BACKGROUND */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 z-0 h-full w-full object-cover opacity-15 scale-[1.55] origin-center"
+        >
+          <source src="/franco_overtake.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0E0E13] via-transparent to-[#0E0E13]" />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-6">
           <Reveal>
             <Eyebrow>Todo en un box</Eyebrow>
             <h2
@@ -251,6 +263,7 @@ export default function Page() {
           {DESTINATIONS.map((dest, i) => (
             <Reveal key={dest.name} delay={(i + 1) * 120}>
               <DestinationCard
+                id={dest.id}
                 name={dest.name}
                 img={dest.img}
                 circuit={dest.circuit}

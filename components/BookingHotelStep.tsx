@@ -79,6 +79,7 @@ export default function BookingHotelStep({
           setMinStars={setMinStars}
           transferOnly={state.traslado}
           setTransferOnly={(val) => dispatch({ type: "setTraslado", incluye: val })}
+          disabledTransfer={filteredHotels.length === 0}
         />
 
         <div className="flex flex-col gap-4">
@@ -99,7 +100,7 @@ export default function BookingHotelStep({
             <div className="relative flex h-64 flex-col items-center justify-center overflow-hidden rounded-md border border-dashed border-[#33343D] bg-[#0E0E13]">
               <div
                 className="absolute inset-0 z-0 bg-cover bg-center opacity-30 grayscale"
-                style={{ backgroundImage: "url('/mclaren_roto.png')" }}
+                style={{ backgroundImage: "url('/empty.png')" }}
               />
               <div className="relative z-10 flex flex-col items-center text-center px-4">
                 <p className="mt-4 font-mono text-sm tracking-widest text-[#ffffff] uppercase">

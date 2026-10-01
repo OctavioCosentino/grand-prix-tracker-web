@@ -16,14 +16,14 @@ export default function RaceDetailsPanel({ race }: RaceDetailsPanelProps) {
         {race.blurb} Prepárate para vivir una experiencia inolvidable en uno de los trazados más emocionantes del calendario.
       </p>
 
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 items-start">
         <StatBox label="Longitud" value={String(race.longitud_km || "-")} unit="km" />
         <StatBox label="Vueltas" value={String(race.vueltas || "-")} />
         <StatBox label="Curvas" value={String(race.curvas || "-")} />
         <StatBox label="Capacidad" value={race.capacidad || "-"} />
         <StatBox label="Récord de Pista" value={race.record || "-"} />
         <StatBox label="Vel. Máxima" value={race.velocidad_maxima || "-"} unit="km/h" />
-        <StatBox label="Máx. Ganador" value={race.maximo_ganador || "-"} />
+        <StatBox label="Máx. Ganador" value={race.maximo_ganador || "-"} className="col-span-2 sm:col-span-2" />
       </div>
     </div>
   );
