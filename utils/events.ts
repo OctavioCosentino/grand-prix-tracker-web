@@ -368,7 +368,19 @@ export function mapBackendEventToRace(event: BackendEvent): Race {
     record: circuit?.record ?? (event as any).record ?? "-",
     velocidad_maxima: circuit?.velocidad_maxima ?? (event as any).velocidad_maxima ?? "-",
     maximo_ganador: circuit?.maximo_ganador ?? (event as any).maximo_ganador ?? "-",
-    circuit_svg_url: circuit?.circuit_svg_url ?? (event as any).circuit_svg_url ?? circuit?.mapaSvgUrl ?? "",
+    circuit_svg_url: (() => {
+      let rawUrl = circuit?.circuit_svg_url ?? (event as any).circuit_svg_url ?? circuit?.mapaSvgUrl ?? "";
+      if (rawUrl) {
+        rawUrl = rawUrl.replace(/\\/g, "/");
+        if (rawUrl.toLowerCase().startsWith("public/")) {
+          rawUrl = rawUrl.substring(6);
+        }
+        if (!rawUrl.startsWith("/")) {
+          rawUrl = "/" + rawUrl;
+        }
+      }
+      return rawUrl;
+    })(),
   };
 }
 

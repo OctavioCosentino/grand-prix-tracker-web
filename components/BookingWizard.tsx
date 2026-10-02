@@ -297,7 +297,7 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
           />
         </div>
       ) : (
-        <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_400px]">
+        <div className={`mt-10 grid grid-cols-1 gap-8 ${state.step === "entradas" ? "lg:grid-cols-1" : "lg:grid-cols-[1fr_400px]"}`}>
           <div className="min-w-0">
             {state.step === "hotel" && (
               <BookingHotelStep
@@ -313,6 +313,7 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
                 ticketsQuery={ticketsQuery}
                 state={state}
                 dispatch={dispatch}
+                race={race}
               />
             )}
             {state.step === "vuelos" && (

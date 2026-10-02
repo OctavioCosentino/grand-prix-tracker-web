@@ -3,6 +3,7 @@ import { Entrada } from "@/services/tickets";
 import { formatUsd } from "@/utils/booking";
 import QuantityStepper from "./QuantityStepper";
 import StockLabel from "./StockLabel";
+import { tireColors } from "@/utils/tireColors";
 
 interface TicketCardProps {
   ticket: Entrada;
@@ -12,9 +13,9 @@ interface TicketCardProps {
 }
 
 const TIPO_COLORS: Record<Entrada["tipo"], string> = {
-  General: "#34D399",
-  "Asiento Numerado": "#7C4DFF",
-  VIP: "#E7B33C",
+  General: tireColors.hard,
+  "Asiento Numerado": tireColors.medium,
+  VIP: tireColors.soft,
 };
 
 export default function TicketCard({
@@ -45,7 +46,7 @@ export default function TicketCard({
         >
           {ticket.tipo}
         </span>
-        <h3 className="font-display mt-1 text-xl font-bold text-[#F3F1EA]">
+        <h3 className="font-display mt-1 text-xl font-bold" style={{ color }}>
           {ticket.nombreTribuna}
         </h3>
         <div className="mt-1">
