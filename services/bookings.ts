@@ -25,6 +25,7 @@ export interface CheckoutRequest {
   }[];
   vuelos?: { idVuelo: string; cantidadPasajeros: number }[];
   pago: PagoConTarjetaGuardada | PagoConTarjetaNueva;
+  incluyeTransporte?: boolean;
 }
 
 export type EstadoReserva = "Pendiente" | "Pagada" | "Cancelada";
@@ -53,6 +54,7 @@ export interface Reserva {
   incluyeEntrada: boolean;
   incluyeHotel: boolean;
   incluyeVuelo: boolean;
+  incluyeTransporte: boolean;
   idMetodoPago: string | null;
   /** Nunca incluye el token de la pasarela */
   metodoPago: {

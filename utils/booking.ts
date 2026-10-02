@@ -298,8 +298,8 @@ export function buildSummaryLines(
       id: "traslado",
       step: "hotel",
       label: "Traslado Incluido",
-      detail: "Servicio de transporte al circuito (pesos argentinos)",
-      subtotal: 10000,
+      detail: "Servicio de transporte ida y vuelta al circuito",
+      subtotal: 30,
     });
   }
 
@@ -416,6 +416,7 @@ export function buildCheckoutRequest(
     ...(entradas.length ? { entradas } : {}),
     ...(habitaciones.length ? { habitaciones } : {}),
     ...(vuelos.length ? { vuelos } : {}),
+    incluyeTransporte: state.traslado,
     pago:
       state.pago.kind === "guardada"
         ? { idMetodoPago: state.pago.idMetodoPago }

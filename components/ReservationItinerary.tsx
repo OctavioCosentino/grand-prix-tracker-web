@@ -34,8 +34,8 @@ export default function ReservationItinerary({ reserva }: { reserva: Reserva }) 
 
   return (
     <div className="flex flex-col gap-6">
-      {reserva.habitaciones.length > 0 && (
-        <Section title="Hotel">
+      {(reserva.habitaciones.length > 0 || reserva.incluyeTransporte) && (
+        <Section title="Estadía">
           {reserva.habitaciones.map((h, i) => (
             <Line
               key={`${h.idHabitacion}-${i}`}
@@ -44,6 +44,13 @@ export default function ReservationItinerary({ reserva }: { reserva: Reserva }) 
               subtotal={h.subtotalUsd}
             />
           ))}
+          {reserva.incluyeTransporte && (
+            <Line 
+              label="Traslado Incluido" 
+              detail="Servicio de transporte ida y vuelta al circuito" 
+              subtotal={30} 
+            />
+          )}
         </Section>
       )}
 
