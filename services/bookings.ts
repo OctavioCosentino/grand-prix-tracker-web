@@ -13,6 +13,7 @@ export interface PagoConTarjetaNueva {
   ultimos4Digitos: string;
   fechaExpiracion: string; // "MM/AA"
   proveedorToken: string;
+  nombre_titular?: string;
 }
 
 export interface CheckoutRequest {

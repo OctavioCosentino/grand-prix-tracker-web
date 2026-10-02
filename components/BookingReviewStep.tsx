@@ -12,6 +12,7 @@ import {
   formatUsd,
 } from "@/utils/booking";
 import ButtonChecker from "./ButtonChecker";
+import ButtonProgress from "./ButtonProgress";
 import BookingNotice from "./BookingNotice";
 import { describeCardType } from "./BookingPaymentStep";
 
@@ -156,14 +157,18 @@ export default function BookingReviewStep({
           </span>
         </div>
 
-        <ButtonChecker
-          className="mt-8 w-full py-4 font-mono text-[11px] uppercase tracking-widest"
-          showArrow={!isSubmitting}
-          disabled={issues.length > 0 || isSubmitting}
-          onClick={onConfirm}
-        >
-          {isSubmitting ? "Procesando pago..." : "Confirmar y pagar"}
-        </ButtonChecker>
+        {isSubmitting ? (
+          <ButtonProgress className="mt-8 w-full py-4" />
+        ) : (
+          <ButtonChecker
+            className="mt-8 w-full py-4 font-mono text-[11px] uppercase tracking-widest"
+            showArrow
+            disabled={issues.length > 0}
+            onClick={onConfirm}
+          >
+            Confirmar y pagar
+          </ButtonChecker>
+        )}
       </div>
     </div>
   );
