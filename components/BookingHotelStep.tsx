@@ -6,6 +6,7 @@ import { Hotel } from "@/services/hotels";
 import { BookingAction, BookingState, formatDateES } from "@/utils/booking";
 import HotelCard from "./HotelCard";
 import HotelFilters from "./HotelFilters";
+import EmptyState from "./EmptyState";
 import BookingNotice, { QueryStatus } from "./BookingNotice";
 
 interface BookingHotelStepProps {
@@ -17,7 +18,7 @@ interface BookingHotelStepProps {
   checkInPassed: boolean;
 }
 
-const MAX_PRICE = 2000;
+const MAX_PRICE = 200000;
 
 export default function BookingHotelStep({
   hotelsQuery,
@@ -50,6 +51,10 @@ export default function BookingHotelStep({
   }
 
   const hotels = hotelsQuery.data;
+  const maxHotelPrice = hotels.length > 0 
+    ? Math.max(...hotels.flatMap(h => h.habitaciones.map(r => r.precioPorNocheUsd)))
+    : MAX_PRICE;
+  const dynamicMaxPrice = Math.max(2000, maxHotelPrice);
   const conflictIds = state.conflict?.step === "hotel" ? state.conflict.itemIds : [];
 
   const filteredHotels = hotels.filter((h) => {
@@ -73,13 +78,14 @@ export default function BookingHotelStep({
 
       <div className="flex flex-col gap-6">
         <HotelFilters
-          priceRange={priceRange}
+          priceRange={Math.min(priceRange, dynamicMaxPrice)}
           setPriceRange={setPriceRange}
           minStars={minStars}
           setMinStars={setMinStars}
           transferOnly={state.traslado}
           setTransferOnly={(val) => dispatch({ type: "setTraslado", incluye: val })}
           disabledTransfer={filteredHotels.length === 0}
+          maxPrice={dynamicMaxPrice}
         />
 
         <div className="flex flex-col gap-4">
@@ -97,29 +103,20 @@ export default function BookingHotelStep({
               />
             ))
           ) : (
-            <div className="relative flex h-64 flex-col items-center justify-center overflow-hidden rounded-md border border-dashed border-[#33343D] bg-[#0E0E13]">
-              <div
-                className="absolute inset-0 z-0 bg-cover bg-center opacity-30 grayscale"
-                style={{ backgroundImage: "url('/empty.png')" }}
-              />
-              <div className="relative z-10 flex flex-col items-center text-center px-4">
-                <p className="mt-4 font-mono text-sm tracking-widest text-[#ffffff] uppercase">
-                  {hotels.length ? "No hay hoteles que coincidan" : "No hay hoteles para este evento"}
-                </p>
-                {hotels.length > 0 && (
-                  <button
-                    onClick={() => {
-                      setPriceRange(MAX_PRICE);
-                      setMinStars(3);
-                      dispatch({ type: "setTraslado", incluye: false });
-                    }}
-                    className="mt-4 text-base font-bold text-[#f10b03] hover:underline cursor-pointer"
-                  >
-                    Limpiar filtros
-                  </button>
-                )}
-              </div>
-            </div>
+            <EmptyState message={hotels.length ? "No hay hoteles que coincidan" : "No hay hoteles para este evento"}>
+              {hotels.length > 0 && (
+                <button
+                  onClick={() => {
+                    setPriceRange(MAX_PRICE);
+                    setMinStars(3);
+                    dispatch({ type: "setTraslado", incluye: false });
+                  }}
+                  className="mt-4 text-base font-bold text-[#f10b03] hover:underline cursor-pointer"
+                >
+                  Limpiar filtros
+                </button>
+              )}
+            </EmptyState>
           )}
         </div>
       </div>

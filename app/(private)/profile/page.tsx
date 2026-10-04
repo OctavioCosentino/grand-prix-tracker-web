@@ -35,9 +35,13 @@ export default function ProfilePage({
       <div className="pointer-events-none absolute right-0 top-0 h-[400px] w-[600px] rounded-full bg-[#E10600]/5 blur-[150px]" />
       <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-8 px-6 pb-24 md:flex-row">
         <aside className="flex w-full flex-col gap-2 md:w-72 md:flex-shrink-0">
-          <div className="mb-6 rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
-            <div className="mb-4 flex items-center gap-4">
-              <ProfileCircle isLoggedIn={true} name={displayName || "Piloto"}/>
+          <div className="relative mb-6 overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 grayscale"
+              style={{ backgroundImage: "url('/franco.png')" }}
+            />
+            <div className="relative z-10 mb-4 flex items-center gap-4">
+              <ProfileCircle isLoggedIn={true} name={displayName || "Piloto"} disableSpin={true} />
               <div>
                 <h2 className="font-display text-lg font-900 tracking-tight">{displayName}</h2>
                 <span className="font-mono text-[10px] tracking-[0.15em] text-[#34D399]">

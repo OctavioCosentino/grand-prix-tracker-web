@@ -2,6 +2,7 @@ import React from "react";
 import DestinationCard from "./DestinationsCard";
 import { Race } from "@/utils/races";
 import SearchBar from "./SearchBar";
+import EmptyState from "./EmptyState";
 import CalendarSkeleton from "./CalendarSkeleton";
 
 interface CalendarGridProps {
@@ -62,26 +63,14 @@ export default function CalendarGrid({
       {isLoading ? (
         <CalendarSkeleton count={6} />
       ) : error ? (
-        <div className="relative flex h-64 flex-col items-center justify-center overflow-hidden rounded-md border border-dashed border-[#33343D] bg-[#0E0E13]">
-          <div
-            className="absolute inset-0 z-0 bg-cover bg-center opacity-30 grayscale"
-            style={{ backgroundImage: "url('/crash.jpg')" }}
-          />
-          <div className="relative z-10 flex flex-col items-center text-center px-4">
-            <p className="mt-4 font-mono text-sm uppercase tracking-widest text-[#ffffff]">
-              No se pudieron cargar los eventos
-            </p>
-            <p className="mt-2 font-mono text-xs text-[#93949F]">{error}</p>
-            {onRetry && (
-              <button
-                onClick={onRetry}
-                className="mt-4 text-base font-bold text-[#f10b03] hover:underline cursor-pointer"
-              >
-                Reintentar conexión
-              </button>
-            )}
-          </div>
-        </div>
+        <EmptyState message="NO HAY CARRERAS EN ESTE SECTOR">
+            <button
+              onClick={onClearFilters}
+              className="mt-4 text-m font-bold text-[#f10b03] hover:underline cursor-pointer"
+            >
+              Limpiar filtros
+            </button>
+          </EmptyState>
       ) : filteredRaces.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           {filteredRaces.map((race, i) => (

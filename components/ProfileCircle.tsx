@@ -12,6 +12,7 @@ interface AuthButtonProps {
   onLoginClick?: () => void;
   onProfileClick?: () => void;
   compound?: "soft" | "medium" | "hard" | "inter" | "full_wet";
+  disableSpin?: boolean;
 }
 
 const emptySubscribe = () => () => {};
@@ -39,6 +40,7 @@ export default function AuthButton({
   onLoginClick,
   onProfileClick,
   compound,
+disableSpin = false,
 }: AuthButtonProps) {
   const randomCompound = useSyncExternalStore(
     emptySubscribe,
@@ -68,7 +70,7 @@ export default function AuthButton({
       className="group relative h-14 w-14 flex-shrink-0 focus:outline-none cursor-pointer"
       title={name}
     >
-      <div className="absolute inset-0 rounded-full bg-[#1C1D24] shadow-[inset_0_4px_6px_rgba(0,0,0,0.6),0_2px_4px_rgba(0,0,0,0.4)] transition-transform duration-700 ease-out group-hover:rotate-180">
+      <div className={`absolute inset-0 rounded-full bg-[#1C1D24] shadow-[inset_0_4px_6px_rgba(0,0,0,0.6),0_2px_4px_rgba(0,0,0,0.4)] transition-transform duration-700 ease-out ${!disableSpin ? "group-hover:rotate-180" : ""}`}>
         <div
           className="absolute inset-[3px] rounded-full border-[3px] border-dashed opacity-70"
           style={{ borderColor: stripeColor }}

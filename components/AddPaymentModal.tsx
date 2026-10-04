@@ -23,6 +23,53 @@ export default function AddPaymentModal({
   const [cvc, setCvc] = useState("");
   const [tipo, setTipo] = useState<"Credito" | "Debito">("Credito");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [expiryError, setExpiryError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length > 16) val = val.slice(0, 16);
+    let formatted = "";
+    for (let i = 0; i < val.length; i += 4) {
+      if (i > 0) formatted += " ";
+      formatted += val.slice(i, i + 4);
+    }
+    setCardNumber(formatted);
+  };
+
+  const handleCardNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\d/g, "");
+    setCardName(val.toUpperCase());
+  };
+
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length > 4) val = val.slice(0, 4);
+    
+    if (val.length >= 3) {
+      val = val.slice(0, 2) + "/" + val.slice(2);
+    }
+    setExpiry(val);
+
+    if (val.length === 5) {
+      const parts = val.split("/");
+      const yy = Number(parts[1]);
+      const currentYear = Number(new Date().getFullYear().toString().slice(-2));
+      if (yy < currentYear) {
+        setExpiryError(true);
+      } else {
+        setExpiryError(false);
+      }
+    } else {
+      setExpiryError(false);
+    }
+  };
+
+  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value.replace(/\D/g, "");
+    if (val.length > 3) val = val.slice(0, 3);
+    setCvc(val);
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -44,7 +91,7 @@ export default function AddPaymentModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const digits = cardNumber.replace(/\D/g, "");
     const cardData = {
@@ -57,6 +104,8 @@ export default function AddPaymentModal({
     
     console.log(mode === "add" ? "Guardando tarjeta:" : "Editando tarjeta:", cardData);
     
+    if (expiryError) return;
+
     if (onConfirm) {
       onConfirm(cardData);
     }
@@ -108,7 +157,7 @@ export default function AddPaymentModal({
               maxLength={19}
               placeholder="0000 0000 0000 0000"
               value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value)}
+              onChange={handleCardNumberChange}
               className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
             />
           </div>
@@ -120,9 +169,9 @@ export default function AddPaymentModal({
             <input
               type="text"
               required
-              placeholder="Ayrton Senna"
+              placeholder="AYRTON SENNA"
               value={cardName}
-              onChange={(e) => setCardName(e.target.value)}
+              onChange={handleCardNameChange}
               className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
             />
           </div>
@@ -138,9 +187,10 @@ export default function AddPaymentModal({
                 maxLength={5}
                 placeholder="MM/AA"
                 value={expiry}
-                onChange={(e) => setExpiry(e.target.value)}
-                className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
+                onChange={handleExpiryChange}
+                className={`w-full rounded-sm border ${expiryError ? 'border-[#E10600]' : 'border-[#33343D]'} bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]`}
               />
+              {expiryError && <span className="text-[#E10600] text-[10px] mt-1">Ingrese un año válido</span>}
             </div>
             <div className="flex flex-col gap-2">
               <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
@@ -149,10 +199,10 @@ export default function AddPaymentModal({
               <input
                 type="text"
                 required
-                maxLength={4}
+                maxLength={3}
                 placeholder="123"
                 value={cvc}
-                onChange={(e) => setCvc(e.target.value)}
+                onChange={handleCvcChange}
                 className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
               />
             </div>

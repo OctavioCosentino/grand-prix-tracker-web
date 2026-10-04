@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Titillium_Web, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import "flag-icons/css/flag-icons.min.css";
 import QueryProvider from "@/components/providers/QueryProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
 import { Toaster } from "react-hot-toast";

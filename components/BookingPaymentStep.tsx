@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { UseQueryResult } from "@tanstack/react-query";
 import { MetodoPago } from "@/services/paymentMethods";
@@ -27,7 +25,12 @@ export default function BookingPaymentStep({
   dispatch,
 }: BookingPaymentStepProps) {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
+  const [modalInitialData, setModalInitialData] = useState<any>(null);
   const pago = state.pago;
+  const [tempNewCard, setTempNewCard] = useState<any>(
+    pago?.kind === "nueva" ? pago.tarjeta : null
+  );
   
   const { user } = useAuth();
   const defaultName = user ? getDisplayName(user) : "Piloto";
@@ -46,7 +49,7 @@ export default function BookingPaymentStep({
             onRetry={() => paymentQuery.refetch()}
             loadingText="Cargando tus tarjetas..."
           />
-        ) : paymentQuery.data.length === 0 ? (
+        ) : paymentQuery.data.length === 0 && !tempNewCard ? (
           <p className="text-sm text-[#93949F]">No tenés tarjetas guardadas.</p>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -54,7 +57,6 @@ export default function BookingPaymentStep({
               const selected =
                 pago?.kind === "guardada" && pago.idMetodoPago === card.idMetodoPago;
               
-              // Import helpers in the component or file level, see below
               return (
                 <div key={card.idMetodoPago} className={card.vencida ? "opacity-40 cursor-not-allowed" : ""}>
                   <PaymentCard
@@ -77,6 +79,27 @@ export default function BookingPaymentStep({
                 </div>
               );
             })}
+
+            {/* MOCK DE TARJETA NUEVA DENTRO DE GUARDADAS */}
+            {tempNewCard && (
+              <div>
+                <PaymentCard
+                  brand={getBrandFromLast4(tempNewCard.ultimos4Digitos)}
+                  last4={tempNewCard.ultimos4Digitos}
+                  holderName={tempNewCard.nombre_titular || defaultName}
+                  tipo={tempNewCard.tipo}
+                  selected={pago?.kind === "nueva"}
+                  editable={false}
+                  onClick={() => {
+                    if (pago?.kind === "nueva") {
+                      dispatch({ type: "setPayment", pago: null });
+                    } else {
+                      dispatch({ type: "setPayment", pago: { kind: "nueva", tarjeta: tempNewCard } });
+                    }
+                  }}
+                />
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -85,47 +108,30 @@ export default function BookingPaymentStep({
         <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7C4DFF]">
           Tarjeta nueva
         </h2>
-
-        {pago?.kind === "nueva" ? (
-          <div className="flex flex-col gap-2">
-            <PaymentCard
-              brand={getBrandFromLast4(pago.tarjeta.ultimos4Digitos)}
-              last4={pago.tarjeta.ultimos4Digitos}
-              holderName={pago.tarjeta.nombre_titular || defaultName}
-              tipo={pago.tarjeta.tipo}
-              selected={true}
-              editable={false}
-              onClick={() => dispatch({ type: "setPayment", pago: null })}
-            />
-            <button
-              type="button"
-              onClick={() => {
-                dispatch({ type: "setPayment", pago: null });
-                setShowAddModal(true);
-              }}
-              className="mt-2 text-sm font-bold text-[#E10600] hover:underline cursor-pointer self-start"
-            >
-              Cambiar tarjeta nueva
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex h-40 flex-col items-center justify-center gap-3 rounded-md border border-dashed border-[#33343D] bg-transparent transition-colors hover:border-[#E10600] hover:bg-[#131318] cursor-pointer sm:w-1/2"
-          >
-            <span className="text-2xl text-[#5C5D66]">+</span>
-            <span className="font-mono text-[10px] tracking-widest text-[#93949F]">
-              USAR TARJETA NUEVA
-            </span>
-          </button>
-        )}
+        
+        <button
+          onClick={() => {
+            setModalMode("add");
+            setModalInitialData(null);
+            setShowAddModal(true);
+          }}
+          className="flex h-40 flex-col items-center justify-center gap-3 rounded-md border border-dashed border-[#33343D] bg-transparent transition-colors hover:border-[#E10600] hover:bg-[#131318] cursor-pointer sm:w-1/2"
+        >
+          <span className="text-2xl text-[#5C5D66]">+</span>
+          <span className="font-mono text-[10px] tracking-widest text-[#93949F]">
+            USAR TARJETA NUEVA
+          </span>
+        </button>
       </section>
 
       <AddPaymentModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
-        mode="add"
-        onConfirm={(cardData) => {
+        mode={modalMode}
+        initialData={modalInitialData}
+        onConfirm={async (cardData) => {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setTempNewCard(cardData);
           dispatch({ 
             type: "setPayment", 
             pago: { kind: "nueva", tarjeta: cardData } 

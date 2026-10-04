@@ -5,6 +5,7 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { Entrada } from "@/services/tickets";
 import { BookingAction, BookingState } from "@/utils/booking";
 import TicketCard from "./TicketCard";
+import EmptyState from "./EmptyState";
 import BookingNotice, { QueryStatus } from "./BookingNotice";
 import CircuitViewer from "./CircuitViewer";
 import { Race } from "@/utils/races";
@@ -38,9 +39,7 @@ export default function BookingTicketsStep({
 
   if (!tickets.length) {
     return (
-      <BookingNotice severity="warning" title="Sin entradas">
-        Todavía no hay entradas a la venta para este Gran Premio.
-      </BookingNotice>
+      <EmptyState message="Todavía no hay entradas a la venta para este Gran Premio" />
     );
   }
 

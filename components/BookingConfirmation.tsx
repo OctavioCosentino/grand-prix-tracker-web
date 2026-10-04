@@ -5,6 +5,7 @@ import Eyebrow from "./EyeBrow";
 import ButtonChecker from "./ButtonChecker";
 import ButtonOutline from "./ButtonOutline";
 import ReservationItinerary from "./ReservationItinerary";
+import { F1CarSilhouette } from "./F1CarSilhouette";
 
 interface BookingConfirmationProps {
   reserva: Reserva;
@@ -25,16 +26,34 @@ export default function BookingConfirmation({ reserva, eventName }: BookingConfi
         </h1>
         <p className="mt-2 text-[#93949F]">Tu paquete para {eventName} ya está pago.</p>
 
-        <div className="mt-8 rounded-sm border border-[#33343D] bg-[#131318] p-6 text-center">
-          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#5C5D66]">
+        <div className="relative overflow-hidden mt-8 rounded-sm border border-[#33343D] bg-[#131318] p-6 text-center">
+          <style>{`
+            @keyframes race-cars-confirmation {
+              0% { transform: translateX(-160px); }
+              100% { transform: translateX(100%); }
+            }
+            .animate-race-confirmation {
+              animation: race-cars-confirmation 5s linear infinite;
+            }
+          `}</style>
+
+          <span className="relative z-10 font-mono text-[10px] uppercase tracking-[0.3em] text-[#5C5D66]">
             Código de confirmación
           </span>
-          <p className="font-display mt-2 text-4xl font-900 tracking-widest text-[#F3F1EA]">
+          <p className="relative z-10 font-display mt-2 text-4xl font-900 tracking-widest text-[#F3F1EA]">
             {reserva.codigoConfirmacion}
           </p>
-          <p className="mt-2 font-mono text-[10px] text-[#5C5D66]">
+          <p className="relative z-10 mt-2 font-mono text-[10px] text-[#5C5D66]">
             Comprado el {formatDateTimeES(reserva.fechaCompra)}
           </p>
+
+          {/* Animación de autos en el borde inferior */}
+          <div className="absolute bottom-[-6px] left-0 w-full h-8 pointer-events-none opacity-40">
+            <div className="flex items-end animate-race-confirmation w-full absolute bottom-0 gap-8">
+              <F1CarSilhouette className="w-14 text-[#5C5D66]" />
+              <F1CarSilhouette className="w-14 text-[#5C5D66]" />
+            </div>
+          </div>
         </div>
 
         <div className="mt-8">

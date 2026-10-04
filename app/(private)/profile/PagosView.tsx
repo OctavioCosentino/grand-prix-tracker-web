@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import PaymentCard from "@/components/PaymentCard";
 import AddPaymentModal from "@/components/AddPaymentModal";
-import { getPaymentMethods } from "@/services/paymentMethods";
+import { getPaymentMethods, addPaymentMethod, updatePaymentMethod, MetodoPago } from "@/services/paymentMethods";
 import getRandomCompound, { tireColors } from "@/utils/tireColors";
 import { getBrandFromLast4 } from "@/utils/banksImages";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { getDisplayName } from "@/utils/auth";
-import { MetodoPago } from "@/services/paymentMethods";
 
 export default function PagosView() {
+  const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
   const [selectedCard, setSelectedCard] = useState<MetodoPago | null>(null);
@@ -22,6 +22,20 @@ export default function PagosView() {
   const { data: cards = [], isLoading } = useQuery({
     queryKey: ["paymentMethods"],
     queryFn: getPaymentMethods,
+  });
+
+  const addMutation = useMutation({
+    mutationFn: addPaymentMethod,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["paymentMethods"] });
+    },
+  });
+
+  const editMutation = useMutation({
+    mutationFn: (params: { id: string; data: any }) => updatePaymentMethod(params.id, params.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["paymentMethods"] });
+    },
   });
 
   const handleOpenAdd = () => {
@@ -45,7 +59,7 @@ export default function PagosView() {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {isLoading ? (
           <div className="flex h-40 flex-col items-center justify-center gap-3 rounded-md border border-[#1C1D24] bg-[#0E0E13] shadow-lg animate-pulse">
-            <span className="font-mono text-[10px] tracking-widest text-[#5C5D66]">
+            <span className="font-mono text-[10px] tracking-widest text-[#E10600]">
               CARGANDO BILLETERA...
             </span>
           </div>
@@ -87,6 +101,35 @@ export default function PagosView() {
         onClose={() => setIsModalOpen(false)}
         mode={modalMode}
         initialData={selectedCard}
+        onConfirm={async (cardData) => {
+          try {
+            if (modalMode === "add") {
+              await addMutation.mutateAsync({
+                tipo: cardData.tipo,
+                ultimos4Digitos: cardData.ultimos4Digitos,
+                fechaExpiracion: cardData.fechaExpiracion,
+                proveedorToken: cardData.proveedorToken,
+                nombre_titular: cardData.nombre_titular,
+              });
+            } else if (modalMode === "edit" && selectedCard) {
+              await editMutation.mutateAsync({
+                id: selectedCard.idMetodoPago,
+                data: {
+                  tipo: cardData.tipo,
+                  ultimos4Digitos: cardData.ultimos4Digitos,
+                  fechaExpiracion: cardData.fechaExpiracion,
+                  proveedorToken: cardData.proveedorToken,
+                  nombre_titular: cardData.nombre_titular,
+                },
+              });
+            }
+            setIsModalOpen(false);
+          } catch (error) {
+            console.error("Error guardando el metodo de pago", error);
+            // Si el backend tira error, lo vas a ver acá y el modal no se cierra
+            throw error; 
+          }
+        }}
       />
     </div>
   );

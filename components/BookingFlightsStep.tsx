@@ -6,6 +6,7 @@ import { Vuelo } from "@/services/flights";
 import { BookingAction, BookingState, countTickets, getPassengers } from "@/utils/booking";
 import FlightCard from "./FlightCard";
 import QuantityStepper from "./QuantityStepper";
+import EmptyState from "./EmptyState";
 import { QueryStatus } from "./BookingNotice";
 
 interface BookingFlightsStepProps {
@@ -61,46 +62,48 @@ export default function BookingFlightsStep({
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {columns.map(({ sentido, title, selectedId }) => {
-          const options = flights.filter((f) => f.sentido === sentido);
-          return (
-            <section key={sentido} className="flex flex-col gap-3">
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7C4DFF]">
-                {title}
-              </h2>
-              {options.length === 0 ? (
-                <p className="rounded-md border border-dashed border-[#33343D] bg-[#0E0E13] p-6 text-center font-mono text-xs uppercase tracking-widest text-[#5C5D66]">
-                  Sin vuelos de {title.toLowerCase()} disponibles
-                </p>
-              ) : (
-                options.map((flight) => {
-                  const selected = flight.idVuelo === selectedId;
-                  return (
-                    <FlightCard
-                      key={flight.idVuelo}
-                      flight={flight}
-                      pasajeros={pasajeros}
-                      selected={selected}
-                      hasConflict={
-                        conflictIds.includes(flight.idVuelo) ||
-                        (selected && flight.stockAsientos < pasajeros)
-                      }
-                      onToggle={() =>
-                        dispatch({
-                          type: "setFlight",
-                          sentido,
-                          idVuelo: selected ? null : flight.idVuelo,
-                        })
-                      }
-                    />
-                  );
-                })
-              )}
-            </section>
-          );
-        })}
-      </div>
+      {flights.length === 0 ? (
+        <EmptyState message="Todavía no hay vuelos para este Gran Premio" />
+      ) : (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          {columns.map(({ sentido, title, selectedId }) => {
+            const options = flights.filter((f) => f.sentido === sentido);
+            return (
+              <section key={sentido} className="flex flex-col gap-3">
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7C4DFF]">
+                  {title}
+                </h2>
+                {options.length === 0 ? (
+                  <EmptyState className="h-32" message={"Sin vuelos de " + title.toLowerCase() + " disponibles"} />
+                ) : (
+                  options.map((flight) => {
+                    const selected = flight.idVuelo === selectedId;
+                    return (
+                      <FlightCard
+                        key={flight.idVuelo}
+                        flight={flight}
+                        pasajeros={pasajeros}
+                        selected={selected}
+                        hasConflict={
+                          conflictIds.includes(flight.idVuelo) ||
+                          (selected && flight.stockAsientos < pasajeros)
+                        }
+                        onToggle={() =>
+                          dispatch({
+                            type: "setFlight",
+                            sentido,
+                            idVuelo: selected ? null : flight.idVuelo,
+                          })
+                        }
+                      />
+                    );
+                  })
+                )}
+              </section>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

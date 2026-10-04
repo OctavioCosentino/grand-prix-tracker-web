@@ -8,6 +8,7 @@ interface HotelFiltersProps {
   transferOnly: boolean;
   setTransferOnly: (val: boolean) => void;
   disabledTransfer?: boolean;
+  maxPrice: number;
 }
 
 export default function HotelFilters({
@@ -18,6 +19,7 @@ export default function HotelFilters({
   transferOnly,
   setTransferOnly,
   disabledTransfer = false,
+  maxPrice,
 }: HotelFiltersProps) {
   return (
     <aside className="w-full">
@@ -65,7 +67,7 @@ export default function HotelFilters({
               <input
                 type="range"
                 min="50"
-                max="2000"
+                max={maxPrice}
                 step="50"
                 value={priceRange}
                 onChange={(e) => setPriceRange(Number(e.target.value))}
@@ -73,7 +75,7 @@ export default function HotelFilters({
                   [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:bg-[#E10600] [&::-moz-range-thumb]:shadow-[0_0_10px_rgba(225,6,0,0.8)] [&::-moz-range-thumb]:transition-transform hover:[&::-moz-range-thumb]:scale-125
                   [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#E10600] [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(225,6,0,0.8)] [&::-webkit-slider-thumb]:transition-transform hover:[&::-webkit-slider-thumb]:scale-125"
                 style={{
-                  background: `linear-gradient(to right, #E10600 ${((priceRange - 50) / (2000 - 50)) * 100}%, #1C1D24 ${((priceRange - 50) / (2000 - 50)) * 100}%)`,
+                  background: `linear-gradient(to right, #E10600 ${((priceRange - 50) / (maxPrice - 50)) * 100}%, #1C1D24 ${((priceRange - 50) / (maxPrice - 50)) * 100}%)`,
                 }}
               />
             </div>
