@@ -5,12 +5,20 @@ interface StockLabelProps {
   unit: string;
   /** Por debajo de este número se resalta como "últimos" */
   lowThreshold?: number;
+  className?: string;
 }
 
-export default function StockLabel({ stock, unit, lowThreshold = 5 }: StockLabelProps) {
+export default function StockLabel({
+  stock,
+  unit,
+  lowThreshold = 5,
+  className,
+}: StockLabelProps) {
+  const baseClass = className || "font-mono text-[10px] uppercase tracking-wider";
+
   if (stock === 0) {
     return (
-      <span className="font-mono text-[10px] uppercase tracking-wider text-[#E10600]">
+      <span className={`${baseClass} text-[#E10600]`}>
         Agotado
       </span>
     );
@@ -18,8 +26,8 @@ export default function StockLabel({ stock, unit, lowThreshold = 5 }: StockLabel
 
   return (
     <span
-      className={`font-mono text-[10px] uppercase tracking-wider ${
-        stock <= lowThreshold ? "text-[#E7B33C]" : "text-[#5C5D66]"
+      className={`${baseClass} ${
+        stock <= lowThreshold ? "text-[#E7B33C]" : className ? "" : "text-[#5C5D66]"
       }`}
     >
       {stock <= lowThreshold ? "Últimos " : ""}

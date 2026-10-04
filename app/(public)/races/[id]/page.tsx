@@ -8,6 +8,7 @@ import WarningModal from "@/components/WarningModal";
 import RaceHero from "@/components/RaceHero";
 import RaceDetailsPanel from "@/components/RaceDetailsPanel";
 import RaceBookingSidebar from "@/components/RaceBookingSidebar";
+import LoadingBox from "@/components/LoadingBox";
 
 export default function RaceDetailPage({
   params,
@@ -23,12 +24,10 @@ export default function RaceDetailPage({
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0B0B10] text-[#F3F1EA]">
-        <div className="flex flex-col items-center gap-4">
-          <span className="h-8 w-8 rounded-full border-2 border-[#E10600] border-t-transparent animate-spin" />
-          <p className="font-mono text-xs uppercase tracking-widest text-[#93949F]">
-            Cargando telemetría del Gran Premio...
-          </p>
-        </div>
+        <LoadingBox
+          text="Cargando telemetría del Gran Premio..."
+          boxed={false}
+        />
       </div>
     );
   }

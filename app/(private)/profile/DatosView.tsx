@@ -7,6 +7,7 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { getDisplayName } from "@/utils/auth";
 import { createClient } from "@/lib/supabase/client";
 import { updateUserProfile } from "@/services/users";
+import { COUNTRY_DIAL_CODES } from "@/utils/dialCodes";
 import toast from "react-hot-toast";
 
 function formatDni(value: string | number): string {
@@ -74,15 +75,30 @@ export default function DatosView() {
     const rawTel =
       cliente?.telefono || user?.user_metadata?.telefono || user?.phone || "";
     if (rawTel) {
-      if (rawTel.includes("+54")) {
-        setCountryCode("+54");
-        const digits = rawTel.replace("+54", "").replace(/\D/g, "").slice(0, 10);
-        setPhoneNumber(formatPhone(digits));
+      let matchedCode = "+54";
+      let remainingDigits = "";
+
+      if (rawTel.includes("+")) {
+        const plusIdx = rawTel.indexOf("+");
+        // Buscamos los dos primeros dígitos después del +
+        const twoDigitsCode = rawTel.slice(plusIdx, plusIdx + 3);
+        const match =
+          COUNTRY_DIAL_CODES.find((c) => c.dialCode === twoDigitsCode) ||
+          COUNTRY_DIAL_CODES.find((c) => rawTel.startsWith(c.dialCode));
+
+        if (match) {
+          matchedCode = match.dialCode;
+          remainingDigits = rawTel.replace(match.dialCode, "");
+        } else {
+          remainingDigits = rawTel.replace("+", "");
+        }
       } else {
-        setCountryCode("+54");
-        const digits = rawTel.replace(/\D/g, "").slice(0, 10);
-        setPhoneNumber(formatPhone(digits));
+        remainingDigits = rawTel;
       }
+
+      setCountryCode(matchedCode);
+      const digits = remainingDigits.replace(/\D/g, "").slice(0, 10);
+      setPhoneNumber(formatPhone(digits));
     } else {
       setCountryCode("+54");
       setPhoneNumber("");
@@ -139,7 +155,7 @@ export default function DatosView() {
         setPhoneError("Por favor complete el teléfono");
         return;
       }
-      finalTelefono = `${countryCode} ${phoneNumber}`;
+      finalTelefono = `${countryCode} ${formatPhone(digitsPhone)}`;
     }
 
     // Separar nombre y apellido
@@ -156,6 +172,8 @@ export default function DatosView() {
       dni: rawDniDigits ? Number(rawDniDigits) : null,
     });
   };
+
+  const selectedCountry = COUNTRY_DIAL_CODES.find((c) => c.dialCode === countryCode);
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -209,10 +227,10 @@ export default function DatosView() {
                 } bg-[#131318] px-3 py-3.5 text-sm text-[#F3F1EA] outline-none focus:border-[#E10600] disabled:opacity-50 cursor-pointer`}
               >
                 <div className="flex items-center gap-2 overflow-hidden">
-                  {countryCode === "+54" ? (
+                  {selectedCountry ? (
                     <>
-                      <span className="fi fi-ar shrink-0 rounded-[2px]" />
-                      <span className="font-mono text-sm text-[#F3F1EA]">+54</span>
+                      <span className={`${selectedCountry.flag} shrink-0 rounded-[2px]`} />
+                      <span className="font-mono text-sm text-[#F3F1EA]">{selectedCountry.dialCode}</span>
                     </>
                   ) : (
                     <span className="text-[#5C5D66] text-sm">--</span>
@@ -230,29 +248,26 @@ export default function DatosView() {
               </button>
 
               {isCountryOpen && (
-                <div className="absolute top-full left-0 mt-1 z-30 w-full rounded-sm border border-[#33343D] bg-[#131318] py-1 shadow-2xl">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCountryCode("");
-                      setIsCountryOpen(false);
-                    }}
-                    className="w-full flex items-center px-3 py-2 text-xs text-[#93949F] hover:bg-[#1C1D24] transition-colors cursor-pointer"
-                  >
-                    --
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCountryCode("+54");
-                      setIsCountryOpen(false);
-                      if (phoneError) setPhoneError("");
-                    }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-xs text-[#F3F1EA] hover:bg-[#1C1D24] transition-colors cursor-pointer"
-                  >
-                    <span className="fi fi-ar shrink-0 rounded-[2px]" />
-                    <span className="font-mono text-sm">+54</span>
-                  </button>
+                <div className="absolute top-full left-0 mt-1 z-30 w-full max-h-56 overflow-y-auto rounded-sm border border-[#33343D] bg-[#131318] py-1 shadow-2xl [scrollbar-width:thin] [scrollbar-color:#33343D_#131318] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#131318] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#33343D] hover:[&::-webkit-scrollbar-thumb]:bg-[#5C5D66]">
+                  {COUNTRY_DIAL_CODES.map((item) => (
+                    <button
+                      key={item.dialCode}
+                      type="button"
+                      onClick={() => {
+                        setCountryCode(item.dialCode);
+                        setIsCountryOpen(false);
+                        if (phoneError) setPhoneError("");
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-xs transition-colors cursor-pointer ${
+                        countryCode === item.dialCode
+                          ? "bg-[#1C1D24] text-[#E10600] font-bold"
+                          : "text-[#F3F1EA] hover:bg-[#1C1D24]"
+                      }`}
+                    >
+                      <span className={`${item.flag} shrink-0 rounded-[2px]`} />
+                      <span className="font-mono text-sm">{item.dialCode}</span>
+                    </button>
+                  ))}
                 </div>
               )}
             </div>

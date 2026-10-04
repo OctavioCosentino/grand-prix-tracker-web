@@ -59,7 +59,7 @@ export default function TicketCard({
           <div className="font-display text-2xl font-900 text-[#E10600]">
             {formatUsd(ticket.precioUsd)}
           </div>
-          <span className="font-mono text-[10px] text-[#5C5D66]">/ entrada</span>
+          <span className="font-mono text-xs text-[#5C5D66]">/ entrada</span>
         </div>
         <QuantityStepper
           value={cantidad}

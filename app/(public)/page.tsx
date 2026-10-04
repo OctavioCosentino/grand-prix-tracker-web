@@ -19,8 +19,8 @@
 
 import React, { useState } from "react";
 import { SERVICES, SERVICE_ICONS } from "../../utils/services";
-import { STEPS } from "@/utils/mockData/steps";
-import { DESTINATIONS } from "@/utils/mockData/destinations";
+import { STEPS } from "@/utils/steps";
+import { DESTINATIONS } from "@/utils/destinations";
 import { SYSTEM_PANELS } from "@/utils/mockData/systemPanels";
 import { useEvents } from "@/hooks/useEvents";
 import ButtonChecker from "../../components/ButtonChecker";

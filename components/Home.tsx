@@ -2,25 +2,32 @@ import Image from "next/image";
 
 interface HomeProps {
   isLarge?: boolean;
+  disableHoverScale?: boolean;
 }
 
-export default function Home({ isLarge = false }: HomeProps) {
+export default function Home({
+  isLarge = false,
+  disableHoverScale = false,
+}: HomeProps) {
   const containerClasses = isLarge
     ? "flex items-center justify-center gap-4 md:gap-5 w-full"
-    : "flex items-center gap-3 transition-transform hover:scale-105";
+    : `flex items-center gap-3 transition-transform ${
+        disableHoverScale ? "" : "hover:scale-105"
+      }`;
 
   const imageWidth = isLarge ? "w-20 md:w-24" : "w-[30px]";
-  
-  const titleClasses = isLarge
-    ? "text-4xl md:text-5xl"
-    : "text-[15px]";
 
-  const subtitleClasses = isLarge
-    ? "mt-2 text-xs md:text-sm"
-    : "text-[9px]";
+  const titleClasses = isLarge ? "text-4xl md:text-5xl" : "text-[15px]";
+
+  const subtitleClasses = isLarge ? "mt-2 text-xs md:text-sm" : "text-[9px]";
 
   return (
-    <a href="/" className={containerClasses}>
+    <a
+      href="/"
+      title="Volver a la página principal"
+      aria-label="Volver a la página principal"
+      className={containerClasses}
+    >
       <Image
         src="/logo-nobg.png"
         alt="GrandPrix Tracker"

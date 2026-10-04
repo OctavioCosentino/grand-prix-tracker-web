@@ -72,7 +72,7 @@ export default function HotelCard({
         <div>
           <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-4">
             <div className="min-w-0 flex-1">
-              <h3 className="font-display text-xl font-bold text-[#F3F1EA] break-words">
+              <h3 className="font-display text-2xl font-bold text-[#F3F1EA] break-words">
                 {nombre}
               </h3>
               {estrellas !== null && (
@@ -98,13 +98,13 @@ export default function HotelCard({
               )}
             </div>
             <div className="text-left sm:text-right shrink-0">
-              <span className="font-mono text-[10px] uppercase text-[#93949F]">
+              <span className="font-mono text-xs uppercase text-[#93949F]">
                 Desde
               </span>
-              <div className="font-display text-2xl font-900 text-[#E10600]">
+              <div className="font-display text-3xl font-900 text-[#E10600]">
                 {formatUsd(fromPrice)}
               </div>
-              <span className="font-mono text-[10px] text-[#5C5D66]">
+              <span className="font-mono text-xs text-[#5C5D66]">
                 / noche
               </span>
             </div>
@@ -155,21 +155,22 @@ export default function HotelCard({
                 } ${soldOut && cantidad === 0 ? "opacity-50" : ""}`}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-display text-sm font-bold text-[#F3F1EA] truncate">
+                  <p className="font-display text-base font-bold text-[#F3F1EA] truncate">
                     {room.tipo}
                   </p>
                   <StockLabel
                     stock={room.stockDisponible}
                     unit="disponibles"
                     lowThreshold={2}
+                    className="font-mono text-xs uppercase tracking-wider text-[#93949F]"
                   />
                 </div>
                 <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 shrink-0">
                   <div className="text-left sm:text-right">
-                    <span className="font-mono text-sm font-bold text-[#F3F1EA]">
+                    <span className="font-mono text-base font-bold text-[#F3F1EA]">
                       {formatUsd(room.precioPorNocheUsd)}
                     </span>
-                    <span className="block font-mono text-[10px] text-[#5C5D66]">
+                    <span className="block font-mono text-xs text-[#5C5D66]">
                       {formatUsd(room.precioPorNocheUsd * nights)} por {nights}{" "}
                       noches
                     </span>

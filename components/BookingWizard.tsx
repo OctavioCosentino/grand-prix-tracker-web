@@ -15,6 +15,7 @@ import {
 import { ApiError } from "@/services/http";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { Reserva } from "@/services/bookings";
+import LoadingBox from "./LoadingBox";
 import {
   BOOKING_STEPS,
   BookingCatalog,
@@ -78,12 +79,12 @@ function getSubmitErrorMessage(error: unknown): string {
 
 function WizardLoading() {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 text-[#F3F1EA]">
-      <span className="h-8 w-8 rounded-full border-2 border-[#E10600] border-t-transparent animate-spin" />
-      <p className="font-mono text-xs uppercase tracking-widest text-[#93949F]">
-        Preparando tu paquete...
-      </p>
-    </div>
+    <LoadingBox
+      text="Preparando tu paquete..."
+      minHeight="min-h-[400px]"
+      boxed={false}
+      className="text-[#F3F1EA]"
+    />
   );
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Badge from "./Badge";
 import ReservationItinerary from "./ReservationItinerary";
 import { Reserva } from "@/services/bookings";
@@ -53,9 +54,13 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
   const items = [
     {
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" />
-        </svg>
+        <Image
+          src="/plane.png"
+          alt="Vuelo"
+          width={24}
+          height={24}
+          className="h-6 w-6 object-contain"
+        />
       ),
       label: "Vuelo",
       active: reserva.incluyeVuelo,
@@ -63,9 +68,13 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
     },
     {
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 2H5C3.9 2 3 2.9 3 4V22H21V4C21 2.9 20.1 2 19 2ZM11 18H7V14H11V18ZM11 10H7V6H11V10ZM17 18H13V14H17V18ZM17 10H13V6H17V10Z" />
-        </svg>
+        <Image
+          src="/hotel.png"
+          alt="Hotel"
+          width={24}
+          height={24}
+          className="h-6 w-6 object-contain"
+        />
       ),
       label: "Hotel",
       active: reserva.incluyeHotel,
@@ -73,9 +82,13 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
     },
     {
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 10V6C22 4.9 21.1 4 20 4H4C2.9 4 2.01 4.9 2.01 6V10C3.11 10 4 10.9 4 12C4 13.1 3.11 14 2 14V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V14C20.9 14 20 13.1 20 12C20 10.9 22 10 22 10ZM11 15H5V13H11V15ZM11 11H5V9H11V11ZM19 15H13V13H19V15ZM19 11H13V9H19V11Z" />
-        </svg>
+        <Image
+          src="/tickets.png"
+          alt="Entrada"
+          width={24}
+          height={24}
+          className="h-6 w-6 object-contain"
+        />
       ),
       label: "Entrada",
       active: reserva.incluyeEntrada,
@@ -90,10 +103,10 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
       <div className="flex flex-col md:flex-row">
         <div className="flex w-full flex-col justify-center border-b border-[#1C1D24] bg-[#0B0B10] p-6 md:w-1/3 md:border-b-0 md:border-r">
           <span 
-            className="inline-block self-start font-mono text-[10px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm border"
+            className="inline-flex items-center justify-center self-start font-mono text-[10px] font-semibold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm border text-center leading-none"
             style={{ color: estado.color, backgroundColor: estado.color + '1A', borderColor: estado.color + '33' }}
           >
-            {estado.label}
+            <span className="-mr-[0.2em]">{estado.label}</span>
           </span>
           <h4 className="font-display mt-3 text-2xl font-900 uppercase tracking-tight text-[#F3F1EA]">
             {name}

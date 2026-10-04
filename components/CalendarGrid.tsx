@@ -64,13 +64,13 @@ export default function CalendarGrid({
         <CalendarSkeleton count={6} />
       ) : error ? (
         <EmptyState message="NO HAY CARRERAS EN ESTE SECTOR">
-            <button
-              onClick={onClearFilters}
-              className="mt-4 text-m font-bold text-[#f10b03] hover:underline cursor-pointer"
-            >
-              Limpiar filtros
-            </button>
-          </EmptyState>
+          <button
+            onClick={onClearFilters}
+            className="text-sm font-bold text-[#f10b03] hover:underline cursor-pointer"
+          >
+            Limpiar filtros
+          </button>
+        </EmptyState>
       ) : filteredRaces.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           {filteredRaces.map((race, i) => (
@@ -91,23 +91,14 @@ export default function CalendarGrid({
           ))}
         </div>
       ) : (
-        <div className="relative flex h-64 flex-col items-center justify-center overflow-hidden rounded-md border border-dashed border-[#33343D] bg-[#0E0E13]">
-          <div
-            className="absolute inset-0 z-0 bg-cover bg-center opacity-30 grayscale"
-            style={{ backgroundImage: "url('/empty.png')" }}
-          />
-          <div className="relative z-10 flex flex-col items-center">
-            <p className="mt-4 font-mono text-s tracking-widest text-[#ffffff]">
-              NO HAY CARRERAS EN ESTE SECTOR
-            </p>
-            <button
-              onClick={onClearFilters}
-              className="mt-4 text-m font-bold text-[#f10b03] hover:underline cursor-pointer"
-            >
-              Limpiar filtros
-            </button>
-          </div>
-        </div>
+        <EmptyState message="NO HAY CARRERAS EN ESTE SECTOR">
+          <button
+            onClick={onClearFilters}
+            className="text-sm font-bold text-[#f10b03] hover:underline cursor-pointer"
+          >
+            Limpiar filtros
+          </button>
+        </EmptyState>
       )}
     </main>
   );

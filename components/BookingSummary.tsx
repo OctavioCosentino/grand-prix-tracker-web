@@ -14,15 +14,15 @@ export default function BookingSummary({ lines, stay, children }: BookingSummary
   return (
     <aside className="w-full">
       <div className="sticky top-28 rounded-md border border-[#33343D] bg-[#181920] p-8 shadow-xl">
-        <h2 className="font-display text-xl font-bold tracking-tight text-[#F3F1EA]">
+        <h2 className="font-display text-2xl font-bold tracking-tight text-[#F3F1EA]">
           Tu paquete
         </h2>
-        <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[#5C5D66]">
+        <p className="mt-1 font-mono text-xs uppercase tracking-wider text-[#93949F]">
           Estadía {formatDateES(stay.checkIn)} → {formatDateES(stay.checkOut)}
         </p>
 
         {lines.length === 0 ? (
-          <p className="mt-6 text-sm text-[#93949F]">
+          <p className="mt-6 text-base text-[#93949F]">
             Todavía no elegiste productos. Todos son opcionales, pero el paquete
             necesita al menos uno.
           </p>
@@ -31,10 +31,10 @@ export default function BookingSummary({ lines, stay, children }: BookingSummary
             {lines.map((line) => (
               <li key={line.id} className="flex justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[#F3F1EA]">{line.label}</p>
-                  <p className="font-mono text-[10px] text-[#5C5D66]">{line.detail}</p>
+                  <p className="truncate text-base font-semibold text-[#F3F1EA]">{line.label}</p>
+                  <p className="font-mono text-xs text-[#93949F]">{line.detail}</p>
                 </div>
-                <span className="shrink-0 font-mono text-sm text-[#D8D7CE]">
+                <span className="shrink-0 font-mono text-base text-[#D8D7CE]">
                   {formatUsd(line.subtotal)}
                 </span>
               </li>
@@ -42,16 +42,16 @@ export default function BookingSummary({ lines, stay, children }: BookingSummary
           </ul>
         )}
 
-        <div className="mt-6 flex items-end justify-between border-t border-[#1C1D24] pt-4">
+        <div className="mt-6 flex items-center justify-between border-t border-[#1C1D24] pt-4">
           <div>
-            <span className="font-mono text-[10px] uppercase tracking-widest text-[#93949F]">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#93949F]">
               Total estimado
             </span>
-            <p className="font-mono text-[10px] text-[#5C5D66]">
+            <p className="font-mono text-xs text-[#5C5D66]">
               El total final se confirma al pagar
             </p>
           </div>
-          <span className="font-display text-2xl font-900 text-[#E10600]">
+          <span className="font-display text-3xl font-900 text-[#E10600]">
             {formatUsd(total)}
           </span>
         </div>
