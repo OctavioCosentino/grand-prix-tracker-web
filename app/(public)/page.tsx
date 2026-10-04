@@ -107,10 +107,11 @@ export default function Page() {
 
           <Reveal delay={160}>
             <p className="mt-6 max-w-xl text-lg text-[#B9B8B0]">
-              Entradas, hotel y traslados en un solo paquete. GrandPrix Tracker
-              cruza en segundos la oferta de hoteles, ticketeras y flotas de
-              ómnibus para que armar el viaje a tu próximo Gran Premio te lleve
-              minutos, no quince pestañas abiertas.
+              Entradas, translados, hoteles y vuelos en un solo paquete.
+              GrandPrix Tracker cruza en segundos la oferta de hoteles,
+              ticketeras y flotas de ómnibus y aviones para que armar el viaje a
+              tu próximo Gran Premio te lleve minutos, no quince pestañas
+              abiertas.
             </p>
           </Reveal>
 

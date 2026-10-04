@@ -45,6 +45,7 @@ import BookingFlightsStep from "./BookingFlightsStep";
 import BookingPaymentStep from "./BookingPaymentStep";
 import BookingReviewStep from "./BookingReviewStep";
 import BookingConfirmation from "./BookingConfirmation";
+import { addNotification } from "@/services/notifications";
 
 const STEP_INTRO: Record<BookingStep, string> = {
   hotel: "Elegí dónde vas a dormir durante el fin de semana de carrera.",
@@ -219,6 +220,24 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
         queryKey: bookingQueryKeys.paymentMethods,
       });
       queryClient.invalidateQueries({ queryKey: bookingQueryKeys.bookings });
+
+      // Notificación funcional de pedido confirmado
+      const orderNum = result.codigoConfirmacion.replace(/^#/, "");
+      const country = event.circuito?.ciudad?.pais?.nombre;
+      const gpName = country
+        ? (country.toLowerCase().startsWith("de ") ? country : `de ${country}`)
+        : (race?.name || "");
+      const ticketName =
+        result.entradas?.[0]?.nombreTribuna || "Pase de Acceso";
+
+      addNotification({
+        idUsuario: userId,
+        titulo: `¡Pedido #${orderNum} Confirmado!`,
+        mensaje: `Se ha procesado tu compra para el Gran Premio ${gpName}. ${ticketName} activado.`,
+        tipo: "ORDER_CONFIRMATION",
+        urlDestino: "/profile?tab=reservas",
+      }).catch((e) => console.error("Error al registrar notificación de compra:", e));
+
       window.scrollTo({ top: 0 });
     } catch (error) {
       if (error instanceof ApiError && error.status === 409) {

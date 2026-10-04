@@ -1,82 +1,142 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { createPortal } from "react-dom";
+import toast from "react-hot-toast";
 import { NotificationItem, NotificationType } from "../app/types/notification";
 import { useAuth } from "./providers/AuthProvider";
+import {
+  API_BASE_URL,
+  DEFAULT_NOTIFICATIONS,
+  getStoredNotifications,
+  saveStoredNotifications,
+  addNotification,
+  simulateOfferNotification,
+  deduplicateNotifications,
+  isMockOrder,
+  purgeMockOrders,
+  playNotificationSound,
+  markAsRead as apiMarkAsRead,
+  markAllAsRead as apiMarkAllAsRead,
+} from "@/services/notifications";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+let lastToastTime = 0;
 
 export function NotificationBell() {
   const { user } = useAuth();
   const userId = user?.id;
   const isLoggedIn = Boolean(user);
-  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [filter, setFilter] = useState<"all" | "unread">("all");
-  const [toast, setToast] = useState<{
-    title: string;
-    message: string;
-    type: NotificationType;
-  } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const isFirstLoad = useRef(true);
 
   useEffect(() => {
-    setMounted(true);
+    purgeMockOrders();
   }, []);
 
   const fetchNotifications = async () => {
+    // 1. Cargar almacenamiento local persistente primero
+    const local = getStoredNotifications(userId);
+    setNotifications(local);
+    setUnreadCount(local.filter((n) => !n.leido).length);
+
     try {
-      // Trae las del usuario más las globales (ofertas)
       const res = await fetch(
         `${API_BASE_URL}/notifications?userId=${encodeURIComponent(userId ?? "")}`,
       );
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
-          setNotifications(json.data);
-          const unread = json.data.filter(
-            (n: NotificationItem) => !n.leido,
-          ).length;
-          setUnreadCount(unread);
+          // Filtrar cualquier pedido mock que haya quedado en la API
+          const cleanRemoteData: NotificationItem[] = json.data.filter(
+            (item: NotificationItem) => !isMockOrder(item)
+          );
+
+          // Si no es la primera carga y detectamos una nueva que no teníamos antes:
+          if (!isFirstLoad.current) {
+            const newest = cleanRemoteData.find(
+              (item) =>
+                !item.leido &&
+                !local.some(
+                  (l) =>
+                    l.idNotificacion === item.idNotificacion ||
+                    (l.titulo === item.titulo && l.mensaje === item.mensaje)
+                )
+            );
+            if (newest) {
+              playNotificationSound();
+              showToast(newest.titulo, newest.mensaje, newest.tipo);
+            }
+          }
+          isFirstLoad.current = false;
+
+          // Combinar remoto y local evitando duplicados tanto por ID como por contenido
+          const merged: NotificationItem[] = [...cleanRemoteData];
+          for (const item of local) {
+            const existsInRemote = cleanRemoteData.some(
+              (r) =>
+                r.idNotificacion === item.idNotificacion ||
+                (r.titulo === item.titulo && r.mensaje === item.mensaje)
+            );
+            if (!existsInRemote) {
+              merged.push(item);
+            }
+          }
+
+          const deduped = deduplicateNotifications(merged);
+          saveStoredNotifications(deduped, userId);
+          setNotifications(deduped);
+          setUnreadCount(deduped.filter((n) => !n.leido).length);
           return;
         }
       }
-      throw new Error("No se pudo obtener notificaciones");
+      throw new Error("No se pudo obtener notificaciones del servidor");
     } catch {
-      const fallbackData: NotificationItem[] = [
-        {
-          idNotificacion: "mock-1",
-          titulo: "¡Pedido Confirmado!",
-          mensaje:
-            "Tu paquete para el Gran Premio de Monza (Entradas + Hotel) fue confirmado con éxito.",
-          tipo: "ORDER_CONFIRMATION",
-          leido: false,
-          urlDestino: "#servicios",
-          creadoEn: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-        },
-        {
-          idNotificacion: "mock-2",
-          titulo: "Oferta Flash de Temporada",
-          mensaje: "20% OFF en traslados exclusivos para el GP de Interlagos.",
-          tipo: "OFFER",
-          leido: false,
-          urlDestino: "#calendario",
-          creadoEn: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
-        },
-      ];
-      setNotifications(fallbackData);
-      setUnreadCount(2);
+      isFirstLoad.current = false;
+      // Fallback si no había nada local tampoco
+      if (local.length === 0) {
+        saveStoredNotifications(DEFAULT_NOTIFICATIONS, userId);
+        setNotifications(DEFAULT_NOTIFICATIONS);
+        setUnreadCount(DEFAULT_NOTIFICATIONS.filter((n) => !n.leido).length);
+      }
     }
   };
 
   useEffect(() => {
     if (!userId) return;
     fetchNotifications();
+
+    const handleAdded = (e: Event) => {
+      const customEvent = e as CustomEvent<NotificationItem>;
+      if (customEvent.detail) {
+        const notif = customEvent.detail;
+        showToast(notif.titulo, notif.mensaje, notif.tipo);
+        if (notif.tipo !== "ORDER_CONFIRMATION") {
+          playNotificationSound();
+        }
+      }
+      const local = getStoredNotifications(userId);
+      setNotifications(local);
+      setUnreadCount(local.filter((n) => !n.leido).length);
+    };
+
+    const handleChanged = () => {
+      const local = getStoredNotifications(userId);
+      setNotifications(local);
+      setUnreadCount(local.filter((n) => !n.leido).length);
+    };
+
+    window.addEventListener("gpt_notification_added", handleAdded);
+    window.addEventListener("gpt_notifications_changed", handleChanged);
+
     const interval = setInterval(fetchNotifications, 15000);
-    return () => clearInterval(interval);
+    return () => {
+      window.removeEventListener("gpt_notification_added", handleAdded);
+      window.removeEventListener("gpt_notifications_changed", handleChanged);
+      clearInterval(interval);
+    };
   }, [userId]);
 
   useEffect(() => {
@@ -97,83 +157,79 @@ export function NotificationBell() {
     message: string,
     type: NotificationType,
   ) => {
-    setToast({ title, message, type });
-    setTimeout(() => setToast(null), 5000);
+    const now = Date.now();
+    // Evitar toasts duplicados si dos componentes escuchan el mismo evento
+    if (now - lastToastTime < 800) return;
+    lastToastTime = now;
+
+    toast.custom(
+      (t) => (
+        <div
+          className={`${
+            t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          } pointer-events-auto flex max-w-sm w-full items-start gap-3 rounded-md border border-[#E10600]/50 bg-[#131318]/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-200`}
+        >
+          <div className="flex-1 min-w-0">
+            <h5 className="text-[13px] font-bold text-[#F3F1EA]">
+              {title}
+            </h5>
+            <p className="mt-0.5 text-xs text-[#93949F] leading-snug break-words">
+              {message}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => toast.dismiss(t.id)}
+            className="text-[#93949F] hover:text-[#F3F1EA] text-xs font-mono cursor-pointer transition-colors p-0.5"
+            aria-label="Cerrar notificación"
+          >
+            ✕
+          </button>
+        </div>
+      ),
+      {
+        id: `notif-${title}`,
+        duration: 5000,
+        position: "bottom-right",
+      }
+    );
   };
 
   const handleMarkAsRead = async (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+
+    const current = getStoredNotifications(userId);
+    const updated = current.map((n) =>
+      n.idNotificacion === id ? { ...n, leido: true } : n
+    );
+    saveStoredNotifications(updated, userId);
+    setNotifications(updated);
+    setUnreadCount(updated.filter((n) => !n.leido).length);
+
     try {
-      await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
-        method: "PATCH",
-      });
+      await apiMarkAsRead(id);
     } catch {
       // Offline fallback
     }
-    setNotifications((prev) =>
-      prev.map((n) => (n.idNotificacion === id ? { ...n, leido: true } : n)),
-    );
-    setUnreadCount((prev) => Math.max(0, prev - 1));
   };
 
   const handleMarkAllAsRead = async () => {
-    const unreadList = notifications.filter((n) => !n.leido);
-    setNotifications((prev) => prev.map((n) => ({ ...n, leido: true })));
+    const current = getStoredNotifications(userId);
+    const unreadList = current.filter((n) => !n.leido);
+    const updated = current.map((n) => ({ ...n, leido: true }));
+    saveStoredNotifications(updated, userId);
+    setNotifications(updated);
     setUnreadCount(0);
+
     try {
-      await Promise.all(
-        unreadList.map((n) =>
-          fetch(`${API_BASE_URL}/notifications/${n.idNotificacion}/read`, {
-            method: "PATCH",
-          }),
-        ),
-      );
+      await apiMarkAllAsRead(unreadList, userId);
     } catch {
       // Offline fallback
     }
   };
 
-  const handleSimulate = async (type: NotificationType) => {
-    const isOrder = type === "ORDER_CONFIRMATION";
-    const payload = {
-      titulo: isOrder ? "¡Pedido #GP-8492 Confirmado!" : "Oferta Relámpago",
-      mensaje: isOrder
-        ? "Se ha procesado tu compra para el Gran Premio de Brasil. Paddock Pass activado."
-        : "¡15% OFF en entradas VIP para el GP de Las Vegas por tiempo limitado!",
-      tipo: type,
-      urlDestino: isOrder ? "#como-funciona" : "#calendario",
-    };
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/notifications`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const json = await res.json();
-        const created: NotificationItem = json.data;
-        setNotifications((prev) => [created, ...prev]);
-        setUnreadCount((prev) => prev + 1);
-        showToast(created.titulo, created.mensaje, created.tipo);
-        return;
-      }
-    } catch {
-      // Offline fallback
-    }
-
-    const localCreated: NotificationItem = {
-      idNotificacion: `mock-${Date.now()}`,
-      titulo: payload.titulo,
-      mensaje: payload.mensaje,
-      tipo: payload.tipo,
-      leido: false,
-      urlDestino: payload.urlDestino,
-      creadoEn: new Date().toISOString(),
-    };
-    setNotifications((prev) => [localCreated, ...prev]);
-    setUnreadCount((prev) => prev + 1);
-    showToast(localCreated.titulo, localCreated.mensaje, localCreated.tipo);
+  const handleSimulate = async () => {
+    await simulateOfferNotification(userId);
   };
 
   const filteredNotifications = notifications.filter((n) => {
@@ -230,7 +286,7 @@ export function NotificationBell() {
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label="Notificaciones"
-        className="relative flex h-10 w-10 items-center justify-center rounded-sm border border-[#1C1D24] bg-[#131318] text-[#D8D7CE] transition-colors hover:border-[#33343D] hover:text-[#F3F1EA]"
+        className="relative flex h-10 w-10 items-center justify-center rounded-sm border border-[#1C1D24] bg-[#131318] text-[#D8D7CE] transition-colors hover:border-[#33343D] hover:text-[#F3F1EA] cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -271,7 +327,7 @@ export function NotificationBell() {
               <button
                 type="button"
                 onClick={handleMarkAllAsRead}
-                className="text-[11px] text-[#93949F] hover:text-[#F3F1EA] transition-colors"
+                className="text-[11px] text-[#93949F] hover:text-[#F3F1EA] transition-colors cursor-pointer"
               >
                 Marcar todas
               </button>
@@ -350,7 +406,7 @@ export function NotificationBell() {
                         onClick={(e) =>
                           handleMarkAsRead(notif.idNotificacion, e)
                         }
-                        className="text-[10px] text-[#93949F] hover:text-[#F3F1EA]"
+                        className="text-[10px] text-[#93949F] hover:text-[#F3F1EA] cursor-pointer"
                       >
                         Marcar leída
                       </button>
@@ -361,51 +417,18 @@ export function NotificationBell() {
             )}
           </div>
 
-          {/* Botones de simulación para pruebas en vivo */}
-          <div className="border-t border-[#1C1D24] bg-[#0B0B10] p-2.5 flex items-center gap-2">
+          {/* Botón de simulación para pruebas en vivo */}
+          <div className="border-t border-[#1C1D24] bg-[#0B0B10] p-2.5">
             <button
               type="button"
-              onClick={() => handleSimulate("ORDER_CONFIRMATION")}
-              className="flex-1 rounded-sm border border-[#E7B33C]/40 bg-[#E7B33C]/10 py-1.5 text-[10px] font-semibold text-[#E7B33C] hover:bg-[#E7B33C]/20 transition-colors"
-            >
-              + Simular Pedido
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSimulate("OFFER")}
-              className="flex-1 rounded-sm border border-[#E10600]/40 bg-[#E10600]/10 py-1.5 text-[10px] font-semibold text-[#FF4D4D] hover:bg-[#E10600]/20 transition-colors"
+              onClick={handleSimulate}
+              className="w-full rounded-sm border border-[#E10600]/40 bg-[#E10600]/10 py-1.5 text-[10px] font-semibold text-[#FF4D4D] hover:bg-[#E10600]/20 transition-colors cursor-pointer"
             >
               + Simular Oferta
             </button>
           </div>
         </div>
       )}
-
-      {/* Toast Flotante en Pantalla (renderizado en el body para evitar que el backdrop-blur del header lo corte al hacer scroll) */}
-      {mounted &&
-        toast &&
-        createPortal(
-          <div className="fixed bottom-6 right-6 z-[9999] max-w-sm rounded-md border border-[#E10600]/50 bg-[#131318]/95 p-4 shadow-2xl backdrop-blur-md animate-bounce-short">
-            <div className="flex items-start gap-3">
-              <div className="flex-1">
-                <h5 className="text-[13px] font-bold text-[#F3F1EA]">
-                  {toast.title}
-                </h5>
-                <p className="mt-0.5 text-xs text-[#93949F] leading-snug">
-                  {toast.message}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setToast(null)}
-                className="text-[#93949F] hover:text-[#F3F1EA] text-xs font-mono cursor-pointer"
-              >
-                ✕
-              </button>
-            </div>
-          </div>,
-          document.body,
-        )}
     </div>
   );
 }

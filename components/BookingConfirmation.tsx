@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Reserva } from "@/services/bookings";
 import { formatDateTimeES } from "@/utils/booking";
+import { playPaymentSuccessSound } from "@/utils/audio";
 import Eyebrow from "./EyeBrow";
 import ButtonChecker from "./ButtonChecker";
 import ButtonOutline from "./ButtonOutline";
@@ -14,6 +15,14 @@ interface BookingConfirmationProps {
 
 /** Pantalla de éxito: muestra solo lo que devolvió POST /bookings. */
 export default function BookingConfirmation({ reserva, eventName }: BookingConfirmationProps) {
+  const soundPlayedRef = useRef(false);
+
+  useEffect(() => {
+    if (!soundPlayedRef.current) {
+      soundPlayedRef.current = true;
+      playPaymentSuccessSound();
+    }
+  }, []);
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <div className="relative overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl sm:p-10">
