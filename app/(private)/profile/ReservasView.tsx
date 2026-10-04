@@ -41,6 +41,7 @@ export default function ReservasView() {
         error={bookingsQuery.error}
         onRetry={() => bookingsQuery.refetch()}
         loadingText="Cargando tu historial de pista..."
+        className="min-h-[60vh]"
       />
     );
   }
@@ -49,13 +50,19 @@ export default function ReservasView() {
 
   if (!reservas.length) {
     return (
-      <div className="flex flex-col items-center gap-6 py-16 text-center">
-        <p className="font-mono text-sm uppercase tracking-widest text-[#93949F]">
-          Todavía no tenés reservas
-        </p>
-        <ButtonChecker href="/calendar" className="px-6 py-3 text-xs" showArrow>
-          Ver el calendario
-        </ButtonChecker>
+      <div className="relative flex min-h-[40vh] flex-col items-center justify-center overflow-hidden rounded-md border border-dashed border-[#33343D] bg-[#0E0E13]">
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center opacity-30 grayscale"
+          style={{ backgroundImage: "url('/empty.png')" }}
+        />
+        <div className="relative z-10 flex flex-col items-center gap-6 px-4 text-center">
+          <p className="font-mono text-sm uppercase tracking-widest text-[#ffffff] drop-shadow-md">
+            Todavía no tenés reservas
+          </p>
+          <ButtonChecker href="/calendar" className="px-6 py-3 text-xs" showArrow>
+            Ver el calendario
+          </ButtonChecker>
+        </div>
       </div>
     );
   }

@@ -141,7 +141,7 @@ export default function Page() {
       {/* ================= CÓMO FUNCIONA ================= */}
       <section
         id="como-funciona"
-        className="mx-auto max-w-7xl px-6 py-24 md:py-32"
+        className="scroll-mt-28 mx-auto max-w-7xl px-6 py-24 md:py-32"
       >
         <Reveal>
           <Eyebrow>Vuelta de formación</Eyebrow>
@@ -167,7 +167,7 @@ export default function Page() {
       {/* ================= SERVICIOS ================= */}
       <section
         id="servicios"
-        className="relative overflow-hidden border-t border-[#1C1D24] bg-[#0E0E13] py-24 md:py-32"
+        className="scroll-mt-55 relative overflow-hidden border-t border-[#1C1D24] bg-[#0E0E13] py-24 md:py-32"
       >
         {/* VIDEO BACKGROUND */}
         <video
@@ -278,7 +278,7 @@ export default function Page() {
       {/* ================= BAJO EL CAPÓ ================= */}
       <section
         id="bajo-el-capo"
-        className="relative border-t border-[#1C1D24] bg-[#0E0E13] py-24 md:py-32"
+        className="scroll-mt-28 relative border-t border-[#1C1D24] bg-[#0E0E13] py-24 md:py-32"
       >
         <div className="gpt-hud-grid pointer-events-none absolute inset-0 opacity-40" />
         <div className="relative mx-auto max-w-7xl px-6">

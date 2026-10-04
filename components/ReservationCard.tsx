@@ -52,19 +52,31 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
 
   const items = [
     {
-      icon: "/plane.png",
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2C10.67 2 10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z" />
+        </svg>
+      ),
       label: "Vuelo",
       active: reserva.incluyeVuelo,
       detail: describeFlights(reserva),
     },
     {
-      icon: "/hotel.png",
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 2H5C3.9 2 3 2.9 3 4V22H21V4C21 2.9 20.1 2 19 2ZM11 18H7V14H11V18ZM11 10H7V6H11V10ZM17 18H13V14H17V18ZM17 10H13V6H17V10Z" />
+        </svg>
+      ),
       label: "Hotel",
       active: reserva.incluyeHotel,
       detail: firstRoom ? `${firstRoom.cantidadNoches} noches` : undefined,
     },
     {
-      icon: "/tickets.png",
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 10V6C22 4.9 21.1 4 20 4H4C2.9 4 2.01 4.9 2.01 6V10C3.11 10 4 10.9 4 12C4 13.1 3.11 14 2 14V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V14C20.9 14 20 13.1 20 12C20 10.9 22 10 22 10ZM11 15H5V13H11V15ZM11 11H5V9H11V11ZM19 15H13V13H19V15ZM19 11H13V9H19V11Z" />
+        </svg>
+      ),
       label: "Entrada",
       active: reserva.incluyeEntrada,
       detail: reserva.entradas.length
@@ -77,15 +89,18 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
     <div className="group mb-4 rounded-md border border-[#1C1D24] bg-[#131318] p-1 shadow-md transition-colors hover:border-[#33343D]">
       <div className="flex flex-col md:flex-row">
         <div className="flex w-full flex-col justify-center border-b border-[#1C1D24] bg-[#0B0B10] p-6 md:w-1/3 md:border-b-0 md:border-r">
-          <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: estado.color }}>
+          <span 
+            className="inline-block self-start font-mono text-[10px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-sm border"
+            style={{ color: estado.color, backgroundColor: estado.color + '1A', borderColor: estado.color + '33' }}
+          >
             {estado.label}
           </span>
-          <h4 className="font-display mt-2 text-xl font-900 uppercase tracking-tight text-[#F3F1EA]">
+          <h4 className="font-display mt-3 text-2xl font-900 uppercase tracking-tight text-[#F3F1EA]">
             {name}
           </h4>
           {place && <span className="mt-1 text-sm text-[#93949F]">{place}</span>}
           {dates && <span className="text-sm text-[#93949F]">{dates}</span>}
-          <span className="mt-3 font-mono text-[11px] tracking-widest text-[#5C5D66]">
+          <span className="mt-3 font-mono tabular-nums text-[11px] tracking-widest text-[#5C5D66]">
             {reserva.codigoConfirmacion}
           </span>
         </div>
@@ -110,7 +125,7 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
       )}
 
       <div className="flex items-center justify-between bg-[#0E0E13] px-6 py-3">
-        <span className="font-mono text-xs text-[#D8D7CE]">{formatUsd(reserva.totalUsd)}</span>
+        <span className="font-mono tabular-nums text-lg font-bold text-[#F3F1EA]">{formatUsd(reserva.totalUsd)}</span>
         <button
           type="button"
           aria-expanded={expanded}

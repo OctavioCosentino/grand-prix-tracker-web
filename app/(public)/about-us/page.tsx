@@ -12,7 +12,6 @@ export default function AboutPage() {
       <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[#E10600]/5 blur-[150px]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 pb-24">
-        
         {/* Encabezado */}
         <div className="mx-auto max-w-2xl text-center">
           <span className="font-mono text-[10px] tracking-[0.2em] text-[#E10600]">
@@ -22,10 +21,10 @@ export default function AboutPage() {
             Conocé a la escudería
           </h1>
           <p className="mt-4 text-sm leading-relaxed text-[#93949F] sm:text-base">
-            Somos un equipo apasionado por la velocidad y la tecnología. 
-            Nuestra misión es diseñar la mejor plataforma para que tu único 
-            enfoque sea disfrutar la carrera, optimizando cada fase de tu viaje 
-            al Gran Premio.
+            Somos un equipo apasionado por la velocidad y la tecnología. Nuestra
+            misión es diseñar la mejor plataforma para que tu único enfoque sea
+            disfrutar la carrera, optimizando cada fase de tu viaje al Gran
+            Premio.
           </p>
         </div>
 
@@ -54,16 +53,15 @@ export default function AboutPage() {
           {/* Se amplió la grilla para acomodar ruedas más grandes sin que se choquen en pantallas medianas */}
           <div className="grid grid-cols-1 gap-14 sm:grid-cols-2 lg:grid-cols-4">
             {teamMembers.map((member) => (
-              <a 
-                href={member.linkedinUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                key={member.id} 
+              <a
+                href={member.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                key={member.id}
                 className="group flex flex-col items-center text-center cursor-pointer"
               >
                 {/* Contenedor principal de la rueda ampliado a h-44 w-44 (176px) */}
                 <div className="relative mb-6 h-44 w-44 flex-shrink-0">
-                  
                   {/* Capa 1: Neumático giratorio con grosores recalibrados */}
                   <div className="absolute inset-0 rounded-full bg-[#1C1D24] shadow-[inset_0_8px_10px_rgba(0,0,0,0.7),0_4px_6px_rgba(0,0,0,0.5)] transition-transform duration-700 ease-out group-hover:rotate-180">
                     <div
@@ -75,7 +73,7 @@ export default function AboutPage() {
                       style={{ borderColor: member.compoundColor }}
                     />
                     <div className="absolute inset-[28px] rounded-full border border-[#33343D] bg-[#0B0B10]" />
-                    
+
                     {/* Válvula escalada proporcionalmente */}
                     <div className="absolute top-[29px] left-1/2 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-[#93949F] shadow-md" />
                   </div>

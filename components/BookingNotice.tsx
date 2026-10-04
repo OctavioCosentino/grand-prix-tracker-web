@@ -53,15 +53,17 @@ export function QueryStatus({
   error,
   onRetry,
   loadingText,
+  className = "",
 }: {
   isPending: boolean;
   error: Error | null;
   onRetry: () => void;
   loadingText: string;
+  className?: string;
 }) {
   if (isPending) {
     return (
-      <div className="flex min-h-[200px] flex-col items-center justify-center gap-4 rounded-md border border-[#1C1D24] bg-[#0E0E13]">
+      <div className={"flex min-h-[200px] flex-col items-center justify-center gap-4 rounded-md border border-[#1C1D24] bg-[#0E0E13] " + className}>
         <span className="h-8 w-8 rounded-full border-2 border-[#E10600] border-t-transparent animate-spin" />
         <p className="font-mono text-xs uppercase tracking-widest text-[#93949F]">{loadingText}</p>
       </div>
