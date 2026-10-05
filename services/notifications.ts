@@ -69,8 +69,23 @@ export function deduplicateNotifications(items: NotificationItem[]): Notificatio
   const seenContent = new Set<string>();
   const result: NotificationItem[] = [];
 
-  for (const item of items) {
-    if (isMockOrder(item)) continue;
+  for (const rawItem of items) {
+    if (isMockOrder(rawItem)) continue;
+
+    // Normalizar cualquier notificación previa que diga "Pedido" para que diga "Compra"
+    let item = rawItem;
+    if (
+      item.tipo === "ORDER_CONFIRMATION" &&
+      item.titulo.includes("Pedido")
+    ) {
+      item = {
+        ...item,
+        titulo: item.titulo
+          .replace("Pedido", "Compra")
+          .replace("Confirmado", "Confirmada"),
+      };
+    }
+
     if (seenIds.has(item.idNotificacion)) continue;
 
     // Si hay ofertas con título y mensaje idénticos, dejamos solo la más reciente

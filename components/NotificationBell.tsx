@@ -253,7 +253,7 @@ export function NotificationBell() {
   const getBadgeLabel = (type: NotificationType) => {
     switch (type) {
       case "ORDER_CONFIRMATION":
-        return "PEDIDO";
+        return "COMPRA";
       case "OFFER":
         return "OFERTA";
       case "SYSTEM":

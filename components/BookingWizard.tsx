@@ -221,7 +221,7 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
       });
       queryClient.invalidateQueries({ queryKey: bookingQueryKeys.bookings });
 
-      // Notificación funcional de pedido confirmado
+      // Notificación funcional de compra confirmada
       const orderNum = result.codigoConfirmacion.replace(/^#/, "");
       const country = event.circuito?.ciudad?.pais?.nombre;
       const gpName = country
@@ -232,7 +232,7 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
 
       addNotification({
         idUsuario: userId,
-        titulo: `¡Pedido #${orderNum} Confirmado!`,
+        titulo: `¡Compra #${orderNum} Confirmada!`,
         mensaje: `Se ha procesado tu compra para el Gran Premio ${gpName}. ${ticketName} activado.`,
         tipo: "ORDER_CONFIRMATION",
         urlDestino: "/profile?tab=reservas",
