@@ -21,7 +21,7 @@ import React from "react";
 import { SERVICES, SERVICE_ICONS } from "../../utils/services";
 import { STEPS } from "@/utils/steps";
 import { DESTINATIONS } from "@/utils/destinations";
-import { SYSTEM_PANELS } from "@/utils/mockData/systemPanels";
+import { SYSTEM_PANELS } from "@/utils/systemPanels";
 import { useEvents } from "@/hooks/useEvents";
 import ButtonChecker from "../../components/ButtonChecker";
 import ButtonOutline from "../../components/ButtonOutline";
@@ -63,7 +63,7 @@ export default function Page() {
         <div className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-[#E10600]/20 blur-[120px]" />
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <span
-            className="gpt-streak absolute top-[20%] h-px w-1/3 bg-linear-to-r from-transparent via-[#F3F1EA]/70 to-transparent"
+            className="gpt-streak absolute top-[172px] md:top-[204px] h-px w-1/3 bg-linear-to-r from-transparent via-[#F3F1EA]/70 to-transparent"
             style={{ animationDelay: "0s" }}
           />
           <span
@@ -78,7 +78,7 @@ export default function Page() {
 
         <div className="relative mx-auto max-w-7xl px-6">
           <Reveal>
-            <Eyebrow>Nombre preliminar del proyecto</Eyebrow>
+            <Eyebrow>GrandPrix Tracker // Experiencia F1</Eyebrow>
           </Reveal>
 
           <Reveal delay={80}>
