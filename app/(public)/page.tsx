@@ -26,7 +26,6 @@ import { useEvents } from "@/hooks/useEvents";
 import ButtonChecker from "../../components/ButtonChecker";
 import ButtonOutline from "../../components/ButtonOutline";
 import FeedbackSection from "@/components/FeedbackSection";
-import Navbar from "@/components/Navbar";
 import RacesCarrousel from "@/components/RacesCarrousel";
 import StepsCard from "@/components/StepsCard";
 import Eyebrow from "@/components/EyeBrow";
@@ -34,12 +33,9 @@ import ServicesCard from "@/components/ServicesCard";
 import DestinationCard from "@/components/DestinationsCard";
 import { DestinationCardSkeleton } from "@/components/CalendarSkeleton";
 import SystemPanelCard from "@/components/SystemPanelCard";
-import EmailInput from "@/components/EmailInput";
 import CountdownGp from "@/components/CountdownGp";
 
 import Reveal from "@/components/Reveal";
-
-import useScrolled from "@/hooks/useScrolled";
 import Link from "next/dist/client/link";
 
 /* ======== DATA =============== */
@@ -47,8 +43,6 @@ import Link from "next/dist/client/link";
 
 /* ======== PÁGINA =========== */
 export default function Page() {
-  const scrolled = useScrolled();
-  const [menuOpen, setMenuOpen] = useState(false);
   const { races, isPending } = useEvents();
 
   const today = new Date();
@@ -60,13 +54,6 @@ export default function Page() {
         " bg-[#0B0B10] text-[#F3F1EA] antialiased selection:bg-[#E10600] selection:text-white"
       }
     >
-      {/* ================= HEADER ================= */}
-      <Navbar
-        scrolled={scrolled}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-      />
-
       {/* ================= Banner principal ================= */}
       <section
         id="inicio"

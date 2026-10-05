@@ -66,7 +66,6 @@ export function isMockOrder(item: NotificationItem): boolean {
 
 export function deduplicateNotifications(items: NotificationItem[]): NotificationItem[] {
   const seenIds = new Set<string>();
-  const seenContent = new Set<string>();
   const result: NotificationItem[] = [];
 
   for (const rawItem of items) {
@@ -87,15 +86,12 @@ export function deduplicateNotifications(items: NotificationItem[]): Notificatio
     }
 
     if (seenIds.has(item.idNotificacion)) continue;
-
-    // Si hay ofertas con título y mensaje idénticos, dejamos solo la más reciente
-    const contentKey = `${item.tipo}_${item.titulo}_${item.mensaje}`;
-    if (seenContent.has(contentKey)) continue;
-
     seenIds.add(item.idNotificacion);
-    seenContent.add(contentKey);
     result.push(item);
   }
+
+  // Ordenar de más reciente a más antigua
+  result.sort((a, b) => new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime());
 
   return result;
 }
@@ -258,12 +254,16 @@ export async function fetchNotifications(
   userId?: string,
   unreadOnly: boolean = false
 ): Promise<NotificationItem[]> {
+  const isUuid =
+    userId &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+
   const params = new URLSearchParams();
-  if (userId) params.append("userId", userId);
+  if (isUuid) params.append("userId", userId);
   if (unreadOnly) params.append("unreadOnly", "true");
 
   const url = `${API_BASE_URL}/notifications${params.toString() ? `?${params.toString()}` : ""}`;
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(4500) });
   if (!res.ok) {
     throw new Error(`Error ${res.status}: No se pudieron obtener las notificaciones`);
   }
@@ -272,14 +272,22 @@ export async function fetchNotifications(
 }
 
 export async function fetchUnreadCount(userId?: string): Promise<number> {
-  const url = userId
+  const isUuid =
+    userId &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+
+  const url = isUuid
     ? `${API_BASE_URL}/notifications/unread-count?userId=${encodeURIComponent(userId)}`
     : `${API_BASE_URL}/notifications/unread-count`;
 
-  const res = await fetch(url);
-  if (!res.ok) return 0;
-  const json: ApiResponse<{ unreadCount: number }> = await res.json();
-  return json.data?.unreadCount ?? 0;
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(3500) });
+    if (!res.ok) return 0;
+    const json: ApiResponse<{ unreadCount: number }> = await res.json();
+    return json.data?.unreadCount ?? 0;
+  } catch {
+    return 0;
+  }
 }
 
 export async function createNotification(
@@ -289,6 +297,7 @@ export async function createNotification(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(dto),
+    signal: AbortSignal.timeout(4500),
   });
 
   if (!res.ok) {
@@ -300,32 +309,63 @@ export async function createNotification(
 }
 
 export async function markAsRead(id: string): Promise<NotificationItem> {
-  const res = await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
-    method: "PATCH",
-  });
-  if (!res.ok) {
-    throw new Error(`Error ${res.status}: No se pudo marcar como leída`);
+  const isUuid =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
+  if (isUuid) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
+        method: "PATCH",
+        signal: AbortSignal.timeout(4000),
+      });
+      if (res.ok) {
+        const json: ApiResponse<NotificationItem> = await res.json();
+        return json.data;
+      }
+    } catch {
+      // Si la API falla, offline o timeout, consideramos marcada localmente sin romper el cliente
+    }
   }
-  const json: ApiResponse<NotificationItem> = await res.json();
-  return json.data;
+
+  return {
+    idNotificacion: id,
+    titulo: "",
+    mensaje: "",
+    tipo: "SYSTEM",
+    leido: true,
+    creadoEn: new Date().toISOString(),
+  };
 }
 
 export async function markAllAsRead(
   unreadItems: NotificationItem[],
   userId?: string
 ): Promise<void> {
-  if (userId) {
-    const res = await fetch(
-      `${API_BASE_URL}/notifications/read-all?userId=${encodeURIComponent(userId)}`,
-      { method: "PATCH" }
-    );
-    if (res.ok) return;
+  const isUuid =
+    userId &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+
+  if (isUuid) {
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/notifications/read-all?userId=${encodeURIComponent(userId)}`,
+        { method: "PATCH", signal: AbortSignal.timeout(4000) }
+      );
+      if (res.ok) return;
+    } catch {}
   }
 
+  const remoteItems = unreadItems.filter((item) =>
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      item.idNotificacion
+    )
+  );
+
   await Promise.allSettled(
-    unreadItems.map((item) =>
+    remoteItems.map((item) =>
       fetch(`${API_BASE_URL}/notifications/${item.idNotificacion}/read`, {
         method: "PATCH",
+        signal: AbortSignal.timeout(4000),
       })
     )
   );

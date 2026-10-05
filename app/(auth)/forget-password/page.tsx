@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Home from "@/components/Home";
 import PasswordInput from "@/components/PasswordInput";
 import ButtonChecker from "@/components/ButtonChecker";
+import PasswordStrengthMeter from "@/components/PasswordStrengthMeter";
 import PasswordRequirements from "@/utils/passwordRequirements";
 import { createClient } from "@/lib/supabase/client";
 import { authErrorMessage } from "@/utils/auth";
@@ -82,26 +83,7 @@ export default function RecoverPage() {
                 placeholder="Tu nueva clave fuerte"
               /> 
               
-              <div className="mt-2 rounded-sm border border-[#1C1D24] bg-[#0B0B10] p-3">
-                <div className="mb-3 flex justify-between gap-1">
-                  {[0, 1, 2, 3].map((index) => (
-                    <div
-                      key={index}
-                      className={`h-1.5 w-full rounded-full transition-all duration-300 ${getLightColor(index)}`}
-                    />
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 gap-y-2">
-                  {requirements.map((req) => (
-                    <div key={req.id} className="flex items-center gap-1.5">
-                      <div className={`h-1.5 w-1.5 rounded-full ${req.met ? 'bg-[#7C4DFF]' : 'bg-[#33343D]'}`} />
-                      <span className={`font-mono text-[9px] uppercase tracking-wider transition-colors ${req.met ? 'text-[#F3F1EA]' : 'text-[#5C5D66]'}`}>
-                        {req.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <PasswordStrengthMeter password={password} />
             </div>
 
             <div className="flex flex-col gap-2">

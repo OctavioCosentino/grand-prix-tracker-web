@@ -23,12 +23,11 @@ export default function QuantityStepper({
   const [tempValue, setTempValue] = useState(String(value));
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Sincronizar el valor temporal cuando cambia el prop desde afuera
-  useEffect(() => {
-    if (!isEditing) {
-      setTempValue(String(value));
-    }
-  }, [value, isEditing]);
+  const [prevValue, setPrevValue] = useState(value);
+  if (!isEditing && prevValue !== value) {
+    setPrevValue(value);
+    setTempValue(String(value));
+  }
 
   // Foco automático y selección del número al entrar en modo edición
   useEffect(() => {

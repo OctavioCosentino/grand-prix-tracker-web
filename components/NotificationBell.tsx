@@ -1,141 +1,133 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { NotificationItem, NotificationType } from "../app/types/notification";
 import { useAuth } from "./providers/AuthProvider";
+import { useNotifications } from "@/hooks/useNotifications";
 import {
-  API_BASE_URL,
-  DEFAULT_NOTIFICATIONS,
-  getStoredNotifications,
-  saveStoredNotifications,
-  addNotification,
   simulateOfferNotification,
-  deduplicateNotifications,
-  isMockOrder,
   purgeMockOrders,
   playNotificationSound,
-  markAsRead as apiMarkAsRead,
-  markAllAsRead as apiMarkAllAsRead,
 } from "@/services/notifications";
 
 let lastToastTime = 0;
 
+export function showNotificationToast(title: string, message: string) {
+  const now = Date.now();
+  // Evitar toasts duplicados si dos componentes escuchan el mismo evento
+  if (now - lastToastTime < 800) return;
+  lastToastTime = now;
+
+  toast.custom(
+    (t) => (
+      <div
+        className={`${
+          t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        } pointer-events-auto flex max-w-sm w-full items-start gap-3 rounded-md border border-[#E10600]/50 bg-[#131318]/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-200`}
+      >
+        <div className="flex-1 min-w-0">
+          <h5 className="text-[13px] font-bold text-[#F3F1EA] truncate">
+            {title}
+          </h5>
+          <p className="mt-0.5 text-xs text-[#93949F] leading-snug break-words">
+            {message}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => toast.dismiss(t.id)}
+          className="text-[#93949F] hover:text-[#F3F1EA] text-xs font-mono cursor-pointer transition-colors p-0.5"
+          aria-label="Cerrar notificación"
+        >
+          ✕
+        </button>
+      </div>
+    ),
+    {
+      id: `notif-${title}`,
+      duration: 5000,
+      position: "bottom-right",
+    }
+  );
+}
+
+export function formatNotificationTime(isoString: string): string {
+  try {
+    const date = new Date(isoString);
+    const diffSecs = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (diffSecs < 60) return "hace un momento";
+    if (diffSecs < 3600) return `hace ${Math.floor(diffSecs / 60)} min`;
+    if (diffSecs < 86400) return `hace ${Math.floor(diffSecs / 3600)} h`;
+    return date.toLocaleDateString();
+  } catch {
+    return "";
+  }
+}
+
 export function NotificationBell() {
+  const router = useRouter();
   const { user } = useAuth();
   const userId = user?.id;
   const isLoggedIn = Boolean(user);
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const isFirstLoad = useRef(true);
+
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+  } = useNotifications(userId);
+
+  const prevIdsRef = useRef<Set<string>>(new Set());
+  const isFirstLoadRef = useRef(true);
 
   useEffect(() => {
     purgeMockOrders();
   }, []);
 
-  const fetchNotifications = async () => {
-    // 1. Cargar almacenamiento local persistente primero
-    const local = getStoredNotifications(userId);
-    setNotifications(local);
-    setUnreadCount(local.filter((n) => !n.leido).length);
+  useEffect(() => {
+    if (!notifications.length) return;
+    const currentIds = new Set(notifications.map((n) => n.idNotificacion));
 
-    try {
-      const res = await fetch(
-        `${API_BASE_URL}/notifications?userId=${encodeURIComponent(userId ?? "")}`,
+    if (!isFirstLoadRef.current) {
+      const incoming = notifications.find(
+        (n) => !n.leido && !prevIdsRef.current.has(n.idNotificacion)
       );
-      if (res.ok) {
-        const json = await res.json();
-        if (json.success && Array.isArray(json.data)) {
-          // Filtrar cualquier pedido mock que haya quedado en la API
-          const cleanRemoteData: NotificationItem[] = json.data.filter(
-            (item: NotificationItem) => !isMockOrder(item)
-          );
-
-          // Si no es la primera carga y detectamos una nueva que no teníamos antes:
-          if (!isFirstLoad.current) {
-            const newest = cleanRemoteData.find(
-              (item) =>
-                !item.leido &&
-                !local.some(
-                  (l) =>
-                    l.idNotificacion === item.idNotificacion ||
-                    (l.titulo === item.titulo && l.mensaje === item.mensaje)
-                )
-            );
-            if (newest) {
-              playNotificationSound();
-              showToast(newest.titulo, newest.mensaje, newest.tipo);
-            }
-          }
-          isFirstLoad.current = false;
-
-          // Combinar remoto y local evitando duplicados tanto por ID como por contenido
-          const merged: NotificationItem[] = [...cleanRemoteData];
-          for (const item of local) {
-            const existsInRemote = cleanRemoteData.some(
-              (r) =>
-                r.idNotificacion === item.idNotificacion ||
-                (r.titulo === item.titulo && r.mensaje === item.mensaje)
-            );
-            if (!existsInRemote) {
-              merged.push(item);
-            }
-          }
-
-          const deduped = deduplicateNotifications(merged);
-          saveStoredNotifications(deduped, userId);
-          setNotifications(deduped);
-          setUnreadCount(deduped.filter((n) => !n.leido).length);
-          return;
+      if (incoming) {
+        showNotificationToast(incoming.titulo, incoming.mensaje);
+        if (incoming.tipo !== "ORDER_CONFIRMATION") {
+          playNotificationSound();
         }
       }
-      throw new Error("No se pudo obtener notificaciones del servidor");
-    } catch {
-      isFirstLoad.current = false;
-      // Fallback si no había nada local tampoco
-      if (local.length === 0) {
-        saveStoredNotifications(DEFAULT_NOTIFICATIONS, userId);
-        setNotifications(DEFAULT_NOTIFICATIONS);
-        setUnreadCount(DEFAULT_NOTIFICATIONS.filter((n) => !n.leido).length);
-      }
     }
-  };
+    isFirstLoadRef.current = false;
+    prevIdsRef.current = currentIds;
+  }, [notifications]);
 
   useEffect(() => {
     if (!userId) return;
-    fetchNotifications();
 
     const handleAdded = (e: Event) => {
       const customEvent = e as CustomEvent<NotificationItem>;
       if (customEvent.detail) {
         const notif = customEvent.detail;
-        showToast(notif.titulo, notif.mensaje, notif.tipo);
+        // Evitar que el useEffect de notifications vuelva a reproducir sonido/toast
+        prevIdsRef.current.add(notif.idNotificacion);
+        showNotificationToast(notif.titulo, notif.mensaje);
         if (notif.tipo !== "ORDER_CONFIRMATION") {
           playNotificationSound();
         }
       }
-      const local = getStoredNotifications(userId);
-      setNotifications(local);
-      setUnreadCount(local.filter((n) => !n.leido).length);
-    };
-
-    const handleChanged = () => {
-      const local = getStoredNotifications(userId);
-      setNotifications(local);
-      setUnreadCount(local.filter((n) => !n.leido).length);
     };
 
     window.addEventListener("gpt_notification_added", handleAdded);
-    window.addEventListener("gpt_notifications_changed", handleChanged);
 
-    const interval = setInterval(fetchNotifications, 15000);
     return () => {
       window.removeEventListener("gpt_notification_added", handleAdded);
-      window.removeEventListener("gpt_notifications_changed", handleChanged);
-      clearInterval(interval);
     };
   }, [userId]);
 
@@ -152,80 +144,14 @@ export function NotificationBell() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const showToast = (
-    title: string,
-    message: string,
-    type: NotificationType,
-  ) => {
-    const now = Date.now();
-    // Evitar toasts duplicados si dos componentes escuchan el mismo evento
-    if (now - lastToastTime < 800) return;
-    lastToastTime = now;
-
-    toast.custom(
-      (t) => (
-        <div
-          className={`${
-            t.visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          } pointer-events-auto flex max-w-sm w-full items-start gap-3 rounded-md border border-[#E10600]/50 bg-[#131318]/95 p-4 shadow-2xl backdrop-blur-md transition-all duration-200`}
-        >
-          <div className="flex-1 min-w-0">
-            <h5 className="text-[13px] font-bold text-[#F3F1EA]">
-              {title}
-            </h5>
-            <p className="mt-0.5 text-xs text-[#93949F] leading-snug break-words">
-              {message}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => toast.dismiss(t.id)}
-            className="text-[#93949F] hover:text-[#F3F1EA] text-xs font-mono cursor-pointer transition-colors p-0.5"
-            aria-label="Cerrar notificación"
-          >
-            ✕
-          </button>
-        </div>
-      ),
-      {
-        id: `notif-${title}`,
-        duration: 5000,
-        position: "bottom-right",
-      }
-    );
-  };
-
-  const handleMarkAsRead = async (id: string, e?: React.MouseEvent) => {
+  const handleMarkAsRead = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-
-    const current = getStoredNotifications(userId);
-    const updated = current.map((n) =>
-      n.idNotificacion === id ? { ...n, leido: true } : n
-    );
-    saveStoredNotifications(updated, userId);
-    setNotifications(updated);
-    setUnreadCount(updated.filter((n) => !n.leido).length);
-
-    try {
-      await apiMarkAsRead(id);
-    } catch {
-      // Offline fallback
-    }
+    markAsRead(id);
   };
 
-  const handleMarkAllAsRead = async () => {
-    const current = getStoredNotifications(userId);
-    const unreadList = current.filter((n) => !n.leido);
-    const updated = current.map((n) => ({ ...n, leido: true }));
-    saveStoredNotifications(updated, userId);
-    setNotifications(updated);
-    setUnreadCount(0);
-
-    try {
-      await apiMarkAllAsRead(unreadList, userId);
-    } catch {
-      // Offline fallback
-    }
+  const handleMarkAllAsRead = () => {
+    const unreadList = notifications.filter((n) => !n.leido);
+    markAllAsRead(unreadList);
   };
 
   const handleSimulate = async () => {
@@ -260,19 +186,6 @@ export function NotificationBell() {
         return "SISTEMA";
       default:
         return "AVISO";
-    }
-  };
-
-  const formatTime = (isoString: string) => {
-    try {
-      const date = new Date(isoString);
-      const diffSecs = Math.floor((Date.now() - date.getTime()) / 1000);
-      if (diffSecs < 60) return "hace un momento";
-      if (diffSecs < 3600) return `hace ${Math.floor(diffSecs / 60)} min`;
-      if (diffSecs < 86400) return `hace ${Math.floor(diffSecs / 3600)} h`;
-      return date.toLocaleDateString();
-    } catch {
-      return "";
     }
   };
 
@@ -373,8 +286,10 @@ export function NotificationBell() {
                   key={notif.idNotificacion}
                   onClick={() => {
                     if (!notif.leido) handleMarkAsRead(notif.idNotificacion);
-                    if (notif.urlDestino)
-                      window.location.href = notif.urlDestino;
+                    if (notif.urlDestino) {
+                      setIsOpen(false);
+                      router.push(notif.urlDestino);
+                    }
                   }}
                   className={`p-3.5 transition-colors cursor-pointer hover:bg-[#1C1D24]/50 ${
                     !notif.leido ? "bg-[#0B0B10]/60" : "opacity-75"
@@ -389,7 +304,7 @@ export function NotificationBell() {
                       {getBadgeLabel(notif.tipo)}
                     </span>
                     <span className="font-mono text-[10px] text-[#93949F]">
-                      {formatTime(notif.creadoEn)}
+                      {formatNotificationTime(notif.creadoEn)}
                     </span>
                   </div>
                   <h4 className="mt-1 text-[13px] font-bold text-[#F3F1EA]">

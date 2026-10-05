@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PaymentCard from "@/components/PaymentCard";
 import AddPaymentModal from "@/components/AddPaymentModal";
-import { getPaymentMethods, addPaymentMethod, updatePaymentMethod, MetodoPago } from "@/services/paymentMethods";
+import { addPaymentMethod, updatePaymentMethod, MetodoPago } from "@/services/paymentMethods";
+import { usePaymentMethods, bookingQueryKeys } from "@/hooks/useBooking";
 import getRandomCompound, { tireColors } from "@/utils/tireColors";
 import { getBrandFromLast4 } from "@/utils/banksImages";
 import { useAuth } from "@/components/providers/AuthProvider";
@@ -19,22 +20,19 @@ export default function PagosView() {
   const { user } = useAuth();
   const defaultName = user ? getDisplayName(user) : "Piloto";
 
-  const { data: cards = [], isLoading } = useQuery({
-    queryKey: ["paymentMethods"],
-    queryFn: getPaymentMethods,
-  });
+  const { data: cards = [], isLoading } = usePaymentMethods();
 
   const addMutation = useMutation({
     mutationFn: addPaymentMethod,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["paymentMethods"] });
+      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.paymentMethods });
     },
   });
 
   const editMutation = useMutation({
     mutationFn: (params: { id: string; data: any }) => updatePaymentMethod(params.id, params.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["paymentMethods"] });
+      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.paymentMethods });
     },
   });
 
