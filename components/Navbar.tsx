@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import IconClose from "./icons/IconClose";
 import IconMenu from "./icons/IconMenu";
@@ -16,11 +16,13 @@ export interface NavbarProps {
 
 import { NotificationBell } from "./NotificationBell";
 import { useAuth } from "./providers/AuthProvider";
+import { useProfile } from "@/hooks/useProfile";
 import { getDisplayName } from "@/utils/auth";
 
 export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
     const router = useRouter();
     const { user, isLoading } = useAuth();
+    const { profile } = useProfile();
     const isLogged = Boolean(user);
     const name = user ? getDisplayName(user) : undefined;
 
@@ -56,6 +58,7 @@ export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
                     <ProfileCircle 
                         isLoggedIn={isLogged} 
                         name={name} 
+                        color={profile?.color}
                         onLoginClick={() => router.push("/login")}
                         onProfileClick={() => router.push("/profile")}
                     />
@@ -96,6 +99,7 @@ export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
                         <ProfileCircle 
                             isLoggedIn={isLogged} 
                             name={name} 
+                            color={profile?.color}
                             onLoginClick={() => router.push("/login")}
                             onProfileClick={() => router.push("/profile")}
                         />

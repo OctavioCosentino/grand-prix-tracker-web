@@ -9,6 +9,7 @@ import PagosView from "./PagosView";
 import ProfileCircle from "@/components/ProfileCircle";
 import TabButton from "@/components/TabButton";
 import { useAuth } from "@/components/providers/AuthProvider";
+import { useProfile } from "@/hooks/useProfile";
 import { getDisplayName } from "@/utils/auth";
 
 type TabType = "datos" | "reservas" | "pagos";
@@ -27,6 +28,7 @@ export default function ProfilePage({
   const [isWarningOpen, setIsWarningOpen] = useState(false);
   const router = useRouter();
   const { user, signOut } = useAuth();
+  const { profile } = useProfile();
   const displayName = user ? getDisplayName(user) : "";
 
   return (
@@ -41,7 +43,12 @@ export default function ProfilePage({
               style={{ backgroundImage: "url('/franco.png')" }}
             />
             <div className="relative z-10 mb-4 flex items-center gap-4">
-              <ProfileCircle isLoggedIn={true} name={displayName || "Piloto"} disableSpin={true} />
+              <ProfileCircle
+                isLoggedIn={true}
+                name={displayName || "Piloto"}
+                color={profile?.color}
+                disableSpin={true}
+              />
               <div>
                 <h2 className="font-display text-lg font-900 tracking-tight">{displayName}</h2>
                 <span className="font-mono text-[10px] tracking-[0.15em] text-[#34D399]">

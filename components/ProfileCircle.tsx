@@ -12,6 +12,7 @@ interface AuthButtonProps {
   onLoginClick?: () => void;
   onProfileClick?: () => void;
   compound?: "soft" | "medium" | "hard" | "inter" | "full_wet";
+  color?: string | null;
   disableSpin?: boolean;
 }
 
@@ -40,7 +41,8 @@ export default function AuthButton({
   onLoginClick,
   onProfileClick,
   compound,
-disableSpin = false,
+  color,
+  disableSpin = false,
 }: AuthButtonProps) {
   const randomCompound = useSyncExternalStore(
     emptySubscribe,
@@ -49,7 +51,8 @@ disableSpin = false,
   );
 
   const activeCompound = compound ?? randomCompound;
-  const stripeColor = tireColors[activeCompound];
+  // Si el usuario configuró un color personalizado (#AHSC3, #E10600, etc.) se usa ese; si es null, se mantiene el random
+  const stripeColor = color || tireColors[activeCompound];
 
   if (!isLoggedIn) {
     return (
