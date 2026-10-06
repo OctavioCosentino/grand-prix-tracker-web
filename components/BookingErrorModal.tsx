@@ -2,6 +2,8 @@
 
 import React, { useEffect } from "react";
 import { AlertTriangle, RotateCcw, Home, X } from "lucide-react";
+import ButtonChecker from "./ButtonChecker";
+import ButtonOutline from "./ButtonOutline";
 
 interface BookingErrorModalProps {
   isOpen: boolean;
@@ -85,36 +87,28 @@ export default function BookingErrorModal({
             </p>
           </div>
 
-          {/* Mensaje de tranquilidad: la selección sigue en memoria */}
-          <div className="rounded-md bg-[#34D399]/10 border border-[#34D399]/20 p-3.5 text-left">
-            <p className="font-mono text-xs text-[#34D399] leading-relaxed">
-              <strong className="font-bold">✓ Tu paquete está a salvo:</strong> Tu hotel, entradas y vuelos elegidos quedan guardados en este dispositivo. No perdiste nada de tu selección.
-            </p>
-          </div>
-
           {/* Botones de acción */}
           <div className="mt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3">
-            <button
-              type="button"
+            <ButtonOutline
               onClick={onLater}
-              className="booking-modal-btn-secondary inline-flex items-center justify-center gap-2 rounded-sm border border-[#33343D] bg-transparent px-5 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-[#D8D7CE] transition-all hover:border-[#E10600] hover:text-[#F3F1EA] hover:bg-[#1C1D24] cursor-pointer"
+              className="px-5 py-3 font-mono text-xs uppercase tracking-wider"
             >
               <Home className="h-4 w-4" />
               Intentar más tarde
-            </button>
+            </ButtonOutline>
 
-            <button
-              type="button"
+            <ButtonChecker
               onClick={onRetry}
               disabled={isSubmitting}
-              className="inline-flex items-center justify-center gap-2 rounded-sm bg-[#E10600] px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest text-white shadow-lg shadow-[#E10600]/25 transition-all hover:bg-[#B80400] hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-50"
+              className="px-6 py-3 font-mono text-xs uppercase tracking-widest"
             >
               <RotateCcw className={`h-4 w-4 ${isSubmitting ? "animate-spin" : ""}`} />
               {isSubmitting ? "Procesando..." : "Reintentar compra"}
-            </button>
+            </ButtonChecker>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
