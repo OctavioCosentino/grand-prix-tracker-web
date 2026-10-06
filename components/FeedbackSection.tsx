@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import Reveal from "./Reveal";
 import Eyebrow from "./EyeBrow";
 import TextBox from "./TextBox";
@@ -10,8 +11,9 @@ export default function FeedbackSection() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!feedback.trim()) return;
+    if (!feedback.trim() || submitted) return;
     setSubmitted(true);
+    toast.success("Mensaje enviado con exito");
   }
 
   return (
@@ -32,32 +34,27 @@ export default function FeedbackSection() {
         </Reveal>
 
         <Reveal delay={120} className="mt-8">
-          {submitted ? (
-            <div className="mx-auto flex max-w-md items-center justify-center gap-3 rounded-md border border-emerald-400/30 bg-emerald-400/10 px-6 py-4 text-sm text-emerald-300">
-              <span className="text-lg">✅</span>
-              ¡Gracias por tu feedback! Lo vamos a tener en cuenta.
-            </div>
-          ) : (
-            <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-3">
-              <form
-                onSubmit={handleSubmit}
-                className="mx-auto flex w-full flex-col gap-4"
+          <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-3">
+            <form
+              onSubmit={handleSubmit}
+              className="mx-auto flex w-full flex-col gap-4"
+            >
+              <TextBox
+                value={feedback}
+                onChange={(val) => setFeedback(val)}
+                placeholder="Escribí acá tu sugerencia o error..."
+                disabled={submitted}
+              />
+              <ButtonChecker
+                className="mx-auto w-11/12 py-3.5 sm:w-5/6"
+                showArrow={!submitted}
+                type="submit"
+                disabled={submitted}
               >
-                <TextBox
-                  value={feedback}
-                  onChange={(val) => setFeedback(val)}
-                  placeholder="Escribí acá tu sugerencia o error..."
-                />
-                <ButtonChecker
-                  className="mx-auto w-11/12 py-3.5 sm:w-5/6"
-                  showArrow={true}
-                  type="submit"
-                >
-                  Enviar
-                </ButtonChecker>
-              </form>
-            </div>
-          )}
+                {submitted ? "Mensaje enviado" : "Enviar"}
+              </ButtonChecker>
+            </form>
+          </div>
           <p className="font-mono mt-4 text-[10px] tracking-[0.15em] text-[#5C5D66]">
             TODOS LOS COMENTARIOS SON BIENVENIDOS
           </p>
