@@ -116,39 +116,40 @@ export default function AddPaymentModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 p-4 backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl"
+        className="relative my-auto w-full max-w-md max-h-[calc(100dvh-2.5rem)] overflow-y-auto custom-scrollbar rounded-md border border-[#1C1D24] bg-[#0E0E13] p-5 sm:p-7 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 text-[#5C5D66] transition-colors hover:text-[#F3F1EA] focus:outline-none cursor-pointer"
+          className="absolute right-4 top-4 text-[#5C5D66] transition-colors hover:text-[#F3F1EA] focus:outline-none cursor-pointer sm:right-5 sm:top-5"
+          aria-label="Cerrar modal"
         >
           ✕
         </button>
 
-        <div className="mb-6 text-center">
+        <div className="mb-4 text-center sm:mb-5">
           <span
             className={`font-mono text-[10px] tracking-[0.2em] ${isEdit ? "text-[#E10600]" : "text-[#34D399]"}`}
           >
             {isEdit ? "EDITAR COMPUESTO" : "NUEVO COMPUESTO"}
           </span>
-          <h2 className="font-display mt-2 text-2xl font-900 tracking-tight text-[#F3F1EA]">
+          <h2 className="font-display mt-1 text-xl font-900 tracking-tight text-[#F3F1EA] sm:mt-1.5 sm:text-2xl">
             {isEdit ? "Editar método de pago" : "Agregar método de pago"}
           </h2>
-          <p className="mt-2 text-sm text-[#93949F]">
+          <p className="mt-1 text-xs text-[#93949F] sm:text-sm">
             {isEdit
               ? "Actualizá los datos de tu tarjeta."
               : "Ingresá los datos de tu tarjeta para habilitar compras rápidas."}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-3.5">
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#5C5D66] sm:text-[10px]">
               Número de Tarjeta
             </label>
             <input
@@ -158,12 +159,12 @@ export default function AddPaymentModal({
               placeholder="0000 0000 0000 0000"
               value={cardNumber}
               onChange={handleCardNumberChange}
-              className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
+              className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-3.5 py-2.5 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600] sm:py-3"
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+          <div className="flex flex-col gap-1.5">
+            <label className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#5C5D66] sm:text-[10px]">
               Nombre en la Tarjeta
             </label>
             <input
@@ -172,13 +173,13 @@ export default function AddPaymentModal({
               placeholder="AYRTON SENNA"
               value={cardName}
               onChange={handleCardNameChange}
-              className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
+              className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-3.5 py-2.5 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600] sm:py-3"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#5C5D66] sm:text-[10px]">
                 Vencimiento
               </label>
               <input
@@ -188,12 +189,12 @@ export default function AddPaymentModal({
                 placeholder="MM/AA"
                 value={expiry}
                 onChange={handleExpiryChange}
-                className={`w-full rounded-sm border ${expiryError ? 'border-[#E10600]' : 'border-[#33343D]'} bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]`}
+                className={`w-full rounded-sm border ${expiryError ? 'border-[#E10600]' : 'border-[#33343D]'} bg-[#131318] px-3.5 py-2.5 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600] sm:py-3`}
               />
-              {expiryError && <span className="text-[#E10600] text-[10px] mt-1">Ingrese un año válido</span>}
+              {expiryError && <span className="text-[#E10600] text-[10px] mt-0.5">Ingrese un año válido</span>}
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#5C5D66] sm:text-[10px]">
                 CVC
               </label>
               <input
@@ -203,17 +204,17 @@ export default function AddPaymentModal({
                 placeholder="123"
                 value={cvc}
                 onChange={handleCvcChange}
-                className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600]"
+                className="w-full rounded-sm border border-[#33343D] bg-[#131318] px-3.5 py-2.5 text-sm text-[#F3F1EA] placeholder-[#5C5D66] outline-none transition-colors focus:border-[#E10600] sm:py-3"
               />
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 relative">
-            <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+          <div className="flex flex-col gap-1.5 relative">
+            <label className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#5C5D66] sm:text-[10px]">
               Tipo de Tarjeta
             </label>
             <div
-              className={`w-full rounded-sm border flex justify-between items-center bg-[#131318] px-4 py-3 text-sm text-[#F3F1EA] outline-none transition-colors cursor-pointer ${isDropdownOpen ? "border-[#E10600]" : "border-[#33343D]"}`}
+              className={`w-full rounded-sm border flex justify-between items-center bg-[#131318] px-3.5 py-2.5 sm:py-3 text-sm text-[#F3F1EA] outline-none transition-colors cursor-pointer ${isDropdownOpen ? "border-[#E10600]" : "border-[#33343D]"}`}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <span>{tipo === "Credito" ? "Crédito" : "Débito"}</span>
@@ -238,9 +239,9 @@ export default function AddPaymentModal({
                   className="fixed inset-0 z-10"
                   onClick={() => setIsDropdownOpen(false)}
                 />
-                <div className="absolute top-[68px] left-0 w-full rounded-sm border border-[#33343D] bg-[#131318] shadow-2xl z-20 overflow-hidden">
+                <div className="absolute top-full left-0 mt-1 w-full rounded-sm border border-[#33343D] bg-[#131318] shadow-2xl z-20 overflow-hidden">
                   <div
-                    className={`px-4 py-3 text-sm cursor-pointer transition-colors hover:bg-[#1C1D24] hover:text-[#E10600] ${tipo === "Credito" ? "text-[#F3F1EA] bg-[#1C1D24]" : "text-[#93949F]"}`}
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-colors hover:bg-[#1C1D24] hover:text-[#E10600] sm:py-3 ${tipo === "Credito" ? "text-[#F3F1EA] bg-[#1C1D24]" : "text-[#93949F]"}`}
                     onClick={() => {
                       setTipo("Credito");
                       setIsDropdownOpen(false);
@@ -249,7 +250,7 @@ export default function AddPaymentModal({
                     Crédito
                   </div>
                   <div
-                    className={`px-4 py-3 text-sm cursor-pointer transition-colors hover:bg-[#1C1D24] hover:text-[#E10600] ${tipo === "Debito" ? "text-[#F3F1EA] bg-[#1C1D24]" : "text-[#93949F]"}`}
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-colors hover:bg-[#1C1D24] hover:text-[#E10600] sm:py-3 ${tipo === "Debito" ? "text-[#F3F1EA] bg-[#1C1D24]" : "text-[#93949F]"}`}
                     onClick={() => {
                       setTipo("Debito");
                       setIsDropdownOpen(false);
@@ -264,7 +265,7 @@ export default function AddPaymentModal({
 
           <ButtonChecker
             type="submit"
-            className="mt-4 w-full py-3.5"
+            className="mt-2 w-full py-3 sm:mt-3 sm:py-3.5"
             showArrow={true}
           >
             {isEdit ? "Actualizar Tarjeta" : "Guardar en Billetera"}

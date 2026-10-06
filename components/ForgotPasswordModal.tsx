@@ -36,7 +36,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm">
       <div className="relative w-full max-w-sm rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl">
         <button
           onClick={onClose}
