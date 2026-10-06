@@ -89,17 +89,14 @@ export default function BookingErrorModal({
 
           {/* Botones de acción */}
           <div className="mt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3">
-            <ButtonOutline
-              onClick={onLater}
-              className="h-11 px-5 font-mono text-xs uppercase tracking-wider"
-            >
+            <ButtonOutline onClick={onLater}>
               Intentar más tarde
             </ButtonOutline>
 
             <ButtonChecker
               onClick={onRetry}
               disabled={isSubmitting}
-              className="h-11 px-6 font-mono text-xs uppercase tracking-widest"
+              className="border border-transparent px-6 py-3.5"
             >
               <RotateCcw className={`h-4 w-4 ${isSubmitting ? "animate-spin" : ""}`} />
               {isSubmitting ? "Procesando..." : "Reintentar compra"}

@@ -13,7 +13,6 @@ import {
 } from "@/utils/booking";
 import ButtonChecker from "./ButtonChecker";
 import ButtonProgress from "./ButtonProgress";
-import BookingNotice from "./BookingNotice";
 import { describeCardType } from "./BookingPaymentStep";
 
 interface BookingReviewStepProps {
@@ -57,31 +56,6 @@ export default function BookingReviewStep({
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
-      {submitError && (
-        <BookingNotice severity="danger" title="No se pudo confirmar">
-          {submitError}
-        </BookingNotice>
-      )}
-
-      {issues.length > 0 && (
-        <BookingNotice severity="warning" title="Revisá tu paquete">
-          <ul className="flex flex-col gap-1">
-            {issues.map((issue, i) => (
-              <li key={i}>
-                {issue.message}{" "}
-                <button
-                  type="button"
-                  onClick={() => onEdit(issue.step)}
-                  className="font-bold text-[#E7B33C] hover:underline cursor-pointer"
-                >
-                  Corregir
-                </button>
-              </li>
-            ))}
-          </ul>
-        </BookingNotice>
-      )}
-
       <div className="rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 sm:p-8">
         {productSteps.map(({ id, label }) => {
           const stepLines = lines.filter((l) => l.step === id);
