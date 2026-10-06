@@ -467,35 +467,15 @@ html.light .gpt-toast-success * {
    Página 404 (Soporte Modo Oscuro y Modo Claro)
    ========================================================================== */
 
-/* Foto de choque de fondo y overlay de viñeta */
+/* Foto de choque de fondo (solo blanco y negro, sin efectos extra) */
 .not-found-crash-bg {
-  opacity: 0.16;
-  filter: contrast(1.15) brightness(0.9);
+  opacity: 0.18;
+  filter: grayscale(100%);
 }
 
-.not-found-crash-overlay {
-  background: radial-gradient(
-    ellipse 85% 75% at 50% 50%,
-    rgba(19, 19, 24, 0.45) 0%,
-    rgba(19, 19, 24, 0.85) 60%,
-    #131318 100%
-  );
-}
-
-/* Modo Claro: Integración limpia sin manchas ni efecto lavado */
 html.light .not-found-crash-bg {
-  opacity: 0.12 !important;
-  mix-blend-mode: multiply !important;
-  filter: contrast(1.15) brightness(1.02) !important;
-}
-
-html.light .not-found-crash-overlay {
-  background: radial-gradient(
-    ellipse 80% 70% at 50% 45%,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(255, 255, 255, 0.55) 55%,
-    rgba(255, 255, 255, 0.15) 100%
-  ) !important;
+  opacity: 0.35 !important;
+  filter: grayscale(100%) !important;
 }
 
 /* 404 Código: En modo claro, rojo de carreras F1 de alto contraste y legibilidad absoluta */

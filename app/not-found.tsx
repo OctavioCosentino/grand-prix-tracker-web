@@ -54,7 +54,6 @@ export default function NotFound() {
                 className="not-found-crash-bg absolute inset-0 z-0 bg-cover bg-center"
                 style={{ backgroundImage: "url('/crash.webp')" }}
               />
-              <div className="not-found-crash-overlay pointer-events-none absolute inset-0 z-0" />
 
               <div className="relative z-10 py-12 px-6 sm:py-16 sm:px-12">
                 <div className="font-mono text-xs tracking-[0.3em] uppercase text-[#7C4DFF] mb-2 flex items-center justify-center gap-2">
