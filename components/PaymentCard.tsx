@@ -25,7 +25,7 @@ export default function PaymentCard({
 }: PaymentCardProps) {
   return (
     <div 
-      className={`relative flex h-40 flex-col justify-between overflow-hidden rounded-md border bg-gradient-to-br from-[#1C1D24] to-[#0B0B10] p-6 shadow-lg transition-transform ${editable || onClick ? 'cursor-pointer hover:-translate-y-1' : ''} ${selected ? 'border-[#E10600] ring-1 ring-[#E10600]' : 'border-[#1C1D24]'}`}
+      className={`payment-card relative flex h-40 flex-col justify-between overflow-hidden rounded-md border bg-gradient-to-br from-[#1C1D24] to-[#0B0B10] p-6 shadow-lg transition-transform ${editable || onClick ? 'cursor-pointer hover:-translate-y-1' : ''} ${selected ? 'border-[#E10600] ring-1 ring-[#E10600]' : 'border-[#1C1D24]'}`}
       onClick={onClick}
     >
       <div

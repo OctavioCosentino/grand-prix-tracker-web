@@ -33,7 +33,14 @@ export default function Home({
         alt="GrandPrix Tracker"
         height={992}
         width={1072}
-        className={`${imageWidth} h-auto shrink-0`}
+        className={`${imageWidth} h-auto shrink-0 dark-logo`}
+      />
+      <Image
+        src="/logo-nobg-white.png"
+        alt="GrandPrix Tracker"
+        height={992}
+        width={1072}
+        className={`${imageWidth} h-auto shrink-0 light-logo`}
       />
       <span className="flex flex-col justify-center leading-none">
         <span

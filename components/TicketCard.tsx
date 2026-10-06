@@ -12,12 +12,6 @@ interface TicketCardProps {
   hasConflict?: boolean;
 }
 
-const TIPO_COLORS: Record<Entrada["tipo"], string> = {
-  General: tireColors.hard,
-  "Asiento Numerado": tireColors.medium,
-  VIP: tireColors.soft,
-};
-
 export default function TicketCard({
   ticket,
   cantidad,
@@ -25,7 +19,8 @@ export default function TicketCard({
   hasConflict = false,
 }: TicketCardProps) {
   const soldOut = ticket.stockDisponible === 0;
-  const color = TIPO_COLORS[ticket.tipo];
+  const isGeneral = ticket.tipo === "General";
+  const isVip = ticket.tipo === "VIP";
 
   return (
     <div
@@ -37,16 +32,30 @@ export default function TicketCard({
             : "border-[#1C1D24] hover:border-[#33343D]"
       } ${soldOut && cantidad === 0 ? "opacity-50" : ""}`}
     >
-      <div className="absolute bottom-0 left-0 top-0 w-1" style={{ backgroundColor: color }} />
+      {/* Indicador de compuesto / categoría */}
+      <div
+        className={`absolute bottom-0 left-0 top-0 w-1 ${
+          isVip
+            ? "bg-[#E10600]"
+            : isGeneral
+              ? "bg-[#93949F]"
+              : "bg-[#E7B33C]"
+        }`}
+      />
 
       <div className="pl-2">
         <span
-          className="font-mono text-[10px] uppercase tracking-[0.2em]"
-          style={{ color }}
+          className={`font-mono text-[10px] uppercase tracking-[0.2em] font-semibold ${
+            isVip
+              ? "text-[#E10600]"
+              : isGeneral
+                ? "text-[#93949F]"
+                : "text-[#E7B33C]"
+          }`}
         >
           {ticket.tipo}
         </span>
-        <h3 className="font-display mt-1 text-xl font-bold" style={{ color }}>
+        <h3 className="font-display mt-1 text-xl font-bold text-[#F3F1EA]">
           {ticket.nombreTribuna}
         </h3>
         <div className="mt-1">

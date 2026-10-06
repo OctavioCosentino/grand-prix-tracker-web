@@ -20,7 +20,7 @@ export default function TireWheel({
   return (
     <div
       style={{ width: size, height: size }}
-      className={`relative flex-shrink-0 select-none ${className}`}
+      className={`relative flex-shrink-0 select-none f1-tire ${className}`}
     >
       {/* Cuerpo del neumático exterior */}
       <div className="absolute inset-0 rounded-full bg-[#1C1D24] shadow-[inset_0_4px_6px_rgba(0,0,0,0.6),0_2px_4px_rgba(0,0,0,0.4)]">

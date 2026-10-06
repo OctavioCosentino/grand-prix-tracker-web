@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { Plane, Hotel, Ticket } from "lucide-react";
 import Badge from "./Badge";
 import ReservationItinerary from "./ReservationItinerary";
 import { Reserva } from "@/services/bookings";
@@ -54,13 +55,19 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
   const items = [
     {
       icon: (
-        <Image
-          src="/plane.png"
-          alt="Vuelo"
-          width={24}
-          height={24}
-          className="h-6 w-6 object-contain"
-        />
+        <div className="relative h-6 w-6 shrink-0 flex items-center justify-center">
+          <Image
+            src="/plane.png"
+            alt="Vuelo"
+            width={24}
+            height={24}
+            className="dark-icon h-6 w-6 object-contain"
+          />
+          <Plane
+            className="light-icon h-6 w-6 text-[#E10600] shrink-0"
+            strokeWidth={2.5}
+          />
+        </div>
       ),
       label: "Vuelo",
       active: reserva.incluyeVuelo,
@@ -68,13 +75,19 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
     },
     {
       icon: (
-        <Image
-          src="/hotel.png"
-          alt="Hotel"
-          width={24}
-          height={24}
-          className="h-6 w-6 object-contain"
-        />
+        <div className="relative h-6 w-6 shrink-0 flex items-center justify-center">
+          <Image
+            src="/hotel.png"
+            alt="Hotel"
+            width={24}
+            height={24}
+            className="dark-icon h-6 w-6 object-contain"
+          />
+          <Hotel
+            className="light-icon h-6 w-6 text-[#E10600] shrink-0"
+            strokeWidth={2.5}
+          />
+        </div>
       ),
       label: "Hotel",
       active: reserva.incluyeHotel,
@@ -82,13 +95,19 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
     },
     {
       icon: (
-        <Image
-          src="/tickets.png"
-          alt="Entrada"
-          width={24}
-          height={24}
-          className="h-6 w-6 object-contain"
-        />
+        <div className="relative h-6 w-6 shrink-0 flex items-center justify-center">
+          <Image
+            src="/tickets.png"
+            alt="Entrada"
+            width={24}
+            height={24}
+            className="dark-icon h-6 w-6 object-contain"
+          />
+          <Ticket
+            className="light-icon h-6 w-6 text-[#E10600] shrink-0"
+            strokeWidth={2.5}
+          />
+        </div>
       ),
       label: "Entrada",
       active: reserva.incluyeEntrada,

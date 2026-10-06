@@ -61,7 +61,7 @@ export default function AboutPage() {
                 className="group flex flex-col items-center text-center cursor-pointer"
               >
                 {/* Contenedor principal de la rueda ampliado a h-44 w-44 (176px) */}
-                <div className="relative mb-6 h-44 w-44 flex-shrink-0">
+                <div className="relative mb-6 h-44 w-44 flex-shrink-0 f1-tire">
                   {/* Capa 1: Neumático giratorio con grosores recalibrados */}
                   <div className="absolute inset-0 rounded-full bg-[#1C1D24] shadow-[inset_0_8px_10px_rgba(0,0,0,0.7),0_4px_6px_rgba(0,0,0,0.5)] transition-transform duration-700 ease-out group-hover:rotate-180">
                     <div

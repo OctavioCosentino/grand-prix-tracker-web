@@ -84,16 +84,26 @@ export default function HotelFilters({
           {/* Filtro Traslado */}
           <div className={`flex shrink-0 items-center md:h-10 ${disabledTransfer ? 'opacity-50 pointer-events-none' : ''}`}>
             <label className={`flex items-center gap-3 ${disabledTransfer ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
-              <div className="relative">
+              <div className="relative flex items-center">
                 <input
                   type="checkbox"
-                  className="peer sr-only"
+                  className="sr-only"
                   checked={transferOnly}
                   onChange={(e) => setTransferOnly(e.target.checked)}
                   disabled={disabledTransfer}
                 />
-                <div className="h-5 w-9 rounded-full bg-[#1C1D24] transition-colors peer-checked:bg-[#E10600]"></div>
-                <div className="absolute left-[2px] top-[2px] h-4 w-4 rounded-full bg-[#F3F1EA] transition-transform peer-checked:translate-x-full"></div>
+                <div
+                  className={`hotel-transfer-toggle h-5 w-9 rounded-full transition-colors border ${
+                    transferOnly
+                      ? "on bg-[#E10600] border-[#E10600]"
+                      : "off bg-[#1C1D24] border-[#33343D]"
+                  }`}
+                />
+                <div
+                  className={`absolute top-[2px] h-4 w-4 rounded-full bg-white shadow-sm border border-black/10 transition-transform ${
+                    transferOnly ? "translate-x-4 left-[2px]" : "translate-x-0 left-[2px]"
+                  }`}
+                />
               </div>
               <span className="font-mono text-xs uppercase tracking-widest text-[#D8D7CE]">
                 Traslado Incluido

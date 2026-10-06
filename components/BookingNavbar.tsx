@@ -14,10 +14,10 @@ export default function BookingNavbar() {
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <button
             onClick={() => router.back()}
-            className="group flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-[#0B0B10]/50 text-white transition-colors hover:bg-white hover:text-[#0B0B10]"
+            className="booking-back-btn group flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#33343D] bg-[#131318] text-[#F3F1EA] transition-all hover:border-[#E10600] hover:text-[#E10600]"
             aria-label="Volver atrás"
           >
-            <ArrowLeft strokeWidth={3} className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" />
+            <ArrowLeft strokeWidth={2.5} className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" />
           </button>
 
           <Home />

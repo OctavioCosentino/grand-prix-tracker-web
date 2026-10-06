@@ -18,6 +18,7 @@ import { NotificationBell } from "./NotificationBell";
 import { useAuth } from "./providers/AuthProvider";
 import { useProfile } from "@/hooks/useProfile";
 import { getDisplayName } from "@/utils/auth";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
     const router = useRouter();
@@ -63,9 +64,11 @@ export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
                         onProfileClick={() => router.push("/profile")}
                     />
                 )}
+                <ThemeToggle />
             </div>
 
             <div className="flex items-center gap-3 md:hidden">
+                <ThemeToggle />
                 {isLogged && <NotificationBell />}
                 <button
                     aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}

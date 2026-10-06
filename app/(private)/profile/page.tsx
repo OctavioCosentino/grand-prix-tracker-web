@@ -39,7 +39,7 @@ export default function ProfilePage({
         <aside className="flex w-full flex-col gap-2 md:w-72 md:flex-shrink-0">
           <div className="relative mb-6 overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
             <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 grayscale"
+              className="franco-profile-bg absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 grayscale"
               style={{ backgroundImage: "url('/franco.png')" }}
             />
             <div className="relative z-10 mb-4 flex items-center gap-4">
@@ -51,7 +51,7 @@ export default function ProfilePage({
               />
               <div>
                 <h2 className="font-display text-lg font-900 tracking-tight">{displayName}</h2>
-                <span className="font-mono text-[10px] tracking-[0.15em] text-[#34D399]">
+                <span className="pilot-active-text font-mono text-[10px] tracking-[0.15em] text-[#34D399]">
                   PILOTO ACTIVO
                 </span>
               </div>

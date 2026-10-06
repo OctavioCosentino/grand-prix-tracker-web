@@ -70,7 +70,7 @@ export default function AuthButton({
   return (
     <button
       onClick={onProfileClick}
-      className="group relative h-14 w-14 flex-shrink-0 focus:outline-none cursor-pointer"
+      className="group relative h-14 w-14 flex-shrink-0 focus:outline-none cursor-pointer f1-tire"
       title={name}
     >
       <div className={`absolute inset-0 rounded-full bg-[#1C1D24] shadow-[inset_0_4px_6px_rgba(0,0,0,0.6),0_2px_4px_rgba(0,0,0,0.4)] transition-transform duration-700 ease-out ${!disableSpin ? "group-hover:rotate-180" : ""}`}>

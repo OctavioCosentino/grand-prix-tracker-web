@@ -61,7 +61,7 @@ export default function TireShelfPicker({
       >
         {/* Rueda con elevación suave cuando está seleccionada */}
         <div
-          className={`transition-all duration-300 ease-out transform ${
+          className={`relative transition-all duration-300 ease-out transform ${
             selected
               ? "-translate-y-4 scale-105"
               : "translate-y-0 group-hover:-translate-y-1.5"
@@ -72,13 +72,26 @@ export default function TireShelfPicker({
               : undefined,
           }}
         >
+          {selected && (
+            <div
+              data-compound={compound.id}
+              className="tire-selected-halo pointer-events-none absolute -inset-1 rounded-full blur-[3px] transition-all duration-300"
+              style={{
+                backgroundColor:
+                  compound.id === "hard"
+                    ? "rgba(243, 241, 234, 0.5)"
+                    : `${compound.hex}`,
+                color: compound.hex,
+              }}
+            />
+          )}
           <TireWheel color={compound.hex} size={58} />
         </div>
 
         {/* Sombra proyectada en la superficie del estante */}
         <div className="h-3 flex items-center justify-center w-full mt-1">
           <div
-            className={`rounded-full bg-black transition-all duration-300 ease-out ${
+            className={`tire-contact-shadow rounded-full bg-black transition-all duration-300 ease-out ${
               selected
                 ? "w-11 h-2 opacity-90 blur-[3px] scale-110"
                 : "w-8 h-1 opacity-45 blur-[1px] scale-90 group-hover:w-9 group-hover:opacity-60"
@@ -102,14 +115,14 @@ export default function TireShelfPicker({
   };
 
   return (
-    <div className="w-full flex flex-col gap-11 py-2">
+    <div className="w-full flex flex-col gap-14 sm:gap-16 pt-3 pb-2">
       {/* Estante Superior: 3 ruedas */}
       <div className="flex flex-col items-center">
         <div className="flex items-end justify-center gap-10 sm:gap-14 pb-1">
           {SHELF_TOP_COMPOUNDS.map(renderWheelItem)}
         </div>
         {/* Barra metálica del estante */}
-        <div className="relative w-full max-w-md h-2 rounded-sm bg-gradient-to-r from-[#1C1D24] via-[#33343D] to-[#1C1D24] border-t border-[#4E505E] shadow-[0_4px_10px_rgba(0,0,0,0.8)] flex justify-between px-3 items-center">
+        <div className="shelf-bar relative w-full max-w-md h-2 rounded-sm bg-gradient-to-r from-[#1C1D24] via-[#33343D] to-[#1C1D24] border-t border-[#4E505E] shadow-[0_4px_10px_rgba(0,0,0,0.8)] flex justify-between px-3 items-center">
           <div className="h-1 w-2 rounded-xs bg-[#131318]" />
           <div className="h-1 w-2 rounded-xs bg-[#131318]" />
         </div>
@@ -121,7 +134,7 @@ export default function TireShelfPicker({
           {SHELF_BOTTOM_COMPOUNDS.map(renderWheelItem)}
         </div>
         {/* Barra metálica del estante (mismo ancho que el superior: max-w-md) */}
-        <div className="relative w-full max-w-md h-2 rounded-sm bg-gradient-to-r from-[#1C1D24] via-[#33343D] to-[#1C1D24] border-t border-[#4E505E] shadow-[0_4px_10px_rgba(0,0,0,0.8)] flex justify-between px-3 items-center">
+        <div className="shelf-bar relative w-full max-w-md h-2 rounded-sm bg-gradient-to-r from-[#1C1D24] via-[#33343D] to-[#1C1D24] border-t border-[#4E505E] shadow-[0_4px_10px_rgba(0,0,0,0.8)] flex justify-between px-3 items-center">
           <div className="h-1 w-2 rounded-xs bg-[#131318]" />
           <div className="h-1 w-2 rounded-xs bg-[#131318]" />
         </div>

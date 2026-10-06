@@ -241,7 +241,7 @@ function DatosForm({
               type="button"
               onClick={() => !isPending && setIsCountryOpen((prev) => !prev)}
               disabled={isPending}
-              className={`w-full flex items-center justify-between gap-1.5 rounded-sm border ${
+              className={`country-code-btn w-full flex items-center justify-between gap-1.5 rounded-sm border ${
                 phoneError && !countryCode
                   ? "border-[#E10600]"
                   : "border-[#33343D]"
@@ -253,7 +253,7 @@ function DatosForm({
                     <span
                       className={`${selectedCountry.flag} shrink-0 rounded-[2px]`}
                     />
-                    <span className="font-mono text-sm text-[#F3F1EA]">
+                    <span className="country-code-text font-mono text-sm text-[#F3F1EA]">
                       {selectedCountry.dialCode}
                     </span>
                   </>
@@ -262,7 +262,7 @@ function DatosForm({
                 )}
               </div>
               <svg
-                className={`h-4 w-4 text-[#5C5D66] transition-transform duration-200 ${
+                className={`country-code-arrow h-4 w-4 text-[#5C5D66] transition-transform duration-200 ${
                   isCountryOpen ? "rotate-180" : ""
                 }`}
                 viewBox="0 0 20 20"
@@ -273,7 +273,7 @@ function DatosForm({
             </button>
 
             {isCountryOpen && (
-              <div className="absolute top-full left-0 mt-1 z-30 w-full max-h-56 overflow-y-auto rounded-sm border border-[#33343D] bg-[#131318] py-1 shadow-2xl [scrollbar-width:thin] [scrollbar-color:#33343D_#131318] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#131318] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#33343D] hover:[&::-webkit-scrollbar-thumb]:bg-[#5C5D66]">
+              <div className="country-code-dropdown absolute top-full left-0 mt-1 z-30 w-full max-h-56 overflow-y-auto rounded-sm border border-[#33343D] bg-[#131318] py-1 shadow-2xl [scrollbar-width:thin] [scrollbar-color:#33343D_#131318] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-[#131318] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#33343D] hover:[&::-webkit-scrollbar-thumb]:bg-[#5C5D66]">
                 {COUNTRY_DIAL_CODES.map((item) => (
                   <button
                     key={item.dialCode}
@@ -285,7 +285,7 @@ function DatosForm({
                     }}
                     className={`w-full flex items-center gap-2 px-3 py-2 text-xs transition-colors cursor-pointer ${
                       countryCode === item.dialCode
-                        ? "bg-[#1C1D24] text-[#E10600] font-bold"
+                        ? "is-selected bg-[#1C1D24] text-[#E10600] font-bold"
                         : "text-[#F3F1EA] hover:bg-[#1C1D24]"
                     }`}
                   >
@@ -347,7 +347,7 @@ function DatosForm({
         </div>
 
         {/* Estantería de 2 niveles con 3 ruedas arriba y 2 abajo */}
-        <div className="rounded-md border border-[#1C1D24] bg-[#0B0B10]/80 p-4 sm:p-6 shadow-inner">
+        <div className="tire-shelf-container rounded-md border border-[#1C1D24] bg-[#0B0B10]/80 p-6 sm:p-8 pt-8 sm:pt-9 shadow-inner">
           <TireShelfPicker
             selectedColor={selectedColor}
             onSelectColor={handleSelectColor}

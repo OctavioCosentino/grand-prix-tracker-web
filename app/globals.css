@@ -89,3 +89,366 @@ body {
     }
   }
 }
+
+/* =======================================================
+ * F1 PADDOCK LIGHT MODE THEME
+ * Adapta dinámicamente toda la interfaz a una estética F1
+ * diurna (Paddock / Telemetría técnica blanca y titanio)
+ * manteniendo los acentos emblemáticos Race Red (#E10600)
+ * ======================================================= */
+
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  background-color: #F4F5F8 !important;
+  color: #111215 !important;
+}
+
+/* --- Superficies y Fondos Base --- */
+html.light .bg-\[\#0B0B10\] { background-color: #F4F5F8 !important; }
+html.light .bg-\[\#0B0B10\]\/90 { background-color: rgba(244, 245, 248, 0.92) !important; }
+html.light .bg-\[\#0B0B10\]\/80 { background-color: rgba(244, 245, 248, 0.85) !important; }
+html.light .bg-\[\#0B0B10\]\/70 { background-color: rgba(244, 245, 248, 0.75) !important; }
+html.light .bg-\[\#0B0B10\]\/60 { background-color: rgba(244, 245, 248, 0.65) !important; }
+html.light .bg-\[\#0B0B10\]\/50 { background-color: rgba(244, 245, 248, 0.50) !important; }
+
+/* Paneles, cards y modales principales */
+html.light .bg-\[\#131318\] { background-color: #FFFFFF !important; }
+html.light .bg-\[\#131318\]\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
+html.light .bg-\[\#131318\]\/90 { background-color: rgba(255, 255, 255, 0.90) !important; }
+html.light .bg-\[\#131318\]\/80 { background-color: rgba(255, 255, 255, 0.85) !important; }
+html.light .bg-\[\#131318\]\/50 { background-color: rgba(255, 255, 255, 0.50) !important; }
+
+/* Contenedores secundarios, cards oscuras y footer */
+html.light .bg-\[\#0E0E13\] { background-color: #ECEEF2 !important; }
+html.light .bg-\[\#0E0E13\]\/80 { background-color: rgba(236, 238, 242, 0.85) !important; }
+
+/* Bloques de asfalto / microcontenedores */
+html.light .bg-\[\#1C1D24\] { background-color: #E6E8ED !important; }
+html.light .bg-\[\#1C1D24\]\/50 { background-color: rgba(230, 232, 237, 0.50) !important; }
+
+html.light .bg-\[\#23242E\] { background-color: #DFE2E8 !important; }
+html.light .bg-\[\#16171F\],
+html.light .bg-\[\#171821\],
+html.light .bg-\[\#181920\],
+html.light .bg-\[\#0F0F14\] {
+  background-color: #E7E9EE !important;
+}
+
+/* Hover de fondos */
+html.light .hover\:bg-\[\#131318\]:hover { background-color: #FFFFFF !important; }
+html.light .hover\:bg-\[\#1C1D24\]:hover { background-color: #DFE2E8 !important; }
+html.light .hover\:bg-\[\#1C1D24\]\/50:hover { background-color: rgba(223, 226, 232, 0.6) !important; }
+html.light .hover\:bg-\[\#33343D\]:hover { background-color: #CFD4DC !important; }
+
+/* --- Tipografía y Colores de Texto --- */
+html.light .text-\[\#F3F1EA\] { color: #111216 !important; }
+html.light .text-\[\#D8D7CE\] { color: #2C303B !important; }
+html.light .text-\[\#B9B8B0\] { color: #4B5162 !important; }
+html.light .text-\[\#93949F\] { color: #5B616E !important; }
+html.light .text-\[\#7E808F\],
+html.light .text-\[\#5C5D66\] { color: #727887 !important; }
+html.light .text-\[\#4E505E\] { color: #8A91A1 !important; }
+
+/* Textos violetas (Vuelta rápida / Telemetría) en Modo Claro: tono más oscuro (#551ED4) y mayor grosor tipográfico para máxima legibilidad */
+html.light .text-\[\#7C4DFF\],
+html.light .text-\[\#A382FF\] {
+  color: #551ED4 !important;
+  font-weight: 700 !important;
+}
+html.light .bg-\[\#7C4DFF\] {
+  background-color: #551ED4 !important;
+}
+
+/* Hover de textos */
+html.light .hover\:text-\[\#F3F1EA\]:hover { color: #000000 !important; }
+html.light .hover\:text-\[\#D8D7CE\]:hover { color: #111216 !important; }
+html.light .group:hover .group-hover\:text-\[\#F3F1EA\] { color: #000000 !important; }
+html.light a.hover\:text-white:hover,
+html.light button.hover\:text-white:hover {
+  color: #E10600 !important;
+}
+
+/* Placeholders de inputs */
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #7E8494 !important;
+}
+
+/* --- Bordes y Separadores Técnicos --- */
+html.light .border-\[\#1C1D24\] { border-color: #DCE0E6 !important; }
+html.light .border-\[\#33343D\] { border-color: #CFD4DC !important; }
+html.light .border-\[\#5C5D66\] { border-color: #B8BFC9 !important; }
+html.light .border-\[\#F3F1EA\]\/20 { border-color: rgba(17, 18, 22, 0.15) !important; }
+html.light .divide-\[\#1C1D24\] > * + * { border-color: #DCE0E6 !important; }
+html.light .divide-\[\#33343D\] > * + * { border-color: #CFD4DC !important; }
+
+/* --- Sombras sutiles para jerarquía visual en blanco --- */
+html.light .bg-\[\#131318\],
+html.light .bg-\[\#0E0E13\] {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Conservar Sombras y Viñetas Oscuras en Fotos (como en Modo Oscuro) --- */
+/* Las sombras/degradados sobre fotos se preservan oscuros (#0B0B10) para no blanquear la imagen */
+html.light [class*="bg-linear-to-t"][class*="from-[#0B0B10]"],
+html.light [class*="bg-linear-to-r"][class*="from-[#0B0B10]"],
+html.light [class*="bg-gradient-to-t"][class*="from-[#0B0B10]"] {
+  --tw-gradient-from: #0B0B10 !important;
+  --tw-gradient-to: transparent !important;
+}
+
+/* El texto que se ubica directamente sobre fotos con sombra oscura se mantiene claro */
+html.light .group:has(img) .absolute.inset-x-0.bottom-0 h3,
+html.light .group:has(img) .absolute.inset-x-0.bottom-0 p,
+html.light .group:has(img) .absolute.inset-x-0.bottom-0 span,
+html.light [class*="h-\[400px\]"]:has(img) h1,
+html.light [class*="h-\[400px\]"]:has(img) p,
+html.light [class*="h-\[420px\]"]:has(img) h3,
+html.light [class*="h-\[420px\]"]:has(img) p {
+  color: #F3F1EA !important;
+}
+
+/* Video de Sección de Servicios en Modo Claro: integración limpia y elegante sin efecto lechoso */
+html.light #servicios video {
+  opacity: 0.28 !important;
+  mix-blend-mode: multiply;
+  filter: contrast(1.1) brightness(0.98);
+}
+html.light #servicios .services-video-overlay {
+  background-image: linear-gradient(
+    to bottom,
+    #ECEEF2 0%,
+    rgba(236, 238, 242, 0.45) 25%,
+    rgba(236, 238, 242, 0.45) 75%,
+    #ECEEF2 100%
+  ) !important;
+}
+
+/* Botón Volver en Booking Navbar (Modo Claro): siempre visible con contraste nítido y solo borde rojo en hover */
+html.light .booking-back-btn {
+  background-color: #FFFFFF !important;
+  border-color: #DCE0E6 !important;
+  color: #111216 !important;
+}
+html.light .booking-back-btn:hover {
+  background-color: #FFFFFF !important;
+  border-color: #E10600 !important;
+  color: #E10600 !important;
+}
+
+/* Alternancia de Logos (Modo Oscuro / Modo Claro) manteniendo tamaño exacto */
+.dark-logo {
+  display: block !important;
+}
+.light-logo {
+  display: none !important;
+}
+
+html.light .dark-logo {
+  display: none !important;
+}
+html.light .light-logo {
+  display: block !important;
+}
+
+/* Alternancia de Iconos de Servicios y Reservas (PNG en Modo Oscuro / Lucide en Modo Claro) */
+.dark-icon {
+  display: block !important;
+}
+.light-icon {
+  display: none !important;
+}
+
+html.light .dark-icon {
+  display: none !important;
+}
+html.light .light-icon {
+  display: block !important;
+}
+
+/* Dropdown de códigos de área de país en Perfil (Modo Claro): blanco pulcro con scrollbar claro */
+html.light .country-code-btn {
+  background-color: #FFFFFF !important;
+  border-color: #DCE0E6 !important;
+  color: #111216 !important;
+}
+html.light .country-code-text {
+  color: #111216 !important;
+}
+html.light .country-code-arrow {
+  color: #5B616E !important;
+}
+html.light .country-code-dropdown {
+  background-color: #FFFFFF !important;
+  border-color: #DCE0E6 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  scrollbar-color: #CFD4DC #FFFFFF !important;
+}
+html.light .country-code-dropdown::-webkit-scrollbar-track {
+  background-color: #FFFFFF !important;
+}
+html.light .country-code-dropdown::-webkit-scrollbar-thumb {
+  background-color: #CFD4DC !important;
+}
+html.light .country-code-dropdown::-webkit-scrollbar-thumb:hover {
+  background-color: #A0A6B2 !important;
+}
+html.light .country-code-dropdown button {
+  color: #111216 !important;
+}
+html.light .country-code-dropdown button:hover {
+  background-color: #F0F2F5 !important;
+}
+html.light .country-code-dropdown button.is-selected {
+  background-color: #ECEEF2 !important;
+  color: #E10600 !important;
+}
+
+/* Tarjetas de Pago (Paso 4 y Perfil) en Modo Claro: fondo blanco/platino con texto oscuro de alto contraste */
+html.light .payment-card {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5F7FA 100%) !important;
+  border-color: #DCE0E6 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+html.light .payment-card.border-\[\#E10600\] {
+  border-color: #E10600 !important;
+}
+
+/* Toggle de Transporte (Paso 1) en Modo Claro: estados claros y contrastados */
+html.light .hotel-transfer-toggle.off {
+  background-color: #D1D5DB !important;
+  border-color: #9CA3AF !important;
+}
+html.light .hotel-transfer-toggle.on {
+  background-color: #E10600 !important;
+  border-color: #E10600 !important;
+}
+
+/* Modales y Overlays en Modo Claro: mantener el oscurecido de fondo para foco */
+html.light .fixed.inset-0.bg-\[\#0B0B10\]\/80,
+html.light .fixed.inset-0.bg-\[\#0B0B10\]\/70,
+html.light .fixed.inset-0.bg-\[\#0B0B10\]\/60,
+html.light .fixed.inset-0.bg-\[\#0B0B10\]\/50 {
+  background-color: rgba(10, 11, 15, 0.55) !important;
+}
+
+html.light .fixed [class*="max-w-"].bg-\[\#0E0E13\],
+html.light .fixed [class*="max-w-"].bg-\[\#131318\] {
+  background-color: #FFFFFF !important;
+}
+
+/* --- Conservar Neumáticos F1 Originales (Goma de caucho negra) --- */
+html.light .f1-tire .bg-\[\#1C1D24\] {
+  background-color: #1C1D24 !important;
+}
+html.light .f1-tire .bg-\[\#0B0B10\] {
+  background-color: #0B0B10 !important;
+}
+html.light .f1-tire .bg-\[\#131318\] {
+  background-color: #131318 !important;
+}
+html.light .f1-tire .text-\[\#F3F1EA\] {
+  color: #F3F1EA !important;
+}
+
+/* --- Texturas y Grillas F1 en Modo Claro --- */
+html.light .gpt-carbon {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 6px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 6px) !important;
+}
+
+html.light .gpt-hud-grid {
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px) !important;
+}
+
+/* Destello blanco en modo oscuro -> Destello metálico/titanio en modo claro */
+html.light .via-\[\#F3F1EA\]\/70 {
+  --tw-gradient-via: rgba(60, 65, 80, 0.45) !important;
+}
+
+/* Scrollbars en modo claro */
+html.light ::-webkit-scrollbar-track {
+  background-color: #ECEEF2;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background-color: #C5C9D4;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background-color: #A4AAB8;
+}
+
+/* --- EmptyState en Modo Claro --- */
+html.light .empty-state-card {
+  background-color: #FFFFFF !important;
+  border-color: #CFD4DC !important;
+}
+
+html.light .empty-state-photo {
+  opacity: 0.48 !important;
+  mix-blend-mode: multiply;
+  filter: grayscale(100%) contrast(1.15) !important;
+}
+
+html.light .empty-state-text {
+  color: #111216 !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* --- Foto de Franco Colapinto y Badge Piloto en Perfil (Modo Claro) --- */
+html.light .franco-profile-bg {
+  opacity: 0.38 !important;
+  mix-blend-mode: multiply;
+  filter: grayscale(100%) contrast(1.25) brightness(0.95) !important;
+}
+
+html.light .pilot-active-text {
+  color: #E10600 !important;
+  font-weight: 800 !important;
+}
+
+/* --- Estantería y Selección de Neumáticos en Perfil (Modo Claro) --- */
+html.light .tire-shelf-container {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%) !important;
+  border-color: #DCE0E6 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .shelf-bar {
+  background-image: linear-gradient(to right, #D8DCE3, #B8BFC9, #D8DCE3) !important;
+  border-top-color: #94A3B8 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
+}
+html.light .shelf-bar > div {
+  background-color: #94A3B8 !important;
+}
+
+html.light .tire-contact-shadow {
+  background-color: rgba(30, 41, 59, 0.3) !important;
+  filter: blur(2px) !important;
+}
+
+/* Halos luminosos de selección para neumáticos (Solo en Modo Claro y tamaño compacto) */
+.tire-selected-halo {
+  display: none;
+}
+
+html.light .tire-selected-halo {
+  display: block !important;
+  box-shadow: 0 0 6px currentColor, 0 0 10px currentColor !important;
+  filter: drop-shadow(0 0 3px currentColor) !important;
+  opacity: 0.85 !important;
+}
+
+html.light .tire-selected-halo[data-compound="hard"] {
+  background-color: rgba(100, 116, 139, 0.25) !important;
+  box-shadow: 0 0 6px #64748B, 0 0 10px rgba(100, 116, 139, 0.4) !important;
+  filter: drop-shadow(0 0 3px #64748B) !important;
+}

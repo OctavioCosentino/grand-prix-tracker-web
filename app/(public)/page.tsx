@@ -163,11 +163,11 @@ export default function Page() {
           loop
           muted
           playsInline
-          className="absolute inset-0 z-0 h-full w-full object-cover opacity-15 scale-[1.55] origin-center"
+          className="absolute inset-0 z-0 h-full w-full object-cover opacity-20 scale-[1.55] origin-center"
         >
           <source src="/franco_overtake.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0E0E13] via-transparent to-[#0E0E13]" />
+        <div className="services-video-overlay absolute inset-0 z-0 bg-gradient-to-b from-[#0E0E13] via-[#0E0E13]/40 to-[#0E0E13]" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-6">
           <Reveal>
