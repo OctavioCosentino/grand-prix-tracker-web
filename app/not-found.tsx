@@ -65,15 +65,17 @@ export default function NotFound() {
                   404
                 </h1>
 
-                <div className="mt-2 font-mono text-xs text-[#93949F] uppercase tracking-widest">
-                  [ DNF · DID NOT FINISH ]
+                <div className="mt-3">
+                  <span className="not-found-dnf inline-block rounded-md border border-[#1C1D24] bg-[#0E0E13]/80 px-3.5 py-1 font-mono text-xs sm:text-sm font-bold tracking-widest uppercase shadow-sm">
+                    [ DNF · DID NOT FINISH ]
+                  </span>
                 </div>
 
                 <h2 className="font-display mt-6 text-3xl sm:text-4xl font-bold text-[#F3F1EA]">
                   Te saliste del trazado
                 </h2>
 
-                <p className="mt-4 max-w-xl mx-auto text-base sm:text-lg text-[#93949F] leading-relaxed">
+                <p className="not-found-desc mt-4 max-w-xl mx-auto text-base sm:text-lg font-medium leading-relaxed">
                   La página que intentas consultar no existe o cambió de
                   posición en el circuito. La telemetría sugiere regresar
                   inmediatamente al garaje principal.
