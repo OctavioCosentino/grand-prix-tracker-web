@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import EmailInput from "@/components/EmailInput";
 import ButtonChecker from "@/components/ButtonChecker";
 import { createClient } from "@/lib/supabase/client";
@@ -10,12 +13,17 @@ interface ForgotPasswordModalProps {
 }
 
 export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +43,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
     setSubmitted(true);
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm">
       <div className="relative w-full max-w-sm rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl">
         <button
@@ -100,6 +108,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

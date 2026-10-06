@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import ButtonChecker from "@/components/ButtonChecker";
 import { MetodoPago } from "@/services/paymentMethods";
 
@@ -17,6 +20,7 @@ export default function AddPaymentModal({
   initialData,
   onConfirm,
 }: AddPaymentModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [cardNumber, setCardNumber] = useState("");
   const [cardName, setCardName] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -25,6 +29,10 @@ export default function AddPaymentModal({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [expiryError, setExpiryError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value.replace(/\D/g, "");
@@ -89,7 +97,7 @@ export default function AddPaymentModal({
     }
   }, [isOpen, mode, initialData]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,7 +122,7 @@ export default function AddPaymentModal({
 
   const isEdit = mode === "edit";
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 p-4 backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
@@ -272,6 +280,7 @@ export default function AddPaymentModal({
           </ButtonChecker>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

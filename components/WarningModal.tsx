@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface WarningModalProps {
   isOpen: boolean;
@@ -21,13 +24,19 @@ export default function WarningModal({
   onConfirm,
   onCancel,
 }: WarningModalProps) {
-  if (!isOpen) return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!isOpen || !mounted) return null;
 
   const isDanger = severity === "danger";
   const accentColor = isDanger ? "#E10600" : "#E7B33C";
   const flagText = isDanger ? "BANDERA ROJA" : "BANDERA AMARILLA";
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm">
       <div className="relative w-full max-w-md overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] shadow-2xl">
         <div
@@ -92,6 +101,7 @@ export default function WarningModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

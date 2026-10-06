@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AlertTriangle, RotateCcw, X } from "lucide-react";
 import ButtonChecker from "./ButtonChecker";
 import ButtonOutline from "./ButtonOutline";
@@ -22,6 +23,12 @@ export default function BookingErrorModal({
   onLater,
   onClose,
 }: BookingErrorModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Manejo de tecla Escape para cerrar
   useEffect(() => {
     if (!isOpen) return;
@@ -32,9 +39,9 @@ export default function BookingErrorModal({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={onClose}
@@ -104,7 +111,8 @@ export default function BookingErrorModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
