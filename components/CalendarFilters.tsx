@@ -52,7 +52,7 @@ export default function CalendarFilters({
               <button
                 key={region}
                 onClick={() => setSelectedRegion(region)}
-                className={`group flex items-center justify-between rounded-sm px-3 py-2 text-left text-sm transition-colors ${
+                className={`group flex items-center justify-between rounded-sm px-3 py-2 text-left text-sm transition-colors cursor-pointer ${
                   selectedRegion === region
                     ? "bg-[#1C1D24] text-[#F3F1EA] font-semibold border-l-2 border-[#E10600]"
                     : "bg-transparent text-[#93949F] hover:bg-[#131318] hover:text-[#F3F1EA] border-l-2 border-transparent"
@@ -75,7 +75,7 @@ export default function CalendarFilters({
             {selectedMonth !== null && (
               <button
                 onClick={() => setSelectedMonth(null)}
-                className="font-mono text-[9px] uppercase text-[#E10600] hover:underline"
+                className="font-mono text-[9px] uppercase text-[#E10600] hover:underline cursor-pointer"
               >
                 Limpiar
               </button>
