@@ -73,12 +73,14 @@ export default function RootLayout({
             position="bottom-right" 
             toastOptions={{
               success: {
+                className: "gpt-toast-success",
                 style: {
                   background: "#dcfce7",
                   color: "#14532d",
                 },
               },
               error: {
+                className: "gpt-toast-error",
                 style: {
                   background: "#fee2e2",
                   color: "#7f1d1d",
