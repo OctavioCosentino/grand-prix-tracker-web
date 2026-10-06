@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useReducer, useState } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEvent } from "@/hooks/useEvents";
 import {
@@ -45,6 +45,7 @@ import BookingFlightsStep from "./BookingFlightsStep";
 import BookingPaymentStep from "./BookingPaymentStep";
 import BookingReviewStep from "./BookingReviewStep";
 import BookingConfirmation from "./BookingConfirmation";
+import BookingErrorModal from "./BookingErrorModal";
 import { addNotification } from "@/services/notifications";
 
 const STEP_INTRO: Record<BookingStep, string> = {
@@ -105,6 +106,7 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
 
 function BookingWizardContent({ eventId, userId }: { eventId: string; userId: string }) {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { event, race, isPending: isEventPending } = useEvent(eventId);
   const hotelsQuery = useEventHotels(eventId);
@@ -120,6 +122,7 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
   );
   const [reserva, setReserva] = useState<Reserva | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isResolvingConflict, setIsResolvingConflict] = useState(false);
 
   // Si hay que volver a loguearse en medio del checkout, el paquete no se pierde
@@ -179,6 +182,7 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
 
   const goTo = (step: BookingStep) => {
     setSubmitError(null);
+    setIsErrorModalOpen(false);
     dispatch({ type: "goTo", step });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -264,7 +268,9 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
           return;
         }
       }
-      setSubmitError(getSubmitErrorMessage(error));
+      const message = getSubmitErrorMessage(error);
+      setSubmitError(message);
+      setIsErrorModalOpen(true);
     }
   };
 
@@ -385,6 +391,25 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
           </BookingSummary>
         </div>
       )}
+
+      <BookingErrorModal
+        isOpen={isErrorModalOpen}
+        errorMessage={
+          submitError || "Hubo un problema en el servidor. Intentá de nuevo en unos minutos."
+        }
+        isSubmitting={createBooking.isPending || isResolvingConflict}
+        onRetry={() => {
+          setIsErrorModalOpen(false);
+          handleConfirm();
+        }}
+        onLater={() => {
+          setIsErrorModalOpen(false);
+          router.push("/");
+        }}
+        onClose={() => {
+          setIsErrorModalOpen(false);
+        }}
+      />
     </div>
   );
 }

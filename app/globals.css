@@ -536,4 +536,16 @@ html.light .not-found-btn-back:hover {
   background-color: #ECEEF2 !important;
   border-color: #E10600 !important;
   color: #111216 !important;
+}
+
+/* Modal de Error de Reserva: botón secundario en modo claro */
+html.light .booking-modal-btn-secondary {
+  background-color: #ECEEF2 !important;
+  border-color: #DCE0E6 !important;
+  color: #111216 !important;
+}
+html.light .booking-modal-btn-secondary:hover {
+  background-color: #E2E5EB !important;
+  border-color: #E10600 !important;
+  color: #111216 !important;
 }
