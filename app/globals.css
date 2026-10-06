@@ -453,9 +453,12 @@ html.light .tire-selected-halo[data-compound="hard"] {
   filter: drop-shadow(0 0 3px #64748B) !important;
 }
 
-/* Toasts en Modo Claro: borde negro definido en mensajes de confirmación */
-html.light .gpt-toast-success,
-html.light div[role="status"] {
+/* Toasts en Modo Claro: borde negro ÚNICAMENTE en el borde exterior */
+html.light .gpt-toast-success {
   border: 1.5px solid #111216 !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light .gpt-toast-success * {
+  border: none !important;
 }
