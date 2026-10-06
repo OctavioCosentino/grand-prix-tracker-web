@@ -51,9 +51,10 @@ export default function NotFound() {
           <div className="mt-8 relative w-full">
             <div className="relative overflow-hidden rounded-2xl border border-[#1C1D24] bg-[#131318]/90 shadow-2xl backdrop-blur-md">
               <div
-                className="absolute inset-0 z-0 bg-cover bg-center opacity-15 grayscale"
+                className="not-found-crash-bg absolute inset-0 z-0 bg-cover bg-center"
                 style={{ backgroundImage: "url('/crash.webp')" }}
               />
+              <div className="not-found-crash-overlay pointer-events-none absolute inset-0 z-0" />
 
               <div className="relative z-10 py-12 px-6 sm:py-16 sm:px-12">
                 <div className="font-mono text-xs tracking-[0.3em] uppercase text-[#7C4DFF] mb-2 flex items-center justify-center gap-2">
@@ -61,7 +62,7 @@ export default function NotFound() {
                   <span>TELEMETRÍA DE PISTA: FUERA DE LÍMITES</span>
                 </div>
 
-                <h1 className="font-display text-8xl sm:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-[#F3F1EA] to-[#5C5D66] drop-shadow-[0_0_30px_rgba(225,6,0,0.3)]">
+                <h1 className="not-found-code font-display text-8xl sm:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-[#F3F1EA] to-[#5C5D66] drop-shadow-[0_0_30px_rgba(225,6,0,0.3)]">
                   404
                 </h1>
 
@@ -90,7 +91,7 @@ export default function NotFound() {
 
                   <Link
                     href="/calendar"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-sm border border-[#1C1D24] bg-[#0E0E13] px-6 py-3 text-sm font-semibold text-[#F3F1EA] hover:border-[#E10600]/60 hover:bg-[#1C1D24] transition-all duration-200 group"
+                    className="not-found-btn-calendar w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-sm border border-[#1C1D24] bg-[#0E0E13] px-6 py-3 text-sm font-semibold text-[#F3F1EA] hover:border-[#E10600] hover:bg-[#1C1D24] transition-all duration-200 group"
                   >
                     <Calendar className="h-4 w-4 text-[#E10600] group-hover:scale-110 transition-transform" />
                     Ver Calendario GP
@@ -98,7 +99,7 @@ export default function NotFound() {
 
                   <button
                     onClick={() => window.history.back()}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-sm border border-transparent px-4 py-3 text-sm font-semibold text-[#93949F] hover:text-[#F3F1EA] hover:bg-[#1C1D24]/50 transition-colors"
+                    className="not-found-btn-back w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-sm border border-[#1C1D24] bg-transparent px-4 py-3 text-sm font-semibold text-[#93949F] hover:border-[#E10600] hover:text-[#F3F1EA] hover:bg-[#1C1D24]/50 transition-all duration-200"
                   >
                     <RotateCcw className="h-4 w-4" />
                     Regresar Giro

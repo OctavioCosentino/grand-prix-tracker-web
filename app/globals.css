@@ -462,3 +462,73 @@ html.light .gpt-toast-success {
 html.light .gpt-toast-success * {
   border: none !important;
 }
+
+/* ==========================================================================
+   Página 404 (Soporte Modo Oscuro y Modo Claro)
+   ========================================================================== */
+
+/* Foto de choque de fondo y overlay de viñeta */
+.not-found-crash-bg {
+  opacity: 0.16;
+  filter: contrast(1.15) brightness(0.9);
+}
+
+.not-found-crash-overlay {
+  background: radial-gradient(
+    ellipse 85% 75% at 50% 50%,
+    rgba(19, 19, 24, 0.45) 0%,
+    rgba(19, 19, 24, 0.85) 60%,
+    #131318 100%
+  );
+}
+
+/* Modo Claro: Integración limpia sin manchas ni efecto lavado */
+html.light .not-found-crash-bg {
+  opacity: 0.12 !important;
+  mix-blend-mode: multiply !important;
+  filter: contrast(1.15) brightness(1.02) !important;
+}
+
+html.light .not-found-crash-overlay {
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 45%,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.55) 55%,
+    rgba(255, 255, 255, 0.15) 100%
+  ) !important;
+}
+
+/* 404 Código: En modo claro, rojo de carreras F1 de alto contraste y legibilidad absoluta */
+html.light .not-found-code {
+  background-image: linear-gradient(180deg, #E10600 0%, #B80400 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 8px 24px rgba(225, 6, 0, 0.22)) !important;
+}
+
+/* Botones 404: Borde rojo en hover garantizado en ambos modos */
+.not-found-btn-calendar:hover,
+.not-found-btn-back:hover {
+  border-color: #E10600 !important;
+}
+
+html.light .not-found-btn-calendar {
+  background-color: #ECEEF2 !important;
+  border-color: #DCE0E6 !important;
+  color: #111216 !important;
+}
+html.light .not-found-btn-calendar:hover {
+  background-color: #E2E5EB !important;
+  border-color: #E10600 !important;
+  color: #111216 !important;
+}
+
+html.light .not-found-btn-back {
+  border-color: #DCE0E6 !important;
+  color: #5B616E !important;
+}
+html.light .not-found-btn-back:hover {
+  background-color: #ECEEF2 !important;
+  border-color: #E10600 !important;
+  color: #111216 !important;
+}
