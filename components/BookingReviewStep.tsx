@@ -13,6 +13,7 @@ import {
 } from "@/utils/booking";
 import ButtonChecker from "./ButtonChecker";
 import ButtonProgress from "./ButtonProgress";
+import BookingNotice from "./BookingNotice";
 import { describeCardType } from "./BookingPaymentStep";
 
 interface BookingReviewStepProps {
@@ -56,6 +57,12 @@ export default function BookingReviewStep({
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6">
+      {submitError && (
+        <BookingNotice severity="danger" title="No se pudo confirmar">
+          {submitError}
+        </BookingNotice>
+      )}
+
       <div className="rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 sm:p-8">
         {productSteps.map(({ id, label }) => {
           const stepLines = lines.filter((l) => l.step === id);
