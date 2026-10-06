@@ -38,21 +38,21 @@ export default function CalendarFilters({
 }: CalendarFiltersProps) {
   return (
     <aside className="w-full shrink-0 md:w-64">
-      <div className="sticky top-28 rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
-        <h2 className="font-display mb-6 text-xl font-900 tracking-tight">
+      <div className="sticky top-24 max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-md border border-[#1C1D24] bg-[#0E0E13] p-5 shadow-xl custom-scrollbar md:p-6">
+        <h2 className="font-display mb-4 text-xl font-900 tracking-tight md:mb-5">
           Filtros de Pista
         </h2>
 
-        <div className="mb-8">
-          <h3 className="font-mono mb-3 text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
+        <div className="mb-5 md:mb-6">
+          <h3 className="font-mono mb-2 text-[10px] uppercase tracking-[0.15em] text-[#5C5D66] md:mb-3">
             Región
           </h3>
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1">
             {REGIONS.map((region) => (
               <button
                 key={region}
                 onClick={() => setSelectedRegion(region)}
-                className={`group flex items-center justify-between rounded-sm px-3 py-2 text-left text-sm transition-colors cursor-pointer ${
+                className={`group flex items-center justify-between rounded-sm px-3 py-1.5 text-left text-sm transition-colors cursor-pointer md:py-2 ${
                   selectedRegion === region
                     ? "bg-[#1C1D24] text-[#F3F1EA] font-semibold border-l-2 border-[#E10600]"
                     : "bg-transparent text-[#93949F] hover:bg-[#131318] hover:text-[#F3F1EA] border-l-2 border-transparent"
@@ -68,7 +68,7 @@ export default function CalendarFilters({
         </div>
 
         <div>
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between md:mb-3">
             <h3 className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
               Mes ({currentYear})
             </h3>
@@ -82,14 +82,14 @@ export default function CalendarFilters({
             )}
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-1.5 md:gap-2">
             {MONTHS.map((month) => {
               const isActive = selectedMonth === month.id;
               return (
                 <button
                   key={month.id}
                   onClick={() => setSelectedMonth(isActive ? null : month.id)}
-                  className={`rounded-sm border py-2 text-center font-mono text-[10px] font-semibold cursor-pointer transition-all ${
+                  className={`rounded-sm border py-1.5 text-center font-mono text-[10px] font-semibold cursor-pointer transition-all md:py-2 ${
                     isActive
                       ? "border-[#E10600] bg-[#E10600] text-white shadow-[0_0_10px_rgba(225,6,0,0.3)]"
                       : "border-[#1C1D24] bg-[#131318] text-[#5C5D66] hover:border-[#33343D] hover:text-[#F3F1EA]"
