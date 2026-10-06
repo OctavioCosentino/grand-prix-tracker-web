@@ -8,14 +8,11 @@ import useScrolled from "@/hooks/useScrolled";
 import ButtonChecker from "@/components/ButtonChecker";
 import {
   Flag,
-  Compass,
   RotateCcw,
   Calendar,
   AlertTriangle,
   Radio,
   ShieldAlert,
-  ArrowRight,
-  Home,
   Gauge,
 } from "lucide-react";
 
@@ -51,14 +48,14 @@ export default function NotFound() {
             <span>BANDERA ROJA · SECTOR 404</span>
           </div>
 
-          <div className="mt-8 relative w-full max-w-3xl mx-auto">
+          <div className="mt-8 relative w-full">
             <div className="relative overflow-hidden rounded-2xl border border-[#1C1D24] bg-[#131318]/90 shadow-2xl backdrop-blur-md">
               <div
-                className="absolute inset-0 z-0 bg-cover bg-center opacity-10 grayscale"
+                className="absolute inset-0 z-0 bg-cover bg-center opacity-15 grayscale"
                 style={{ backgroundImage: "url('/crash.webp')" }}
               />
 
-              <div className="relative z-10 p-8 sm:p-12">
+              <div className="relative z-10 py-12 px-6 sm:py-16 sm:px-12">
                 <div className="font-mono text-xs tracking-[0.3em] uppercase text-[#7C4DFF] mb-2 flex items-center justify-center gap-2">
                   <ShieldAlert className="h-4 w-4" />
                   <span>TELEMETRÍA DE PISTA: FUERA DE LÍMITES</span>
@@ -72,17 +69,17 @@ export default function NotFound() {
                   [ DNF · DID NOT FINISH ]
                 </div>
 
-                <h2 className="font-display mt-6 text-2xl sm:text-4xl font-bold text-[#F3F1EA]">
+                <h2 className="font-display mt-6 text-3xl sm:text-4xl font-bold text-[#F3F1EA]">
                   Te saliste del trazado
                 </h2>
 
-                <p className="mt-4 max-w-lg mx-auto text-sm sm:text-base text-[#93949F] leading-relaxed">
+                <p className="mt-4 max-w-xl mx-auto text-base sm:text-lg text-[#93949F] leading-relaxed">
                   La página que intentas consultar no existe o cambió de
                   posición en el circuito. La telemetría sugiere regresar
                   inmediatamente al garaje principal.
                 </p>
 
-                <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                   <ButtonChecker
                     href="/"
                     showArrow
@@ -112,7 +109,7 @@ export default function NotFound() {
           </div>
 
           {/* Motorsport Telemetry Cards */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
             <div className="rounded-lg border border-[#1C1D24] bg-[#131318] p-5 transition-all hover:border-[#33343D]">
               <div className="flex items-center justify-between text-xs font-mono text-[#7C4DFF] mb-2">
                 <span>ESTADO PISTA</span>
@@ -150,42 +147,6 @@ export default function NotFound() {
               <p className="mt-1 text-xs text-[#93949F]">
                 Nuestros boxes y calendarios siguen operativos 24/7.
               </p>
-            </div>
-          </div>
-
-          {/* Quick Access Circuit Navigation */}
-          <div className="mt-8 rounded-lg border border-[#1C1D24] bg-[#0E0E13]/80 p-6 backdrop-blur">
-            <p className="font-mono text-xs tracking-widest text-[#5C5D66] uppercase mb-4 text-center">
-              ACCESOS RÁPIDOS AL CIRCUITO
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-[#D8D7CE]">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1.5 hover:text-[#E10600] transition-colors"
-              >
-                <Home className="h-4 w-4" /> Inicio
-              </Link>
-              <span className="text-[#33343D]">|</span>
-              <Link
-                href="/calendar"
-                className="inline-flex items-center gap-1.5 hover:text-[#E10600] transition-colors"
-              >
-                <Calendar className="h-4 w-4" /> Calendario GP
-              </Link>
-              <span className="text-[#33343D]">|</span>
-              <Link
-                href="/#servicios"
-                className="inline-flex items-center gap-1.5 hover:text-[#E10600] transition-colors"
-              >
-                <Compass className="h-4 w-4" /> Servicios
-              </Link>
-              <span className="text-[#33343D]">|</span>
-              <Link
-                href="/profile"
-                className="inline-flex items-center gap-1.5 hover:text-[#E10600] transition-colors"
-              >
-                <ArrowRight className="h-4 w-4 text-[#7C4DFF]" /> Mi Cuenta
-              </Link>
             </div>
           </div>
         </div>
