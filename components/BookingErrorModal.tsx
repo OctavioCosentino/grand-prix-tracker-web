@@ -88,7 +88,7 @@ export default function BookingErrorModal({
           </div>
 
           {/* Botones de acción */}
-          <div className="mt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3">
+          <div className="mt-4 flex flex-col-reverse sm:flex-row items-center justify-center gap-3 w-full">
             <ButtonOutline onClick={onLater}>
               Intentar más tarde
             </ButtonOutline>
