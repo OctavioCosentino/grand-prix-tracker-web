@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { AlertTriangle, RotateCcw, Home, X } from "lucide-react";
+import { AlertTriangle, RotateCcw, X } from "lucide-react";
 import ButtonChecker from "./ButtonChecker";
 import ButtonOutline from "./ButtonOutline";
 
@@ -91,16 +91,15 @@ export default function BookingErrorModal({
           <div className="mt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3">
             <ButtonOutline
               onClick={onLater}
-              className="px-5 py-3 font-mono text-xs uppercase tracking-wider"
+              className="h-11 px-5 font-mono text-xs uppercase tracking-wider"
             >
-              <Home className="h-4 w-4" />
               Intentar más tarde
             </ButtonOutline>
 
             <ButtonChecker
               onClick={onRetry}
               disabled={isSubmitting}
-              className="px-6 py-3 font-mono text-xs uppercase tracking-widest"
+              className="h-11 px-6 font-mono text-xs uppercase tracking-widest"
             >
               <RotateCcw className={`h-4 w-4 ${isSubmitting ? "animate-spin" : ""}`} />
               {isSubmitting ? "Procesando..." : "Reintentar compra"}
