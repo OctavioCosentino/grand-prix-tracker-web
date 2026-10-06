@@ -17,10 +17,13 @@ const LUCIDE_ICONS: Record<
   React.ComponentType<{ className?: string; strokeWidth?: number }>
 > = {
   "/hotel.png": Hotel,
+  "/hotel.webp": Hotel,
   hotel: Hotel,
   "/tickets.png": Ticket,
+  "/tickets.webp": Ticket,
   ticket: Ticket,
   "/transport.png": Bus,
+  "/transport.webp": Bus,
   bus: Bus,
 };
 

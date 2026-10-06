@@ -55,7 +55,7 @@ export default function NotFound() {
             <div className="relative overflow-hidden rounded-2xl border border-[#1C1D24] bg-[#131318]/90 shadow-2xl backdrop-blur-md">
               <div
                 className="absolute inset-0 z-0 bg-cover bg-center opacity-10 grayscale"
-                style={{ backgroundImage: "url('/crash.jpg')" }}
+                style={{ backgroundImage: "url('/crash.webp')" }}
               />
 
               <div className="relative z-10 p-8 sm:p-12">

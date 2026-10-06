@@ -29,14 +29,14 @@ export default function Home({
       className={containerClasses}
     >
       <Image
-        src="/logo-nobg.png"
+        src="/logo-nobg.webp"
         alt="GrandPrix Tracker"
         height={992}
         width={1072}
         className={`${imageWidth} h-auto shrink-0 dark-logo`}
       />
       <Image
-        src="/logo-nobg-white.png"
+        src="/logo-nobg-white.webp"
         alt="GrandPrix Tracker"
         height={992}
         width={1072}

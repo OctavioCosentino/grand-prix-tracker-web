@@ -5,7 +5,7 @@ export const teamMembers = [
     role: "FRONTEND DEVELOPER",
     initials: "OC",
     compoundColor: "#E10600",
-    photoUrl: "/octa.jpeg",
+    photoUrl: "/octa.webp",
     linkedinUrl: "https://www.linkedin.com/in/octavio-cosentino-58a8a12b8/",
   },
   {
@@ -14,7 +14,7 @@ export const teamMembers = [
     role: "BACKEND DEVELOPER",
     initials: "MV",
     compoundColor: "#E7B33C",
-    photoUrl: "/mate.png",
+    photoUrl: "/mate.webp",
     linkedinUrl: "https://www.linkedin.com/in/mateovillafañe/",
   },
   {
@@ -23,7 +23,7 @@ export const teamMembers = [
     role: "FULL STACK DEVELOPER",
     initials: "MM",
     compoundColor: "#F3F1EA",
-    photoUrl: "/martin.png",
+    photoUrl: "/martin.webp",
     linkedinUrl: "https://www.youtube.com/watch?v=GROgxR27u0Q",
   },
   {
@@ -32,7 +32,7 @@ export const teamMembers = [
     role: "ROSSONERO",
     initials: "EZ",
     compoundColor: "#34D399",
-    photoUrl: "/eric.png",
+    photoUrl: "/eric.webp",
     linkedinUrl: "https://www.linkedin.com/in/zagereric/",
   },
 ];

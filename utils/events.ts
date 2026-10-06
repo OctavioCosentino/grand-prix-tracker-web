@@ -58,201 +58,201 @@ interface CircuitMeta {
 const KNOWN_CIRCUITS_META: Record<string, CircuitMeta> = {
   madrid: {
     name: "Spanish GP",
-    img: "/races/madrid.png",
+    img: "/races/madrid.webp",
     blurb:
       "¡Nueva pista urbana e híbrida por las calles de la capital española!",
     regionFallback: "Europa",
   },
   baku: {
     name: "Azerbaijan GP",
-    img: "/races/baku.jpg",
+    img: "/races/baku.webp",
     blurb: "Largas rectas y la estrechísima sección del castillo.",
     regionFallback: "Europa",
   },
   singapore: {
     name: "Singapore GP",
-    img: "/races/signapur.jpg",
+    img: "/races/signapur.webp",
     blurb: "Calor extremo y máxima exigencia física bajo las luces nocturnas.",
     regionFallback: "Asia",
   },
   singapur: {
     name: "Singapore GP",
-    img: "/races/signapur.jpg",
+    img: "/races/signapur.webp",
     blurb: "Calor extremo y máxima exigencia física bajo las luces nocturnas.",
     regionFallback: "Asia",
   },
   austin: {
     name: "United States GP",
-    img: "/races/austin.jpg",
+    img: "/races/austin.webp",
     blurb: "Elevación extrema en la curva 1 y mucho espectáculo en Texas.",
     regionFallback: "Norteamérica",
   },
   cota: {
     name: "United States GP",
-    img: "/races/austin.jpg",
+    img: "/races/austin.webp",
     blurb: "Elevación extrema en la curva 1 y mucho espectáculo en Texas.",
     regionFallback: "Norteamérica",
   },
   mexico: {
     name: "Mexico City GP",
-    img: "/races/mejico.jpg",
+    img: "/races/mejico.webp",
     blurb:
       "Alta altitud que exige a los motores y el increíble paso por el Foro Sol.",
     regionFallback: "Latinoamérica",
   },
   "hermanos rodríguez": {
     name: "Mexico City GP",
-    img: "/races/mejico.jpg",
+    img: "/races/mejico.webp",
     blurb:
       "Alta altitud que exige a los motores y el increíble paso por el Foro Sol.",
     regionFallback: "Latinoamérica",
   },
   interlagos: {
     name: "São Paulo GP",
-    img: "/races/interlagos.jpg",
+    img: "/races/interlagos.webp",
     blurb: "Carreras impredecibles, clima cambiante y la 'S' de Senna.",
     regionFallback: "Latinoamérica",
   },
   "são paulo": {
     name: "São Paulo GP",
-    img: "/races/interlagos.jpg",
+    img: "/races/interlagos.webp",
     blurb: "Carreras impredecibles, clima cambiante y la 'S' de Senna.",
     regionFallback: "Latinoamérica",
   },
   "las vegas": {
     name: "Las Vegas GP",
-    img: "/races/las_vegas.jpg",
+    img: "/races/las_vegas.webp",
     blurb: "Velocidad extrema directo por el Strip en la noche del sábado.",
     regionFallback: "Norteamérica",
   },
   lusail: {
     name: "Qatar GP",
-    img: "/races/qtar.jpg",
+    img: "/races/qtar.webp",
     blurb: "Un trazado rápido y fluido en medio del desierto nocturno.",
     regionFallback: "Medio Oriente",
   },
   qatar: {
     name: "Qatar GP",
-    img: "/races/qtar.jpg",
+    img: "/races/qtar.webp",
     blurb: "Un trazado rápido y fluido en medio del desierto nocturno.",
     regionFallback: "Medio Oriente",
   },
   "yas marina": {
     name: "Abu Dhabi GP",
-    img: "/races/yas_marina.jpg",
+    img: "/races/yas_marina.webp",
     blurb:
       "El gran cierre de temporada, empezando de día y terminando de noche.",
     regionFallback: "Medio Oriente",
   },
   "abu dabi": {
     name: "Abu Dhabi GP",
-    img: "/races/yas_marina.jpg",
+    img: "/races/yas_marina.webp",
     blurb:
       "El gran cierre de temporada, empezando de día y terminando de noche.",
     regionFallback: "Medio Oriente",
   },
   bahrain: {
     name: "Bahrain GP",
-    img: "/races/bahrain.jpg",
+    img: "/races/bahrain.webp",
     blurb: "El inicio de temporada bajo las luces del desierto.",
     regionFallback: "Medio Oriente",
   },
   jeddah: {
     name: "Saudi Arabian GP",
-    img: "/races/jedah.png",
+    img: "/races/jedah.webp",
     blurb: "El circuito urbano más rápido del mundo, rozando los muros.",
     regionFallback: "Medio Oriente",
   },
   melbourne: {
     name: "Australian GP",
-    img: "/races/albert-park.jpg",
+    img: "/races/albert-park.webp",
     blurb: "Clásico parque urbano en Melbourne con zonas de alta velocidad.",
     regionFallback: "Oceanía",
   },
   suzuka: {
     name: "Japanese GP",
-    img: "/races/Japan.jpg",
+    img: "/races/Japan.webp",
     blurb: "El icónico trazado en forma de 8, favorito de los pilotos.",
     regionFallback: "Asia",
   },
   shanghai: {
     name: "Chinese GP",
-    img: "/races/china.png",
+    img: "/races/china.webp",
     blurb: "Largas rectas y la infame y técnica primera curva del caracol.",
     regionFallback: "Asia",
   },
   miami: {
     name: "Miami GP",
-    img: "/races/miami.png",
+    img: "/races/miami.webp",
     blurb: "Glamour, yates falsos y pura acción alrededor del estadio.",
     regionFallback: "Norteamérica",
   },
   imola: {
     name: "Emilia Romagna GP",
-    img: "/races/imola.jpg",
+    img: "/races/imola.webp",
     blurb:
       "Historia pura y un trazado de la vieja escuela sin margen de error.",
     regionFallback: "Europa",
   },
   monaco: {
     name: "Monaco GP",
-    img: "/races/monaco.jpg",
+    img: "/races/monaco.webp",
     blurb: "La joya de la corona. Clasificar acá lo es todo.",
     regionFallback: "Europa",
   },
   montreal: {
     name: "Canadian GP",
-    img: "/races/canada.png",
+    img: "/races/canada.webp",
     blurb: "Curvas rápidas, chicanas y el famoso Muro de los Campeones.",
     regionFallback: "Norteamérica",
   },
   spielberg: {
     name: "Austrian GP",
-    img: "/races/austria.png",
+    img: "/races/austria.webp",
     blurb: "Pista corta en las montañas con tres zonas de DRS consecutivas.",
     regionFallback: "Europa",
   },
   silverstone: {
     name: "British GP",
-    img: "/races/silverstone.jpg",
+    img: "/races/silverstone.webp",
     blurb:
       "La cuna de la F1. Maggots y Becketts ponen a prueba la aerodinámica.",
     regionFallback: "Europa",
   },
   spa: {
     name: "Belgian GP",
-    img: "/races/spa.png",
+    img: "/races/spa.webp",
     blurb: "La pista más larga del año y el espectacular paso por Eau Rouge.",
     regionFallback: "Europa",
   },
   hungaroring: {
     name: "Hungarian GP",
-    img: "/races/hungary.png",
+    img: "/races/hungary.webp",
     blurb: "Apodado 'Mónaco sin muros', requiere máxima carga aerodinámica.",
     regionFallback: "Europa",
   },
   zandvoort: {
     name: "Dutch GP",
-    img: "/races/dutch.png",
+    img: "/races/dutch.webp",
     blurb: "Curvas peraltadas y un mar naranja en las dunas holandesas.",
     regionFallback: "Europa",
   },
   monza: {
     name: "Italian GP",
-    img: "/races/monza.png",
+    img: "/races/monza.webp",
     blurb: "El Templo de la Velocidad. Acelerador a fondo frente a los Tifosi.",
     regionFallback: "Europa",
   },
   portugal: {
     name: "Portuguese GP",
-    img: "/races/portugal.jpg",
+    img: "/races/portugal.webp",
     blurb:
       "Una montaña rusa de asfalto con impresionantes cambios de elevación.",
     regionFallback: "Europa",
   },
   portimao: {
     name: "Portuguese GP",
-    img: "/races/portugal.jpg",
+    img: "/races/portugal.webp",
     blurb:
       "Una montaña rusa de asfalto con impresionantes cambios de elevación.",
     regionFallback: "Europa",
@@ -339,7 +339,7 @@ export function mapBackendEventToRace(event: BackendEvent): Race {
   const name = getRaceName(circuitName, cityName, countryName);
 
   // Imagen
-  const img = meta?.img || "/races/madrid.png";
+  const img = meta?.img || "/races/madrid.webp";
 
   // Blurb
   const blurb =

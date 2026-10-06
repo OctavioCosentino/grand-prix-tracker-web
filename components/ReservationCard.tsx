@@ -57,7 +57,7 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
       icon: (
         <div className="relative h-6 w-6 shrink-0 flex items-center justify-center">
           <Image
-            src="/plane.png"
+            src="/plane.webp"
             alt="Vuelo"
             width={24}
             height={24}
@@ -77,7 +77,7 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
       icon: (
         <div className="relative h-6 w-6 shrink-0 flex items-center justify-center">
           <Image
-            src="/hotel.png"
+            src="/hotel.webp"
             alt="Hotel"
             width={24}
             height={24}
@@ -97,7 +97,7 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
       icon: (
         <div className="relative h-6 w-6 shrink-0 flex items-center justify-center">
           <Image
-            src="/tickets.png"
+            src="/tickets.webp"
             alt="Entrada"
             width={24}
             height={24}

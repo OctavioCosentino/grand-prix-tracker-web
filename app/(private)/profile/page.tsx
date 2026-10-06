@@ -40,7 +40,7 @@ export default function ProfilePage({
           <div className="relative mb-6 overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
             <div 
               className="franco-profile-bg absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 grayscale"
-              style={{ backgroundImage: "url('/franco.png')" }}
+              style={{ backgroundImage: "url('/franco.webp')" }}
             />
             <div className="relative z-10 mb-4 flex items-center gap-4">
               <ProfileCircle

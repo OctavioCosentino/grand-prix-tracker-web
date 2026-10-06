@@ -32,7 +32,7 @@ export default function AboutPage() {
         <div className="group relative mt-16 h-[300px] w-full overflow-hidden rounded-xl border border-[#1C1D24] bg-[#0E0E13] shadow-2xl sm:h-[400px]">
           <div className="absolute inset-0 flex items-center justify-center bg-[#131318] transition-transform duration-700 group-hover:scale-105">
             <Image
-              src="/fangio.jpg"
+              src="/fangio.webp"
               alt="Foto de F1"
               fill
               className="object-cover"
