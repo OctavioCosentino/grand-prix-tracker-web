@@ -101,7 +101,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
             </p>
             <button
               onClick={onClose}
-              className="mt-8 w-full rounded-sm border border-[#33343D] bg-transparent py-3 text-sm font-semibold text-[#F3F1EA] transition-colors hover:border-[#E10600] hover:text-white"
+              className="gpt-outline-btn mt-8 w-full rounded-sm border border-[#33343D] bg-transparent py-3 text-sm font-semibold text-[#F3F1EA] transition-colors hover:border-[#E10600] hover:text-white"
             >
               Cerrar y volver al box
             </button>

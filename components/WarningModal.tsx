@@ -84,7 +84,7 @@ export default function WarningModal({
           <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <button
               onClick={onCancel}
-              className="rounded-sm border border-[#33343D] bg-transparent px-6 py-2.5 text-sm font-semibold text-[#F3F1EA] transition-colors hover:border-[#93949F] hover:bg-[#1C1D24] cursor-pointer"
+              className="gpt-outline-btn rounded-sm border border-[#33343D] bg-transparent px-6 py-2.5 text-sm font-semibold text-[#F3F1EA] transition-colors hover:border-[#93949F] hover:bg-[#1C1D24] cursor-pointer"
             >
               {cancelText}
             </button>

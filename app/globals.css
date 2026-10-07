@@ -576,4 +576,21 @@ html.light .booking-modal-btn-secondary:hover {
   background-color: #E2E5EB !important;
   border-color: #E10600 !important;
   color: #111216 !important;
+}
+
+/* ==========================================================================
+   Botones Outline y Botón de Iniciar Sesión (Modo Claro)
+   Borde más grueso (2px) con contraste técnico para máxima visibilidad
+   ========================================================================== */
+html.light .gpt-outline-btn {
+  border-width: 2px !important;
+  border-color: #8A91A1 !important;
+  color: #111216 !important;
+}
+
+html.light .gpt-outline-btn:hover {
+  border-width: 2px !important;
+  border-color: #E10600 !important;
+  color: #E10600 !important;
+  background-color: rgba(225, 6, 0, 0.05) !important;
 }

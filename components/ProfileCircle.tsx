@@ -58,7 +58,7 @@ export default function AuthButton({
     return (
       <button
         onClick={onLoginClick}
-        className="inline-flex items-center justify-center rounded-sm border border-[#33343D] bg-transparent px-5 py-2.5 text-sm font-semibold text-[#F3F1EA] transition-colors hover:border-[#E10600] hover:text-white cursor-pointer"
+        className="gpt-outline-btn inline-flex items-center justify-center rounded-sm border border-[#33343D] bg-transparent px-5 py-2.5 text-sm font-semibold text-[#F3F1EA] transition-colors hover:border-[#E10600] hover:text-white cursor-pointer"
       >
         Iniciar sesión / Registrate
       </button>
