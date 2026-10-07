@@ -72,10 +72,7 @@ export default function BookingFlightsStep({
               <section key={sentido} className="flex flex-col gap-3">
                 {/* Título distintivo en Celular */}
                 <div className="flex md:hidden items-center gap-3 pt-4 first:pt-0">
-                  <div className="flex items-center gap-2 rounded-sm bg-[#131318] border border-[#1C1D24] border-l-4 border-l-[#E10600] px-3.5 py-2 shadow-md">
-                    <span className="text-sm">
-                      {sentido === "IDA" ? "🛫" : "🛬"}
-                    </span>
+                  <div className="flex items-center rounded-sm bg-[#131318] border border-[#1C1D24] border-l-4 border-l-[#E10600] px-3.5 py-2 shadow-md">
                     <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#F3F1EA]">
                       VUELOS DE {sentido}
                     </span>
