@@ -70,7 +70,21 @@ export default function BookingFlightsStep({
             const options = flights.filter((f) => f.sentido === sentido);
             return (
               <section key={sentido} className="flex flex-col gap-3">
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7C4DFF]">
+                {/* Título distintivo en Celular */}
+                <div className="flex md:hidden items-center gap-3 pt-4 first:pt-0">
+                  <div className="flex items-center gap-2 rounded-sm bg-[#131318] border border-[#1C1D24] border-l-4 border-l-[#E10600] px-3.5 py-2 shadow-md">
+                    <span className="text-sm">
+                      {sentido === "IDA" ? "🛫" : "🛬"}
+                    </span>
+                    <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#F3F1EA]">
+                      VUELOS DE {sentido}
+                    </span>
+                  </div>
+                  <div className="h-px flex-1 bg-gradient-to-r from-[#1C1D24] to-transparent" />
+                </div>
+
+                {/* Título en Desktop */}
+                <h2 className="hidden md:block font-mono text-[11px] uppercase tracking-[0.2em] text-[#7C4DFF]">
                   {title}
                 </h2>
                 {options.length === 0 ? (

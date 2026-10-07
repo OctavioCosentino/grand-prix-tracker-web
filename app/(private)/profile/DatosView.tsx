@@ -347,7 +347,7 @@ function DatosForm({
         </div>
 
         {/* Estantería de 2 niveles con 3 ruedas arriba y 2 abajo */}
-        <div className="tire-shelf-container rounded-md border border-[#1C1D24] bg-[#0B0B10]/80 p-6 sm:p-8 pt-8 sm:pt-9 shadow-inner">
+        <div className="tire-shelf-container rounded-md border border-[#1C1D24] bg-[#0B0B10]/80 p-3 sm:p-8 pt-6 sm:pt-9 shadow-inner">
           <TireShelfPicker
             selectedColor={selectedColor}
             onSelectColor={handleSelectColor}

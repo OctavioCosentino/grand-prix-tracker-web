@@ -32,10 +32,10 @@ export default function ProfilePage({
   const displayName = user ? getDisplayName(user) : "";
 
   return (
-    <div className="relative min-h-screen bg-[#0B0B10] pt-24 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
+    <div className="relative min-h-screen overflow-x-clip bg-[#0B0B10] pt-24 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
       <div className="gpt-carbon pointer-events-none absolute inset-0 opacity-70" />
-      <div className="pointer-events-none absolute right-0 top-0 h-[400px] w-[600px] rounded-full bg-[#E10600]/5 blur-[150px]" />
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-8 px-6 pb-24 md:flex-row">
+      <div className="pointer-events-none absolute right-0 top-0 h-[400px] w-full max-w-[600px] rounded-full bg-[#E10600]/5 blur-[150px]" />
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:px-6 pb-24 md:flex-row">
         <aside className="flex w-full flex-col gap-2 md:w-72 md:flex-shrink-0">
           <div className="relative mb-6 overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
             <div 
@@ -90,7 +90,7 @@ export default function ProfilePage({
           </button>
         </aside>
 
-        <main className="flex-grow rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl flex flex-col">
+        <main className="flex-grow rounded-md border-0 sm:border border-[#1C1D24] bg-transparent sm:bg-[#0E0E13] p-0 sm:p-8 sm:shadow-2xl flex flex-col">
           {activeTab === "datos" && <DatosView />}
           {activeTab === "reservas" && <ReservasView />}
           {activeTab === "pagos" && <PagosView />}

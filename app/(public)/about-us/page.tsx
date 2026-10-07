@@ -6,12 +6,12 @@ import { teamMembers } from "@/utils/teamInfo";
 
 export default function AboutPage() {
   return (
-    <main className="relative min-h-screen bg-[#0B0B10] pt-24 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
+    <main className="relative min-h-screen overflow-x-clip bg-[#0B0B10] pt-24 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
       {/* Fondos F1 */}
       <div className="gpt-carbon pointer-events-none absolute inset-0 opacity-70" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[#E10600]/5 blur-[150px]" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-full max-w-[800px] -translate-x-1/2 rounded-full bg-[#E10600]/5 blur-[150px]" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 pb-24">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 pb-24">
         {/* Encabezado */}
         <div className="mx-auto max-w-2xl text-center">
           <span className="font-mono text-[10px] tracking-[0.2em] text-[#E10600]">

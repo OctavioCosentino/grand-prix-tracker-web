@@ -50,10 +50,10 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0B0B10] pt-24 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
+    <div className="relative min-h-screen overflow-x-clip bg-[#0B0B10] pt-24 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
       <div className="gpt-carbon pointer-events-none absolute inset-0 opacity-70" />
-      <div className="pointer-events-none absolute left-0 top-0 h-[500px] w-[500px] rounded-full bg-[#E10600]/5 blur-[150px]" />
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-10 px-6 pb-24 md:flex-row">
+      <div className="pointer-events-none absolute left-0 top-0 h-[500px] w-full max-w-[500px] rounded-full bg-[#E10600]/5 blur-[150px]" />
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-10 px-4 sm:px-6 pb-24 md:flex-row">
         <CalendarFilters
           currentYear={currentYear}
           selectedRegion={selectedRegion}

@@ -148,14 +148,14 @@ export default function HotelCard({
             return (
               <li
                 key={room.idHabitacion}
-                className={`flex flex-wrap sm:flex-nowrap items-center justify-between gap-4 py-3 ${
+                className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 py-3.5 ${
                   hasConflict
                     ? "-mx-2 rounded-sm border border-[#E10600] px-2"
                     : ""
                 } ${soldOut && cantidad === 0 ? "opacity-50" : ""}`}
               >
-                <div className="min-w-0 flex-1">
-                  <p className="font-display text-base font-bold text-[#F3F1EA] truncate">
+                <div className="w-full sm:w-auto sm:flex-1 sm:min-w-0">
+                  <p className="font-display text-base font-bold text-[#F3F1EA] break-words">
                     {room.tipo}
                   </p>
                   <StockLabel
@@ -165,7 +165,7 @@ export default function HotelCard({
                     className="font-mono text-xs uppercase tracking-wider text-[#93949F]"
                   />
                 </div>
-                <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 shrink-0">
+                <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-4 shrink-0">
                   <div className="text-left sm:text-right">
                     <span className="font-mono text-base font-bold text-[#F3F1EA]">
                       {formatUsd(room.precioPorNocheUsd)}

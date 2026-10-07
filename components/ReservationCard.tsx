@@ -120,7 +120,7 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
   return (
     <div className="group mb-4 rounded-md border border-[#1C1D24] bg-[#131318] p-1 shadow-md transition-colors hover:border-[#33343D]">
       <div className="flex flex-col md:flex-row">
-        <div className="flex w-full flex-col justify-center border-b border-[#1C1D24] bg-[#0B0B10] p-6 md:w-1/3 md:border-b-0 md:border-r">
+        <div className="flex w-full flex-col justify-center border-b border-[#1C1D24] bg-[#0B0B10] p-4 sm:p-6 md:w-1/3 md:border-b-0 md:border-r">
           <span 
             className="inline-flex items-center justify-center self-start font-mono text-[10px] font-semibold uppercase tracking-[0.2em] px-2.5 py-1 rounded-sm border text-center leading-none"
             style={{ color: estado.color, backgroundColor: estado.color + '1A', borderColor: estado.color + '33' }}
@@ -137,7 +137,7 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
           </span>
         </div>
 
-        <div className="grid grow grid-cols-3 gap-4 p-6">
+        <div className="grid grow grid-cols-3 gap-2 p-3 sm:gap-4 sm:p-6">
           {items.map((item) => (
             <Badge
               key={item.label}
@@ -151,12 +151,12 @@ export default function ReservationCard({ reserva }: ReservationCardProps) {
       </div>
 
       {expanded && (
-        <div className="border-t border-[#1C1D24] bg-[#0E0E13] px-6 pb-6">
+        <div className="border-t border-[#1C1D24] bg-[#0E0E13] px-4 pb-6 sm:px-6">
           <ReservationItinerary reserva={reserva} />
         </div>
       )}
 
-      <div className="flex items-center justify-between bg-[#0E0E13] px-6 py-3">
+      <div className="flex items-center justify-between bg-[#0E0E13] px-4 py-3 sm:px-6">
         <span className="font-mono tabular-nums text-lg font-bold text-[#F3F1EA]">{formatUsd(reserva.totalUsd)}</span>
         <button
           type="button"

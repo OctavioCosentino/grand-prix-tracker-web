@@ -118,7 +118,7 @@ export default function TireShelfPicker({
     <div className="w-full flex flex-col gap-14 sm:gap-16 pt-3 pb-2">
       {/* Estante Superior: 3 ruedas */}
       <div className="flex flex-col items-center">
-        <div className="flex items-end justify-center gap-10 sm:gap-14 pb-1">
+        <div className="flex items-end justify-center gap-4 sm:gap-14 pb-1">
           {SHELF_TOP_COMPOUNDS.map(renderWheelItem)}
         </div>
         {/* Barra metálica del estante */}
@@ -130,7 +130,7 @@ export default function TireShelfPicker({
 
       {/* Estante Inferior: 2 ruedas */}
       <div className="flex flex-col items-center">
-        <div className="flex items-end justify-center gap-14 sm:gap-20 pb-1">
+        <div className="flex items-end justify-center gap-8 sm:gap-20 pb-1">
           {SHELF_BOTTOM_COMPOUNDS.map(renderWheelItem)}
         </div>
         {/* Barra metálica del estante (mismo ancho que el superior: max-w-md) */}

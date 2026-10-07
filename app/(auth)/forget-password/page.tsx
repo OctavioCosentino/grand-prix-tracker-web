@@ -47,10 +47,10 @@ export default function RecoverPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#0B0B10] px-6 py-12 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-x-clip bg-[#0B0B10] px-4 py-12 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white sm:px-6">
       
-      <div className="gpt-carbon pointer-events-none absolute inset-0 opacity-70" />
-      <div className="pointer-events-none absolute top-1/2 left-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E10600]/10 blur-[120px]" />
+      <div className="gpt-carbon pointer-events-none fixed inset-0 opacity-70" />
+      <div className="pointer-events-none fixed top-1/2 left-1/2 h-[400px] w-full max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E10600]/10 blur-[120px]" />
 
       <div className="relative z-10 w-full max-w-sm">
         
