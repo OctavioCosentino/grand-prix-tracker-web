@@ -23,6 +23,16 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
     setMounted(true);
   }, []);
 
+  // Manejo de tecla Escape para cerrar
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !mounted) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,8 +54,14 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-sm rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0B10]/80 px-4 backdrop-blur-sm cursor-pointer"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-sm rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl cursor-default"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={onClose}
           className="absolute right-5 top-5 text-[#5C5D66] transition-colors hover:text-[#F3F1EA] focus:outline-none cursor-pointer"
