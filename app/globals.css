@@ -34,32 +34,56 @@ body {
 /* ==== GRANDPRIX TRACKER - ESTILOS PERSONALIZADOS ==== */
 
 @keyframes gpt-marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 @keyframes gpt-streak {
-  0% { transform: translateX(-120%) skewX(-12deg); opacity: 0; }
-  12% { opacity: .55; }
-  100% { transform: translateX(220%) skewX(-12deg); opacity: 0; }
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateX(220%) skewX(-12deg);
+    opacity: 0;
+  }
 }
 @keyframes gpt-flicker {
-  0%, 92%, 100% { opacity: 1; }
-  94% { opacity: .55; }
-  96% { opacity: 1; }
+  0%,
+  92%,
+  100% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 0.55;
+  }
+  96% {
+    opacity: 1;
+  }
 }
 @keyframes gpt-checker-sweep {
-  from { background-position: 0 0; }
-  to { background-position: 56px 0; }
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 56px 0;
+  }
 }
 
 @layer utilities {
   .cursor-f1 {
-    cursor: url('/cursor-f1.png'), auto !important;
+    cursor: url("/cursor-f1.png"), auto !important;
   }
 
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #33343D transparent;
+    scrollbar-color: #33343d transparent;
   }
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
@@ -68,11 +92,11 @@ body {
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #2A2B36;
+    background: #2a2b36;
     border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #E10600;
+    background: #e10600;
   }
 }
 
@@ -87,35 +111,54 @@ body {
     animation: gpt-flicker 5s ease-in-out infinite;
   }
   .gpt-checker-btn {
-    background-image: repeating-linear-gradient(45deg, rgba(243,241,234,.18) 0 7px, transparent 7px 14px);
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(243, 241, 234, 0.18) 0 7px,
+      transparent 7px 14px
+    );
     background-size: 56px 14px;
     background-position: 0 0;
-    transition: background-position .6s ease;
+    transition: background-position 0.6s ease;
   }
   .gpt-checker-btn:hover {
     animation: gpt-checker-sweep 1.1s linear infinite;
   }
   .gpt-carbon {
     background-image:
-      repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(-45deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 6px);
+      repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.025) 0px,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 6px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.025) 0px,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 6px
+      );
   }
   .gpt-hud-grid {
     background-image:
-      linear-gradient(to right, rgba(243,241,234,0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(243,241,234,0.05) 1px, transparent 1px);
+      linear-gradient(to right, rgba(243, 241, 234, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(243, 241, 234, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gpt-marquee-track, .gpt-streak, .gpt-flicker, .gpt-checker-btn:hover {
+    .gpt-marquee-track,
+    .gpt-streak,
+    .gpt-flicker,
+    .gpt-checker-btn:hover {
       animation: none !important;
     }
   }
 }
 
 /* =======================================================
- * F1 PADDOCK LIGHT MODE THEME
+ * F1 LIGHT MODE THEME
  * Adapta dinámicamente toda la interfaz a una estética F1
  * diurna (Paddock / Telemetría técnica blanca y titanio)
  * manteniendo los acentos emblemáticos Race Red (#E10600)
@@ -126,93 +169,165 @@ html.light {
 }
 
 html.light body {
-  background-color: #F4F5F8 !important;
+  background-color: #f4f5f8 !important;
   color: #111215 !important;
 }
 
 /* --- Superficies y Fondos Base --- */
-html.light .bg-\[\#0B0B10\] { background-color: #F4F5F8 !important; }
-html.light .bg-\[\#0B0B10\]\/90 { background-color: rgba(244, 245, 248, 0.92) !important; }
-html.light .bg-\[\#0B0B10\]\/80 { background-color: rgba(244, 245, 248, 0.85) !important; }
-html.light .bg-\[\#0B0B10\]\/70 { background-color: rgba(244, 245, 248, 0.75) !important; }
-html.light .bg-\[\#0B0B10\]\/60 { background-color: rgba(244, 245, 248, 0.65) !important; }
-html.light .bg-\[\#0B0B10\]\/50 { background-color: rgba(244, 245, 248, 0.50) !important; }
+html.light .bg-\[\#0B0B10\] {
+  background-color: #f4f5f8 !important;
+}
+html.light .bg-\[\#0B0B10\]\/90 {
+  background-color: rgba(244, 245, 248, 0.92) !important;
+}
+html.light .bg-\[\#0B0B10\]\/80 {
+  background-color: rgba(244, 245, 248, 0.85) !important;
+}
+html.light .bg-\[\#0B0B10\]\/70 {
+  background-color: rgba(244, 245, 248, 0.75) !important;
+}
+html.light .bg-\[\#0B0B10\]\/60 {
+  background-color: rgba(244, 245, 248, 0.65) !important;
+}
+html.light .bg-\[\#0B0B10\]\/50 {
+  background-color: rgba(244, 245, 248, 0.5) !important;
+}
 
 /* Paneles, cards y modales principales */
-html.light .bg-\[\#131318\] { background-color: #FFFFFF !important; }
-html.light .bg-\[\#131318\]\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
-html.light .bg-\[\#131318\]\/90 { background-color: rgba(255, 255, 255, 0.90) !important; }
-html.light .bg-\[\#131318\]\/80 { background-color: rgba(255, 255, 255, 0.85) !important; }
-html.light .bg-\[\#131318\]\/50 { background-color: rgba(255, 255, 255, 0.50) !important; }
+html.light .bg-\[\#131318\] {
+  background-color: #ffffff !important;
+}
+html.light .bg-\[\#131318\]\/95 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+html.light .bg-\[\#131318\]\/90 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+html.light .bg-\[\#131318\]\/80 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+}
+html.light .bg-\[\#131318\]\/50 {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
 
 /* Contenedores secundarios, cards oscuras y footer */
-html.light .bg-\[\#0E0E13\] { background-color: #ECEEF2 !important; }
-html.light .bg-\[\#0E0E13\]\/80 { background-color: rgba(236, 238, 242, 0.85) !important; }
+html.light .bg-\[\#0E0E13\] {
+  background-color: #eceef2 !important;
+}
+html.light .bg-\[\#0E0E13\]\/80 {
+  background-color: rgba(236, 238, 242, 0.85) !important;
+}
 
 /* Bloques de asfalto / microcontenedores */
-html.light .bg-\[\#1C1D24\] { background-color: #E6E8ED !important; }
-html.light .bg-\[\#1C1D24\]\/50 { background-color: rgba(230, 232, 237, 0.50) !important; }
+html.light .bg-\[\#1C1D24\] {
+  background-color: #e6e8ed !important;
+}
+html.light .bg-\[\#1C1D24\]\/50 {
+  background-color: rgba(230, 232, 237, 0.5) !important;
+}
 
-html.light .bg-\[\#23242E\] { background-color: #DFE2E8 !important; }
+html.light .bg-\[\#23242E\] {
+  background-color: #dfe2e8 !important;
+}
 html.light .bg-\[\#16171F\],
 html.light .bg-\[\#171821\],
 html.light .bg-\[\#181920\],
 html.light .bg-\[\#0F0F14\] {
-  background-color: #E7E9EE !important;
+  background-color: #e7e9ee !important;
 }
 
 /* Hover de fondos */
-html.light .hover\:bg-\[\#131318\]:hover { background-color: #FFFFFF !important; }
-html.light .hover\:bg-\[\#1C1D24\]:hover { background-color: #DFE2E8 !important; }
-html.light .hover\:bg-\[\#1C1D24\]\/50:hover { background-color: rgba(223, 226, 232, 0.6) !important; }
-html.light .hover\:bg-\[\#33343D\]:hover { background-color: #CFD4DC !important; }
+html.light .hover\:bg-\[\#131318\]:hover {
+  background-color: #ffffff !important;
+}
+html.light .hover\:bg-\[\#1C1D24\]:hover {
+  background-color: #dfe2e8 !important;
+}
+html.light .hover\:bg-\[\#1C1D24\]\/50:hover {
+  background-color: rgba(223, 226, 232, 0.6) !important;
+}
+html.light .hover\:bg-\[\#33343D\]:hover {
+  background-color: #cfd4dc !important;
+}
 
 /* --- Tipografía y Colores de Texto --- */
-html.light .text-\[\#F3F1EA\] { color: #111216 !important; }
-html.light .text-\[\#D8D7CE\] { color: #2C303B !important; }
-html.light .text-\[\#B9B8B0\] { color: #4B5162 !important; }
-html.light .text-\[\#93949F\] { color: #5B616E !important; }
+html.light .text-\[\#F3F1EA\] {
+  color: #111216 !important;
+}
+html.light .text-\[\#D8D7CE\] {
+  color: #2c303b !important;
+}
+html.light .text-\[\#B9B8B0\] {
+  color: #4b5162 !important;
+}
+html.light .text-\[\#93949F\] {
+  color: #5b616e !important;
+}
 html.light .text-\[\#7E808F\],
-html.light .text-\[\#5C5D66\] { color: #727887 !important; }
-html.light .text-\[\#4E505E\] { color: #8A91A1 !important; }
+html.light .text-\[\#5C5D66\] {
+  color: #727887 !important;
+}
+html.light .text-\[\#4E505E\] {
+  color: #8a91a1 !important;
+}
 
 /* Textos violetas (Vuelta rápida / Telemetría) en Modo Claro: tono más oscuro (#551ED4) y mayor grosor tipográfico para máxima legibilidad */
 html.light .text-\[\#7C4DFF\],
 html.light .text-\[\#A382FF\] {
-  color: #551ED4 !important;
+  color: #551ed4 !important;
   font-weight: 700 !important;
 }
 html.light .bg-\[\#7C4DFF\] {
-  background-color: #551ED4 !important;
+  background-color: #551ed4 !important;
 }
 
 /* Hover de textos */
-html.light .hover\:text-\[\#F3F1EA\]:hover { color: #000000 !important; }
-html.light .hover\:text-\[\#D8D7CE\]:hover { color: #111216 !important; }
-html.light .group:hover .group-hover\:text-\[\#F3F1EA\] { color: #000000 !important; }
+html.light .hover\:text-\[\#F3F1EA\]:hover {
+  color: #000000 !important;
+}
+html.light .hover\:text-\[\#D8D7CE\]:hover {
+  color: #111216 !important;
+}
+html.light .group:hover .group-hover\:text-\[\#F3F1EA\] {
+  color: #000000 !important;
+}
 html.light a.hover\:text-white:hover,
 html.light button.hover\:text-white:hover {
-  color: #E10600 !important;
+  color: #e10600 !important;
 }
 
 /* Placeholders de inputs */
 html.light input::placeholder,
 html.light textarea::placeholder {
-  color: #7E8494 !important;
+  color: #7e8494 !important;
 }
 
 /* --- Bordes y Separadores Técnicos --- */
-html.light .border-\[\#1C1D24\] { border-color: #DCE0E6 !important; }
-html.light .border-\[\#33343D\] { border-color: #CFD4DC !important; }
-html.light .border-\[\#5C5D66\] { border-color: #B8BFC9 !important; }
-html.light .border-\[\#F3F1EA\]\/20 { border-color: rgba(17, 18, 22, 0.15) !important; }
-html.light .divide-\[\#1C1D24\] > * + * { border-color: #DCE0E6 !important; }
-html.light .divide-\[\#33343D\] > * + * { border-color: #CFD4DC !important; }
+html.light .border-\[\#1C1D24\] {
+  border-color: #dce0e6 !important;
+}
+html.light .border-\[\#33343D\] {
+  border-color: #cfd4dc !important;
+}
+html.light .border-\[\#5C5D66\] {
+  border-color: #b8bfc9 !important;
+}
+html.light .border-\[\#F3F1EA\]\/20 {
+  border-color: rgba(17, 18, 22, 0.15) !important;
+}
+html.light .divide-\[\#1C1D24\] > * + * {
+  border-color: #dce0e6 !important;
+}
+html.light .divide-\[\#33343D\] > * + * {
+  border-color: #cfd4dc !important;
+}
 
 /* --- Sombras sutiles para jerarquía visual en blanco --- */
 html.light .bg-\[\#131318\],
 html.light .bg-\[\#0E0E13\] {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.05),
+    0 1px 2px -1px rgba(0, 0, 0, 0.05);
 }
 
 /* --- Conservar Sombras y Viñetas Oscuras en Fotos (como en Modo Oscuro) --- */
@@ -220,7 +335,7 @@ html.light .bg-\[\#0E0E13\] {
 html.light [class*="bg-linear-to-t"][class*="from-[#0B0B10]"],
 html.light [class*="bg-linear-to-r"][class*="from-[#0B0B10]"],
 html.light [class*="bg-gradient-to-t"][class*="from-[#0B0B10]"] {
-  --tw-gradient-from: #0B0B10 !important;
+  --tw-gradient-from: #0b0b10 !important;
   --tw-gradient-to: transparent !important;
 }
 
@@ -232,7 +347,7 @@ html.light [class*="h-\[400px\]"]:has(img) h1,
 html.light [class*="h-\[400px\]"]:has(img) p,
 html.light [class*="h-\[420px\]"]:has(img) h3,
 html.light [class*="h-\[420px\]"]:has(img) p {
-  color: #F3F1EA !important;
+  color: #f3f1ea !important;
 }
 
 /* Video de Sección de Servicios en Modo Claro: integración limpia y elegante sin efecto lechoso */
@@ -244,23 +359,23 @@ html.light #servicios video {
 html.light #servicios .services-video-overlay {
   background-image: linear-gradient(
     to bottom,
-    #ECEEF2 0%,
+    #eceef2 0%,
     rgba(236, 238, 242, 0.45) 25%,
     rgba(236, 238, 242, 0.45) 75%,
-    #ECEEF2 100%
+    #eceef2 100%
   ) !important;
 }
 
 /* Botón Volver en Booking Navbar (Modo Claro): siempre visible con contraste nítido y solo borde rojo en hover */
 html.light .booking-back-btn {
-  background-color: #FFFFFF !important;
-  border-color: #DCE0E6 !important;
+  background-color: #ffffff !important;
+  border-color: #dce0e6 !important;
   color: #111216 !important;
 }
 html.light .booking-back-btn:hover {
-  background-color: #FFFFFF !important;
-  border-color: #E10600 !important;
-  color: #E10600 !important;
+  background-color: #ffffff !important;
+  border-color: #e10600 !important;
+  color: #e10600 !important;
 }
 
 /* Alternancia de Logos (Modo Oscuro / Modo Claro) manteniendo tamaño exacto */
@@ -295,60 +410,62 @@ html.light .light-icon {
 
 /* Dropdown de códigos de área de país en Perfil (Modo Claro): blanco pulcro con scrollbar claro */
 html.light .country-code-btn {
-  background-color: #FFFFFF !important;
-  border-color: #DCE0E6 !important;
+  background-color: #ffffff !important;
+  border-color: #dce0e6 !important;
   color: #111216 !important;
 }
 html.light .country-code-text {
   color: #111216 !important;
 }
 html.light .country-code-arrow {
-  color: #5B616E !important;
+  color: #5b616e !important;
 }
 html.light .country-code-dropdown {
-  background-color: #FFFFFF !important;
-  border-color: #DCE0E6 !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
-  scrollbar-color: #CFD4DC #FFFFFF !important;
+  background-color: #ffffff !important;
+  border-color: #dce0e6 !important;
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+  scrollbar-color: #cfd4dc #ffffff !important;
 }
 html.light .country-code-dropdown::-webkit-scrollbar-track {
-  background-color: #FFFFFF !important;
+  background-color: #ffffff !important;
 }
 html.light .country-code-dropdown::-webkit-scrollbar-thumb {
-  background-color: #CFD4DC !important;
+  background-color: #cfd4dc !important;
 }
 html.light .country-code-dropdown::-webkit-scrollbar-thumb:hover {
-  background-color: #A0A6B2 !important;
+  background-color: #a0a6b2 !important;
 }
 html.light .country-code-dropdown button {
   color: #111216 !important;
 }
 html.light .country-code-dropdown button:hover {
-  background-color: #F0F2F5 !important;
+  background-color: #f0f2f5 !important;
 }
 html.light .country-code-dropdown button.is-selected {
-  background-color: #ECEEF2 !important;
-  color: #E10600 !important;
+  background-color: #eceef2 !important;
+  color: #e10600 !important;
 }
 
 /* Tarjetas de Pago (Paso 4 y Perfil) en Modo Claro: fondo blanco/platino con texto oscuro de alto contraste */
 html.light .payment-card {
-  background: linear-gradient(135deg, #FFFFFF 0%, #F5F7FA 100%) !important;
-  border-color: #DCE0E6 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%) !important;
+  border-color: #dce0e6 !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
 }
 html.light .payment-card.border-\[\#E10600\] {
-  border-color: #E10600 !important;
+  border-color: #e10600 !important;
 }
 
 /* Toggle de Transporte (Paso 1) en Modo Claro: estados claros y contrastados */
 html.light .hotel-transfer-toggle.off {
-  background-color: #D1D5DB !important;
-  border-color: #9CA3AF !important;
+  background-color: #d1d5db !important;
+  border-color: #9ca3af !important;
 }
 html.light .hotel-transfer-toggle.on {
-  background-color: #E10600 !important;
-  border-color: #E10600 !important;
+  background-color: #e10600 !important;
+  border-color: #e10600 !important;
 }
 
 /* Modales y Overlays en Modo Claro: mantener el oscurecido de fondo para foco */
@@ -361,34 +478,46 @@ html.light .fixed.inset-0.bg-\[\#0B0B10\]\/50 {
 
 html.light .fixed [class*="max-w-"].bg-\[\#0E0E13\],
 html.light .fixed [class*="max-w-"].bg-\[\#131318\] {
-  background-color: #FFFFFF !important;
+  background-color: #ffffff !important;
 }
 
 /* --- Conservar Neumáticos F1 Originales (Goma de caucho negra) --- */
 html.light .f1-tire .bg-\[\#1C1D24\] {
-  background-color: #1C1D24 !important;
+  background-color: #1c1d24 !important;
 }
 html.light .f1-tire .bg-\[\#0B0B10\] {
-  background-color: #0B0B10 !important;
+  background-color: #0b0b10 !important;
 }
 html.light .f1-tire .bg-\[\#131318\] {
   background-color: #131318 !important;
 }
 html.light .f1-tire .text-\[\#F3F1EA\] {
-  color: #F3F1EA !important;
+  color: #f3f1ea !important;
 }
 
 /* --- Texturas y Grillas F1 en Modo Claro --- */
 html.light .gpt-carbon {
   background-image:
-    repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 6px),
-    repeating-linear-gradient(-45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 6px) !important;
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.02) 0px,
+      rgba(0, 0, 0, 0.02) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.02) 0px,
+      rgba(0, 0, 0, 0.02) 1px,
+      transparent 1px,
+      transparent 6px
+    ) !important;
 }
 
 html.light .gpt-hud-grid {
   background-image:
-    linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px) !important;
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px) !important;
 }
 
 /* Destello blanco en modo oscuro -> Destello metálico/titanio en modo claro */
@@ -398,29 +527,29 @@ html.light .via-\[\#F3F1EA\]\/70 {
 
 /* Scrollbars en modo claro */
 html.light ::-webkit-scrollbar-track {
-  background-color: #ECEEF2;
+  background-color: #eceef2;
 }
 html.light ::-webkit-scrollbar-thumb {
-  background-color: #C5C9D4;
+  background-color: #c5c9d4;
 }
 html.light ::-webkit-scrollbar-thumb:hover {
-  background-color: #A4AAB8;
+  background-color: #a4aab8;
 }
 
 html.light .custom-scrollbar {
-  scrollbar-color: #C5C9D4 transparent;
+  scrollbar-color: #c5c9d4 transparent;
 }
 html.light .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #C5C9D4;
+  background-color: #c5c9d4;
 }
 html.light .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #E10600;
+  background-color: #e10600;
 }
 
 /* --- EmptyState en Modo Claro --- */
 html.light .empty-state-card {
-  background-color: #FFFFFF !important;
-  border-color: #CFD4DC !important;
+  background-color: #ffffff !important;
+  border-color: #cfd4dc !important;
 }
 
 html.light .empty-state-photo {
@@ -444,24 +573,29 @@ html.light .franco-profile-bg {
 }
 
 html.light .pilot-active-text {
-  color: #E10600 !important;
+  color: #e10600 !important;
   font-weight: 800 !important;
 }
 
 /* --- Estantería y Selección de Neumáticos en Perfil (Modo Claro) --- */
 html.light .tire-shelf-container {
-  background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 100%) !important;
-  border-color: #DCE0E6 !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%) !important;
+  border-color: #dce0e6 !important;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
 }
 
 html.light .shelf-bar {
-  background-image: linear-gradient(to right, #D8DCE3, #B8BFC9, #D8DCE3) !important;
-  border-top-color: #94A3B8 !important;
+  background-image: linear-gradient(
+    to right,
+    #d8dce3,
+    #b8bfc9,
+    #d8dce3
+  ) !important;
+  border-top-color: #94a3b8 !important;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
 }
 html.light .shelf-bar > div {
-  background-color: #94A3B8 !important;
+  background-color: #94a3b8 !important;
 }
 
 html.light .tire-contact-shadow {
@@ -476,15 +610,19 @@ html.light .tire-contact-shadow {
 
 html.light .tire-selected-halo {
   display: block !important;
-  box-shadow: 0 0 6px currentColor, 0 0 10px currentColor !important;
+  box-shadow:
+    0 0 6px currentColor,
+    0 0 10px currentColor !important;
   filter: drop-shadow(0 0 3px currentColor) !important;
   opacity: 0.85 !important;
 }
 
 html.light .tire-selected-halo[data-compound="hard"] {
   background-color: rgba(100, 116, 139, 0.25) !important;
-  box-shadow: 0 0 6px #64748B, 0 0 10px rgba(100, 116, 139, 0.4) !important;
-  filter: drop-shadow(0 0 3px #64748B) !important;
+  box-shadow:
+    0 0 6px #64748b,
+    0 0 10px rgba(100, 116, 139, 0.4) !important;
+  filter: drop-shadow(0 0 3px #64748b) !important;
 }
 
 /* Toasts en Modo Claro: borde negro ÚNICAMENTE en el borde exterior */
@@ -514,7 +652,11 @@ html.light .not-found-crash-bg {
 
 /* 404 Código: En modo claro, rojo de carreras F1 de alto contraste y legibilidad absoluta */
 html.light .not-found-code {
-  background-image: linear-gradient(180deg, #E10600 0%, #B80400 100%) !important;
+  background-image: linear-gradient(
+    180deg,
+    #e10600 0%,
+    #b80400 100%
+  ) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   filter: drop-shadow(0 8px 24px rgba(225, 6, 0, 0.22)) !important;
@@ -522,20 +664,20 @@ html.light .not-found-code {
 
 /* Badge DNF y Descripción (Alta legibilidad sobre la foto de fondo) */
 .not-found-dnf {
-  color: #F3F1EA;
+  color: #f3f1ea;
   background-color: rgba(14, 14, 19, 0.85);
   border-color: rgba(255, 255, 255, 0.14);
 }
 
 .not-found-desc {
-  color: #E2E4EB;
+  color: #e2e4eb;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 html.light .not-found-dnf {
   color: #111216 !important;
   background-color: rgba(255, 255, 255, 0.94) !important;
-  border-color: #CFD4DC !important;
+  border-color: #cfd4dc !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
 }
 
@@ -548,39 +690,39 @@ html.light .not-found-desc {
 /* Botones 404: Borde rojo en hover garantizado en ambos modos */
 .not-found-btn-calendar:hover,
 .not-found-btn-back:hover {
-  border-color: #E10600 !important;
+  border-color: #e10600 !important;
 }
 
 html.light .not-found-btn-calendar {
-  background-color: #ECEEF2 !important;
-  border-color: #DCE0E6 !important;
+  background-color: #eceef2 !important;
+  border-color: #dce0e6 !important;
   color: #111216 !important;
 }
 html.light .not-found-btn-calendar:hover {
-  background-color: #E2E5EB !important;
-  border-color: #E10600 !important;
+  background-color: #e2e5eb !important;
+  border-color: #e10600 !important;
   color: #111216 !important;
 }
 
 html.light .not-found-btn-back {
-  border-color: #DCE0E6 !important;
-  color: #5B616E !important;
+  border-color: #dce0e6 !important;
+  color: #5b616e !important;
 }
 html.light .not-found-btn-back:hover {
-  background-color: #ECEEF2 !important;
-  border-color: #E10600 !important;
+  background-color: #eceef2 !important;
+  border-color: #e10600 !important;
   color: #111216 !important;
 }
 
 /* Modal de Error de Reserva: botón secundario en modo claro */
 html.light .booking-modal-btn-secondary {
-  background-color: #ECEEF2 !important;
-  border-color: #DCE0E6 !important;
+  background-color: #eceef2 !important;
+  border-color: #dce0e6 !important;
   color: #111216 !important;
 }
 html.light .booking-modal-btn-secondary:hover {
-  background-color: #E2E5EB !important;
-  border-color: #E10600 !important;
+  background-color: #e2e5eb !important;
+  border-color: #e10600 !important;
   color: #111216 !important;
 }
 
@@ -590,13 +732,13 @@ html.light .booking-modal-btn-secondary:hover {
    ========================================================================== */
 html.light .gpt-outline-btn {
   border-width: 2px !important;
-  border-color: #8A91A1 !important;
+  border-color: #8a91a1 !important;
   color: #111216 !important;
 }
 
 html.light .gpt-outline-btn:hover {
   border-width: 2px !important;
-  border-color: #E10600 !important;
-  color: #E10600 !important;
+  border-color: #e10600 !important;
+  color: #e10600 !important;
   background-color: rgba(225, 6, 0, 0.05) !important;
 }

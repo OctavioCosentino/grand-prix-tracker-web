@@ -53,13 +53,9 @@ export default function BookingErrorModal({
         aria-modal="true"
         aria-labelledby="booking-error-title"
       >
-        {/* Barra superior con acento rojo de advertencia F1 */}
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#E10600] via-[#FF4D4D] to-[#E10600]" />
-
-        {/* Resplandor sutil en esquina */}
         <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-[#E10600]/10 blur-3xl" />
 
-        {/* Botón de cierre superior derecho */}
         <button
           type="button"
           onClick={onClose}
@@ -70,13 +66,11 @@ export default function BookingErrorModal({
         </button>
 
         <div className="flex flex-col gap-4">
-          {/* Badge de estado F1 */}
           <div className="inline-flex items-center gap-2 self-start rounded-full border border-[#E10600]/30 bg-[#E10600]/10 px-3 py-1 font-mono text-[11px] font-bold tracking-widest text-[#FF4D4D] uppercase">
             <AlertTriangle className="h-3.5 w-3.5 text-[#E10600]" />
             <span>INCIDENCIA EN BOXES · PIT LANE</span>
           </div>
 
-          {/* Título */}
           <h2
             id="booking-error-title"
             className="font-display text-2xl sm:text-3xl font-900 tracking-tight text-[#F3F1EA]"
@@ -84,7 +78,6 @@ export default function BookingErrorModal({
             No pudimos procesar tu compra
           </h2>
 
-          {/* Caja con detalle técnico o del servidor */}
           <div className="rounded-md border border-[#1C1D24] bg-[#131318] p-4 text-left">
             <span className="font-mono text-[10px] uppercase tracking-widest text-[#7C4DFF]">
               Reporte del servidor
@@ -94,7 +87,6 @@ export default function BookingErrorModal({
             </p>
           </div>
 
-          {/* Botones de acción */}
           <div className="mt-4 flex flex-col-reverse sm:flex-row items-center justify-center gap-3 w-full">
             <ButtonOutline onClick={onLater} className="w-full sm:w-auto">
               Intentar más tarde
@@ -105,14 +97,15 @@ export default function BookingErrorModal({
               disabled={isSubmitting}
               className="w-full sm:w-auto border border-transparent px-6 py-3.5"
             >
-              <RotateCcw className={`h-4 w-4 ${isSubmitting ? "animate-spin" : ""}`} />
+              <RotateCcw
+                className={`h-4 w-4 ${isSubmitting ? "animate-spin" : ""}`}
+              />
               {isSubmitting ? "Procesando..." : "Reintentar compra"}
             </ButtonChecker>
           </div>
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
-

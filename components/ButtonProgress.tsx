@@ -27,21 +27,19 @@ export default function ButtonProgress({
         className
       }
     >
-      {/* Barra de progreso */}
       <div
         className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#00A651] to-[#34D399] transition-all duration-[3000ms] ease-out"
         style={{ width: progress + "%" }}
       />
-      
-      {/* Patrón de líneas diagonales para mantener el estilo de ButtonChecker pero en verde */}
-      <div 
+
+      <div
         className="absolute inset-0 z-0 opacity-20 transition-opacity"
         style={{
-          backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 20px)"
+          backgroundImage:
+            "repeating-linear-gradient(45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 20px)",
         }}
       />
 
-      {/* Texto centrado */}
       <span className="relative z-10 font-mono text-[11px] font-bold uppercase tracking-widest text-[#F3F1EA] drop-shadow-md">
         {text}
       </span>

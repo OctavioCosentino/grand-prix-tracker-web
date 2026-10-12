@@ -3,7 +3,9 @@ import React, { ReactNode } from "react";
 interface ButtonOutlineProps {
   children: ReactNode;
   href?: string;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void;
+  onClick?: (
+    e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+  ) => void;
   type?: "button" | "submit" | "reset";
   className?: string;
   disabled?: boolean;
@@ -30,7 +32,12 @@ export default function ButtonOutline({
   }
 
   return (
-    <button type={type} onClick={onClick} className={baseClasses} disabled={disabled}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={baseClasses}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

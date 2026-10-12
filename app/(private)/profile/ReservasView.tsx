@@ -26,7 +26,6 @@ function Group({ title, reservas }: { title: string; reservas: Reserva[] }) {
 
 export default function ReservasView() {
   const { user, isLoading } = useAuth();
-  // Sin token el back responde 401: se pide recién cuando la sesión terminó de cargar
   const bookingsQuery = useMyBookings(!isLoading && Boolean(user));
 
   if (!isLoading && !user) {
@@ -66,7 +65,6 @@ export default function ReservasView() {
 
   const byEndDate = (a: Reserva, b: Reserva) =>
     getReservationEndDate(a).localeCompare(getReservationEndDate(b));
-  // Próximas: la carrera más cercana primero. Pasadas: la más reciente primero.
   const upcoming = reservas
     .filter((r) => !isReservationPast(r))
     .sort(byEndDate);

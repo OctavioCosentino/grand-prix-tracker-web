@@ -18,7 +18,9 @@ export default function LoginPage({
 }) {
   // ?next= lo pone el proxy al rebotar de una ruta privada; ?error= el callback de auth
   const params = use(searchParams);
-  const next = safeNextPath(typeof params.next === "string" ? params.next : null);
+  const next = safeNextPath(
+    typeof params.next === "string" ? params.next : null,
+  );
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +37,10 @@ export default function LoginPage({
     setIsSubmitting(true);
     setError(null);
 
-    const { error } = await createClient().auth.signInWithPassword({ email, password });
+    const { error } = await createClient().auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) {
       setError(authErrorMessage(error));
       setIsSubmitting(false);
@@ -47,7 +52,7 @@ export default function LoginPage({
   };
 
   const handleGoogleLogin = () => {
-    // TODO: Conectar con el proveedor OAuth de Supabase
+    // Quedara para el futuro mostro
     console.log("Google login intent");
   };
 
@@ -55,10 +60,10 @@ export default function LoginPage({
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-x-clip bg-[#0B0B10] px-4 py-12 text-[#F3F1EA] selection:bg-[#E10600] selection:text-white sm:px-6">
       <div className="gpt-carbon pointer-events-none fixed inset-0 opacity-70" />
       <div className="pointer-events-none fixed top-1/2 left-1/2 h-[400px] w-full max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E10600]/10 blur-[120px]" />
-      
+
       <div className="relative z-10 w-full max-w-sm">
         <div className="mb-10 flex justify-center">
-          <Home isLarge={true} /> 
+          <Home isLarge={true} />
         </div>
 
         <div className="rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl">
@@ -74,7 +79,6 @@ export default function LoginPage({
             </p>
           </div>
 
-          {/* Google (En desarrollo) */}
           <GoogleAuthButton text="Continuar con Google" />
 
           {/* Divisor */}
@@ -91,11 +95,11 @@ export default function LoginPage({
               <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
                 Correo electrónico
               </label>
-              <EmailInput 
-                email={email} 
-                setEmail={setEmail} 
-                placeholder="piloto@escuderia.com" 
-              /> 
+              <EmailInput
+                email={email}
+                setEmail={setEmail}
+                placeholder="piloto@escuderia.com"
+              />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -103,18 +107,21 @@ export default function LoginPage({
                 <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
                   Contraseña
                 </label>
-                <a className="cursor-pointer text-xs text-[#93949F] transition-colors hover:text-[#F3F1EA]" onClick={() => setModalOpen(true)}>
+                <a
+                  className="cursor-pointer text-xs text-[#93949F] transition-colors hover:text-[#F3F1EA]"
+                  onClick={() => setModalOpen(true)}
+                >
                   ¿Olvidaste tu clave?
                 </a>
               </div>
-              <PasswordInput 
-                value={password} 
-                onChange={setPassword} 
-              /> 
+              <PasswordInput value={password} onChange={setPassword} />
             </div>
 
             {error && (
-              <span role="alert" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]">
+              <span
+                role="alert"
+                className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]"
+              >
                 ✕ {error}
               </span>
             )}
@@ -131,13 +138,21 @@ export default function LoginPage({
 
           <div className="mt-8 border-t border-[#1C1D24] pt-6 text-center text-sm text-[#93949F]">
             ¿No tenés tu butaca asegurada?{" "}
-            <a href="/register" className="font-semibold text-[#F3F1EA] transition-colors hover:text-[#E10600]">
+            <a
+              href="/register"
+              className="font-semibold text-[#F3F1EA] transition-colors hover:text-[#E10600]"
+            >
               Registrate acá
             </a>
           </div>
         </div>
       </div>
-      {modalOpen && ( <ForgotPasswordModal isOpen={modalOpen} onClose={() => setModalOpen(false)} /> )}
+      {modalOpen && (
+        <ForgotPasswordModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

@@ -7,7 +7,11 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export default function SearchBar({ value, onChange, placeholder = "Buscar circuito o carrera..." }: SearchBarProps) {
+export default function SearchBar({
+  value,
+  onChange,
+  placeholder = "Buscar circuito o carrera...",
+}: SearchBarProps) {
   return (
     <div className="relative mt-5 mb-2 w-full max-w-md">
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
@@ -23,4 +27,3 @@ export default function SearchBar({ value, onChange, placeholder = "Buscar circu
     </div>
   );
 }
-

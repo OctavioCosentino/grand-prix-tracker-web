@@ -17,7 +17,10 @@ export default function BookingNavbar() {
             className="booking-back-btn group flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#33343D] bg-[#131318] text-[#F3F1EA] transition-all hover:border-[#E10600] hover:text-[#E10600]"
             aria-label="Volver atrás"
           >
-            <ArrowLeft strokeWidth={2.5} className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" />
+            <ArrowLeft
+              strokeWidth={2.5}
+              className="h-5 w-5 transition-transform group-hover:-translate-x-0.5"
+            />
           </button>
 
           <Home />
@@ -26,4 +29,3 @@ export default function BookingNavbar() {
     </>
   );
 }
-

@@ -28,7 +28,8 @@ export default function QueryProvider({
             staleTime: Infinity,
             gcTime: 1000 * 60 * 60 * 24, // 24 horas en memoria cache
             // Los reintentos son para el cold start de Render; un 401 no se arregla reintentando
-            retry: (failureCount, error) => !isUnauthorized(error) && failureCount < 4,
+            retry: (failureCount, error) =>
+              !isUnauthorized(error) && failureCount < 4,
             retryDelay: (attemptIndex) =>
               Math.min(2000 * (attemptIndex + 1), 10000),
             refetchOnWindowFocus: false,

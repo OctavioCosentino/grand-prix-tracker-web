@@ -35,7 +35,8 @@ export default function BookingTicketsStep({
   }
 
   const tickets = ticketsQuery.data;
-  const conflictIds = state.conflict?.step === "entradas" ? state.conflict.itemIds : [];
+  const conflictIds =
+    state.conflict?.step === "entradas" ? state.conflict.itemIds : [];
 
   if (!tickets.length) {
     return (
@@ -54,7 +55,11 @@ export default function BookingTicketsStep({
             cantidad={state.entradas[ticket.idEntrada] ?? 0}
             hasConflict={conflictIds.includes(ticket.idEntrada)}
             onChange={(cantidad) =>
-              dispatch({ type: "setTicket", idEntrada: ticket.idEntrada, cantidad })
+              dispatch({
+                type: "setTicket",
+                idEntrada: ticket.idEntrada,
+                cantidad,
+              })
             }
           />
         ))}
@@ -62,7 +67,9 @@ export default function BookingTicketsStep({
 
       {/* RIGHT: CIRCUIT VIEWER */}
       <div className="sticky top-24 self-start w-full">
-        <CircuitViewer imgUrl={race.circuit_svg_url || "/circuits/default.png"} />
+        <CircuitViewer
+          imgUrl={race.circuit_svg_url || "/circuits/default.png"}
+        />
       </div>
     </div>
   );

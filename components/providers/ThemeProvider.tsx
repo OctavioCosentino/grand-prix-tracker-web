@@ -28,8 +28,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Sincronizar estado inicial con el DOM / localStorage
     const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
     const isLight =
-      saved === "light" ||
-      document.documentElement.classList.contains("light");
+      saved === "light" || document.documentElement.classList.contains("light");
 
     const activeTheme: Theme = isLight ? "light" : "dark";
     setThemeState(activeTheme);

@@ -22,7 +22,9 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
 
-  const { requirements, score, getLightColor } = PasswordRequirements({ password });
+  const { requirements, score, getLightColor } = PasswordRequirements({
+    password,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +60,6 @@ export default function RegisterPage() {
   };
 
   const handleGoogleRegister = () => {
-    // TODO: Conectar con el proveedor OAuth de Supabase
     console.log("Google register intent");
   };
 
@@ -68,9 +69,8 @@ export default function RegisterPage() {
       <div className="pointer-events-none fixed top-1/2 left-1/2 h-[400px] w-full max-w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#E10600]/10 blur-[120px]" />
 
       <div className="relative z-10 w-full max-w-sm">
-        
         <div className="mb-10 flex justify-center">
-          <Home isLarge={true} /> 
+          <Home isLarge={true} />
         </div>
 
         <div className="rounded-md border border-[#1C1D24] bg-[#0E0E13] p-8 shadow-2xl">
@@ -86,7 +86,6 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* Google (En desarrollo) */}
           <GoogleAuthButton text="Registrate con Google" />
 
           {/* Divisor */}
@@ -99,7 +98,6 @@ export default function RegisterPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Nombre y apellido */}
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-2">
                 <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
@@ -129,40 +127,44 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Email */}
             <div className="flex flex-col gap-2">
               <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
                 Correo electrónico
               </label>
-              <EmailInput 
-                email={email} 
-                setEmail={setEmail} 
-                placeholder="piloto@escuderia.com" 
-              /> 
+              <EmailInput
+                email={email}
+                setEmail={setEmail}
+                placeholder="piloto@escuderia.com"
+              />
             </div>
 
-            {/* Contraseña + Telemetría */}
             <div className="flex flex-col gap-2">
               <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-[#5C5D66]">
                 Contraseña
               </label>
-              <PasswordInput 
-                value={password} 
-                onChange={setPassword} 
+              <PasswordInput
+                value={password}
+                onChange={setPassword}
                 placeholder="Creá una clave fuerte"
-              /> 
-              
+              />
+
               <PasswordStrengthMeter password={password} />
             </div>
 
             {error && (
-              <span role="alert" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]">
+              <span
+                role="alert"
+                className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]"
+              >
                 ✕ {error}
               </span>
             )}
 
             {awaitingConfirmation && (
-              <span role="status" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#34D399]">
+              <span
+                role="status"
+                className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#34D399]"
+              >
                 ✓ Te mandamos un correo para confirmar tu cuenta
               </span>
             )}
@@ -179,7 +181,10 @@ export default function RegisterPage() {
 
           <div className="mt-8 border-t border-[#1C1D24] pt-6 text-center text-sm text-[#93949F]">
             ¿Ya sos parte del equipo?{" "}
-            <a href="/login" className="font-semibold text-[#F3F1EA] transition-colors hover:text-[#E10600]">
+            <a
+              href="/login"
+              className="font-semibold text-[#F3F1EA] transition-colors hover:text-[#E10600]"
+            >
               Entrá al box
             </a>
           </div>

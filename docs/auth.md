@@ -27,6 +27,7 @@ Todo lo que está dentro de `app/(private)` requiere sesión. Hoy son `/booking/
    - si hay usuario y la ruta es `/login` o `/register`, redirige a `/`.
 
    Como el route group `(private)` no aparece en la URL, **las rutas privadas están listadas a mano** en `PRIVATE_PREFIXES` de [`lib/supabase/proxy.ts`](../lib/supabase/proxy.ts).
+
 2. **`app/(private)/layout.tsx`** valida el JWT con `supabase.auth.getClaims()` y redirige a `/login` si no hay sesión. Es el control definitivo: una página nueva dentro de `app/(private)` queda protegida aunque nadie actualice la lista del proxy. En ese caso, eso sí, se pierde el `?next=`.
 
 Para agregar una ruta privada:
@@ -59,6 +60,7 @@ Authorization: Bearer <access_token>
 El backend verifica el token (firma ES256 contra el JWKS del proyecto, emisor, audiencia `authenticated` y vencimiento) y toma el cliente del claim `sub`, que es igual a `clientes.id_cliente`. El header `X-Cliente-Id` ya no existe. Los endpoints públicos (`/events/**`, incluidos `/tickets`, `/hotels` y `/flights`) se siguen llamando con `apiFetch`, sin token.
 
 **Qué pasa ante un 401.** El back responde con el envoltorio de siempre, con estos mensajes:
+
 - sin token: `"Se requiere iniciar sesión para acceder a este recurso"`;
 - token vencido o inválido: `"La sesión es inválida o expiró"`.
 
@@ -84,14 +86,14 @@ Si la sesión vence en medio de una reserva, el usuario vuelve a loguearse y enc
 
 ### Flujos
 
-| Flujo | Dónde | Qué hace |
-|---|---|---|
-| Login | `app/(auth)/login` | `signInWithPassword`. Después vuelve a `?next=` (validado con `safeNextPath`) o a `/`. |
-| Registro | `app/(auth)/register` | `signUp` con `nombre` y `apellido` en `user_metadata`. Si la confirmación de email está desactivada, entra directo. |
-| Olvidé mi clave | `components/ForgotPasswordModal.tsx` | `resetPasswordForEmail`. El link del mail pasa por `/auth/callback?next=/forget-password`. |
-| Nueva clave | `app/(auth)/forget-password` | `updateUser({ password })` con la sesión que abrió el callback. |
-| Callback | `app/auth/callback/route.ts` | Cambia el `code` del link por una sesión (`exchangeCodeForSession`) y redirige a `next`. Si falla, va a `/login?error=link_invalido`. |
-| Logout | `/profile` → Cerrar sesión | `signOut()` desde `useAuth()`. |
+| Flujo           | Dónde                                | Qué hace                                                                                                                              |
+| --------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Login           | `app/(auth)/login`                   | `signInWithPassword`. Después vuelve a `?next=` (validado con `safeNextPath`) o a `/`.                                                |
+| Registro        | `app/(auth)/register`                | `signUp` con `nombre` y `apellido` en `user_metadata`. Si la confirmación de email está desactivada, entra directo.                   |
+| Olvidé mi clave | `components/ForgotPasswordModal.tsx` | `resetPasswordForEmail`. El link del mail pasa por `/auth/callback?next=/forget-password`.                                            |
+| Nueva clave     | `app/(auth)/forget-password`         | `updateUser({ password })` con la sesión que abrió el callback.                                                                       |
+| Callback        | `app/auth/callback/route.ts`         | Cambia el `code` del link por una sesión (`exchangeCodeForSession`) y redirige a `next`. Si falla, va a `/login?error=link_invalido`. |
+| Logout          | `/profile` → Cerrar sesión           | `signOut()` desde `useAuth()`.                                                                                                        |
 
 Los errores de Supabase se muestran en español con `authErrorMessage()` (`utils/auth.ts`).
 
@@ -99,20 +101,20 @@ Los errores de Supabase se muestran en español con `authErrorMessage()` (`utils
 
 ## Archivos
 
-| Archivo | Rol |
-|---|---|
-| `proxy.ts` | Entrada del proxy de Next. Solo llama a `updateSession`. |
-| `lib/supabase/proxy.ts` | Refresco de sesión y redirects de rutas privadas y de invitados. |
-| `lib/supabase/client.ts` | Cliente de Supabase para Client Components. |
-| `lib/supabase/server.ts` | Cliente para Server Components y Route Handlers (lee `cookies()`). |
-| `app/(private)/layout.tsx` | Control de sesión de todo `app/(private)`. |
-| `app/(private)/booking/layout.tsx` | Layout del wizard de reserva (BookingNavbar). |
-| `app/(private)/profile/layout.tsx` | Navbar y Footer, vía `components/SiteLayout.tsx`. |
-| `app/auth/callback/route.ts` | Callback de los links de email (y de OAuth más adelante). |
-| `components/providers/AuthProvider.tsx` | `AuthProvider` + `useAuth()`. |
-| `utils/auth.ts` | `safeNextPath`, `authErrorMessage`, `getDisplayName`. |
-| `services/http.ts` | `authFetch` (Bearer, refresh ante 401 y redirect al login) e `isUnauthorized`. |
-| `utils/bookingDraft.ts` | Borrador del checkout en `sessionStorage`. |
+| Archivo                                 | Rol                                                                            |
+| --------------------------------------- | ------------------------------------------------------------------------------ |
+| `proxy.ts`                              | Entrada del proxy de Next. Solo llama a `updateSession`.                       |
+| `lib/supabase/proxy.ts`                 | Refresco de sesión y redirects de rutas privadas y de invitados.               |
+| `lib/supabase/client.ts`                | Cliente de Supabase para Client Components.                                    |
+| `lib/supabase/server.ts`                | Cliente para Server Components y Route Handlers (lee `cookies()`).             |
+| `app/(private)/layout.tsx`              | Control de sesión de todo `app/(private)`.                                     |
+| `app/(private)/booking/layout.tsx`      | Layout del wizard de reserva (BookingNavbar).                                  |
+| `app/(private)/profile/layout.tsx`      | Navbar y Footer, vía `components/SiteLayout.tsx`.                              |
+| `app/auth/callback/route.ts`            | Callback de los links de email (y de OAuth más adelante).                      |
+| `components/providers/AuthProvider.tsx` | `AuthProvider` + `useAuth()`.                                                  |
+| `utils/auth.ts`                         | `safeNextPath`, `authErrorMessage`, `getDisplayName`.                          |
+| `services/http.ts`                      | `authFetch` (Bearer, refresh ante 401 y redirect al login) e `isUnauthorized`. |
+| `utils/bookingDraft.ts`                 | Borrador del checkout en `sessionStorage`.                                     |
 
 ---
 
@@ -182,4 +184,5 @@ create trigger on_auth_user_created
   - llamar a `signInWithOAuth({ provider: "google", options: { redirectTo: <origin>/auth/callback?next=... } })`.
 
   El callback ya está listo. El trigger toma `nombre` del email si no viene en la metadata, así que conviene mapear también `full_name` de Google.
+
 - **Datos del perfil** (`DatosView`): muestra nombre y email del usuario, pero "Actualizar Setup" todavía no guarda nada.

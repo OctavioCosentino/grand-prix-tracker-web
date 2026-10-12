@@ -26,7 +26,9 @@ export function isUnauthorized(error: unknown): boolean {
 }
 
 /** Headers que identifican al cliente: el back toma el cliente del claim `sub` del JWT. */
-export function getClientAuthHeaders(accessToken: string): Record<string, string> {
+export function getClientAuthHeaders(
+  accessToken: string,
+): Record<string, string> {
   return { Authorization: `Bearer ${accessToken}` };
 }
 
@@ -36,7 +38,10 @@ export function getClientAuthHeaders(accessToken: string): Record<string, string
  * seguro: el back rechaza el token antes de procesar nada. Si vuelve a dar 401,
  * o no hay sesión, cierra la sesión y manda al login.
  */
-export async function authFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
+export async function authFetch<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
   const supabase = createClient();
   const withToken = (accessToken: string): RequestInit => ({
     ...init,
@@ -86,7 +91,10 @@ async function redirectToLogin(): Promise<never> {
     // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.assign(`/login?next=${encodeURIComponent(next)}`);
   }
-  throw new ApiError(401, "Tu sesión expiró. Volvé a iniciar sesión para continuar.");
+  throw new ApiError(
+    401,
+    "Tu sesión expiró. Volvé a iniciar sesión para continuar.",
+  );
 }
 
 /**

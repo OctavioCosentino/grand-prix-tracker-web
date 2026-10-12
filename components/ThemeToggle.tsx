@@ -15,14 +15,20 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={isLight ? "Cambiar a modo nocturno (F1 Dark)" : "Cambiar a modo diurno (Paddock Light)"}
+      aria-label={
+        isLight
+          ? "Cambiar a modo nocturno (F1 Dark)"
+          : "Cambiar a modo diurno (Paddock Light)"
+      }
       title={isLight ? "Modo Nocturno (Gran Premio)" : "Modo Diurno (Paddock)"}
       className={`group relative flex h-10 w-10 items-center justify-center rounded-full border border-[#33343D] bg-[#131318] transition-all duration-300 hover:border-[#E10600] hover:scale-105 active:scale-95 cursor-pointer shadow-sm ${className}`}
     >
-      {/* Icono del Sol (cuando estamos en Dark Mode, muestra el Sol para pasar a Light) */}
+      {/* Icono del Sol */}
       <svg
         className={`h-5 w-5 text-[#E7B33C] transition-all duration-500 transform ${
-          isLight ? "scale-0 rotate-90 absolute opacity-0" : "scale-100 rotate-0 opacity-100 group-hover:rotate-45"
+          isLight
+            ? "scale-0 rotate-90 absolute opacity-0"
+            : "scale-100 rotate-0 opacity-100 group-hover:rotate-45"
         }`}
         fill="none"
         viewBox="0 0 24 24"
@@ -36,10 +42,12 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
         />
       </svg>
 
-      {/* Icono de la Luna (cuando estamos en Light Mode, muestra la Luna para pasar a Dark) */}
+      {/* Icono de la Luna */}
       <svg
         className={`h-5 w-5 text-[#7C4DFF] transition-all duration-500 transform ${
-          isLight ? "scale-100 rotate-0 opacity-100 group-hover:-rotate-12" : "scale-0 -rotate-90 absolute opacity-0"
+          isLight
+            ? "scale-100 rotate-0 opacity-100 group-hover:-rotate-12"
+            : "scale-0 -rotate-90 absolute opacity-0"
         }`}
         fill="none"
         viewBox="0 0 24 24"

@@ -27,12 +27,6 @@ interface TireShelfPickerProps {
   onSelectColor: (colorHex: string | null) => void;
 }
 
-/**
- * Selector estético de compuestos de neumáticos en formato de estantería de F1.
- * Muestra 3 neumáticos en el estante superior y 2 en el inferior.
- * Al seleccionar una rueda, se eleva suavemente y proyecta sombra sobre el estante.
- * Un segundo clic sobre la rueda seleccionada la deselecciona (enviando null).
- */
 export default function TireShelfPicker({
   selectedColor,
   onSelectColor,

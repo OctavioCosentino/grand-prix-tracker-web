@@ -6,7 +6,12 @@ import { getEventHotels, Hotel } from "@/services/hotels";
 import { getEventTickets, Entrada } from "@/services/tickets";
 import { getEventFlights, Vuelo } from "@/services/flights";
 import { getPaymentMethods, MetodoPago } from "@/services/paymentMethods";
-import { createBooking, getBookings, CheckoutRequest, Reserva } from "@/services/bookings";
+import {
+  createBooking,
+  getBookings,
+  CheckoutRequest,
+  Reserva,
+} from "@/services/bookings";
 
 /**
  * Reintenta ante cold-starts de Render (errores de red o 5xx),
@@ -23,7 +28,8 @@ const stockQueryOptions = {
   // El stock cambia con cada compra: se refresca al volver a montar el paso.
   staleTime: 30_000,
   retry: retryUnlessClientError,
-  retryDelay: (attemptIndex: number) => Math.min(2000 * (attemptIndex + 1), 10000),
+  retryDelay: (attemptIndex: number) =>
+    Math.min(2000 * (attemptIndex + 1), 10000),
 };
 
 export const bookingQueryKeys = {

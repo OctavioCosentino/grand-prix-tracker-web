@@ -2,8 +2,18 @@ export function formatRaceDates(dates: string[]): string {
   if (!dates || dates.length < 2) return "";
 
   const months = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
   ];
 
   const [d1, m1, y1] = dates[0].split("/");
@@ -11,7 +21,7 @@ export function formatRaceDates(dates: string[]): string {
 
   const day1 = parseInt(d1, 10);
   const day2 = parseInt(d2, 10);
-  
+
   const month1Name = months[parseInt(m1, 10) - 1];
   const month2Name = months[parseInt(m2, 10) - 1];
 

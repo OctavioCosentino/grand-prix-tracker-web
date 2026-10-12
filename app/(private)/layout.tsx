@@ -7,7 +7,11 @@ import { createClient } from "@/lib/supabase/server";
  * getClaims valida el JWT (no confía solo en la cookie). El proxy ya redirige
  * antes con ?next=; esto cubre cualquier ruta nueva que no esté en su lista.
  */
-export default async function PrivateLayout({ children }: { children: React.ReactNode }) {
+export default async function PrivateLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
 

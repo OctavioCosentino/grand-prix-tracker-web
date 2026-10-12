@@ -35,11 +35,7 @@ export default function TicketCard({
       {/* Indicador de compuesto / categoría */}
       <div
         className={`absolute bottom-0 left-0 top-0 w-1 ${
-          isVip
-            ? "bg-[#E10600]"
-            : isGeneral
-              ? "bg-[#93949F]"
-              : "bg-[#E7B33C]"
+          isVip ? "bg-[#E10600]" : isGeneral ? "bg-[#93949F]" : "bg-[#E7B33C]"
         }`}
       />
 

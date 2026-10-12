@@ -102,6 +102,6 @@ export default function WarningModal({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

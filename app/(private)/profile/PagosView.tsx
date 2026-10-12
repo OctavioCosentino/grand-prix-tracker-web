@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PaymentCard from "@/components/PaymentCard";
 import AddPaymentModal from "@/components/AddPaymentModal";
-import { addPaymentMethod, updatePaymentMethod, MetodoPago } from "@/services/paymentMethods";
+import {
+  addPaymentMethod,
+  updatePaymentMethod,
+  MetodoPago,
+} from "@/services/paymentMethods";
 import { usePaymentMethods, bookingQueryKeys } from "@/hooks/useBooking";
 import getRandomCompound, { tireColors } from "@/utils/tireColors";
 import { getBrandFromLast4 } from "@/utils/banksImages";
@@ -25,14 +29,19 @@ export default function PagosView() {
   const addMutation = useMutation({
     mutationFn: addPaymentMethod,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.paymentMethods });
+      queryClient.invalidateQueries({
+        queryKey: bookingQueryKeys.paymentMethods,
+      });
     },
   });
 
   const editMutation = useMutation({
-    mutationFn: (params: { id: string; data: any }) => updatePaymentMethod(params.id, params.data),
+    mutationFn: (params: { id: string; data: any }) =>
+      updatePaymentMethod(params.id, params.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: bookingQueryKeys.paymentMethods });
+      queryClient.invalidateQueries({
+        queryKey: bookingQueryKeys.paymentMethods,
+      });
     },
   });
 
@@ -124,8 +133,7 @@ export default function PagosView() {
             setIsModalOpen(false);
           } catch (error) {
             console.error("Error guardando el metodo de pago", error);
-            // Si el backend tira error, lo vas a ver acá y el modal no se cierra
-            throw error; 
+            throw error;
           }
         }}
       />

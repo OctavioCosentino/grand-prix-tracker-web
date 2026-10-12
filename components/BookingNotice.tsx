@@ -35,18 +35,26 @@ export default function BookingNotice({
       role={severity === "info" ? "status" : "alert"}
       className="relative overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] px-6 py-4"
     >
-      <div className="absolute bottom-0 left-0 top-0 w-1" style={{ backgroundColor: accent }} />
+      <div
+        className="absolute bottom-0 left-0 top-0 w-1"
+        style={{ backgroundColor: accent }}
+      />
       <div className="flex items-center gap-4">
         <div className="shrink-0" style={{ color: accent }}>
           <Icon className="h-7 w-7" />
         </div>
         <div className="flex-1 min-w-0">
           {title && (
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: accent }}>
+            <p
+              className="font-mono text-[10px] uppercase tracking-[0.2em]"
+              style={{ color: accent }}
+            >
               {title}
             </p>
           )}
-          <div className="mt-1 text-sm leading-relaxed text-[#D8D7CE]">{children}</div>
+          <div className="mt-1 text-sm leading-relaxed text-[#D8D7CE]">
+            {children}
+          </div>
           {action && (
             <button
               type="button"
@@ -87,7 +95,8 @@ export function QueryStatus({
         title="Sin señal del box"
         action={{ label: "Reintentar", onClick: onRetry }}
       >
-        No pudimos cargar esta información. Revisá tu conexión e intentá de nuevo.
+        No pudimos cargar esta información. Revisá tu conexión e intentá de
+        nuevo.
       </BookingNotice>
     );
   }

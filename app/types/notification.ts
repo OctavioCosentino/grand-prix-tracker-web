@@ -1,4 +1,8 @@
-export type NotificationType = 'ORDER_CONFIRMATION' | 'OFFER' | 'SYSTEM' | 'REMINDER';
+export type NotificationType =
+  | "ORDER_CONFIRMATION"
+  | "OFFER"
+  | "SYSTEM"
+  | "REMINDER";
 
 export interface NotificationItem {
   idNotificacion: string;

@@ -33,8 +33,9 @@ export default function BookingHotelStep({
   if (checkInPassed) {
     return (
       <BookingNotice severity="warning" title="Hotel no disponible">
-        El check-in del paquete era el {formatDateES(stay.checkIn)} y ya pasó, así que
-        no se puede reservar hotel para este Gran Premio. Podés seguir con entradas y vuelos.
+        El check-in del paquete era el {formatDateES(stay.checkIn)} y ya pasó,
+        así que no se puede reservar hotel para este Gran Premio. Podés seguir
+        con entradas y vuelos.
       </BookingNotice>
     );
   }
@@ -51,16 +52,25 @@ export default function BookingHotelStep({
   }
 
   const hotels = hotelsQuery.data;
-  const maxHotelPrice = hotels.length > 0 
-    ? Math.max(...hotels.flatMap(h => h.habitaciones.map(r => r.precioPorNocheUsd)))
-    : MAX_PRICE;
+  const maxHotelPrice =
+    hotels.length > 0
+      ? Math.max(
+          ...hotels.flatMap((h) =>
+            h.habitaciones.map((r) => r.precioPorNocheUsd),
+          ),
+        )
+      : MAX_PRICE;
   const dynamicMaxPrice = Math.max(2000, maxHotelPrice);
-  const conflictIds = state.conflict?.step === "hotel" ? state.conflict.itemIds : [];
+  const conflictIds =
+    state.conflict?.step === "hotel" ? state.conflict.itemIds : [];
 
   const filteredHotels = hotels.filter((h) => {
     // Un hotel con habitaciones elegidas no se oculta aunque no pase los filtros
-    if (h.habitaciones.some((r) => state.habitaciones[r.idHabitacion])) return true;
-    const cheapest = Math.min(...h.habitaciones.map((r) => r.precioPorNocheUsd));
+    if (h.habitaciones.some((r) => state.habitaciones[r.idHabitacion]))
+      return true;
+    const cheapest = Math.min(
+      ...h.habitaciones.map((r) => r.precioPorNocheUsd),
+    );
     return (
       cheapest <= priceRange &&
       // Sin clasificación cargada no se filtra por estrellas
@@ -72,8 +82,9 @@ export default function BookingHotelStep({
   return (
     <div className="flex flex-col gap-6">
       <BookingNotice title="Fechas del paquete">
-        Check-in {formatDateES(stay.checkIn)} · Check-out {formatDateES(stay.checkOut)} ·{" "}
-        {stay.nights} noches. Las fechas cubren todo el fin de semana de carrera.
+        Check-in {formatDateES(stay.checkIn)} · Check-out{" "}
+        {formatDateES(stay.checkOut)} · {stay.nights} noches. Las fechas cubren
+        todo el fin de semana de carrera.
       </BookingNotice>
 
       <div className="flex flex-col gap-6">
@@ -83,7 +94,9 @@ export default function BookingHotelStep({
           minStars={minStars}
           setMinStars={setMinStars}
           transferOnly={state.traslado}
-          setTransferOnly={(val) => dispatch({ type: "setTraslado", incluye: val })}
+          setTransferOnly={(val) =>
+            dispatch({ type: "setTraslado", incluye: val })
+          }
           disabledTransfer={filteredHotels.length === 0}
           maxPrice={dynamicMaxPrice}
         />
@@ -103,7 +116,13 @@ export default function BookingHotelStep({
               />
             ))
           ) : (
-            <EmptyState message={hotels.length ? "No hay hoteles que coincidan" : "No hay hoteles para este evento"}>
+            <EmptyState
+              message={
+                hotels.length
+                  ? "No hay hoteles que coincidan"
+                  : "No hay hoteles para este evento"
+              }
+            >
               {hotels.length > 0 && (
                 <button
                   onClick={() => {

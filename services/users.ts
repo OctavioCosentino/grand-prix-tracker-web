@@ -77,7 +77,7 @@ export async function getUserProfile(): Promise<UserProfile | null> {
  * Además, sincroniza la tabla 'clientes' en Supabase para persistencia inmediata.
  */
 export async function updateUserProfile(
-  payload: UpdateProfilePayload
+  payload: UpdateProfilePayload,
 ): Promise<UserProfile> {
   const supabase = createClient();
   const { data: sessionData } = await supabase.auth.getSession();
@@ -110,10 +110,7 @@ export async function updateUserProfile(
     if (payload.dni !== undefined) updateObj.dni = payload.dni;
     if (payload.color !== undefined) updateObj.color = payload.color;
 
-    await supabase
-      .from("clientes")
-      .update(updateObj)
-      .eq("id_cliente", user.id);
+    await supabase.from("clientes").update(updateObj).eq("id_cliente", user.id);
   } catch (err) {
     console.debug("Error sincronizando en Supabase:", err);
     if (!backendSuccess) {

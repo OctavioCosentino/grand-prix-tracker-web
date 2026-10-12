@@ -19,7 +19,11 @@ const AuthContext = createContext<AuthContextValue | null>(null);
  * Sesión del usuario para los Client Components.
  * Proteger rutas NO depende de esto: eso lo hacen el proxy y app/(private)/layout.tsx.
  */
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +37,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       // Las reservas y tarjetas cacheadas son del usuario anterior.
       if (event === "SIGNED_OUT") {
         queryClient.removeQueries({ queryKey: bookingQueryKeys.bookings });
-        queryClient.removeQueries({ queryKey: bookingQueryKeys.paymentMethods });
+        queryClient.removeQueries({
+          queryKey: bookingQueryKeys.paymentMethods,
+        });
       }
     });
     return () => data.subscription.unsubscribe();
@@ -52,6 +58,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth tiene que usarse dentro de <AuthProvider>");
+  if (!context)
+    throw new Error("useAuth tiene que usarse dentro de <AuthProvider>");
   return context;
 }

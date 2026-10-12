@@ -37,7 +37,7 @@ interface DatosFormProps {
     options?: {
       onSuccess?: () => void;
       onError?: (err: unknown) => void;
-    }
+    },
   ) => void;
   isUpdating: boolean;
 }
@@ -98,12 +98,18 @@ function DatosForm({
     return "";
   }, [profile?.nombre, profile?.apellido, user]);
 
-  const [countryCode, setCountryCode] = React.useState(initialPhone.countryCode);
-  const [phoneNumber, setPhoneNumber] = React.useState(initialPhone.phoneNumber);
+  const [countryCode, setCountryCode] = React.useState(
+    initialPhone.countryCode,
+  );
+  const [phoneNumber, setPhoneNumber] = React.useState(
+    initialPhone.phoneNumber,
+  );
   const [dni, setDni] = React.useState(initialDni);
-  const [nombreCompleto, setNombreCompleto] = React.useState(initialNombreCompleto);
+  const [nombreCompleto, setNombreCompleto] = React.useState(
+    initialNombreCompleto,
+  );
   const [selectedColor, setSelectedColor] = React.useState<string | null>(
-    profile?.color ?? null
+    profile?.color ?? null,
   );
 
   const [isCountryOpen, setIsCountryOpen] = React.useState(false);
@@ -122,7 +128,6 @@ function DatosForm({
         setPreviewColor(originalColor);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -151,7 +156,6 @@ function DatosForm({
 
   const handleSelectColor = (colorHex: string | null) => {
     setSelectedColor(colorHex);
-    // Cambia inmediatamente la rueda en el Navbar y la del costado de Piloto Activo (en vivo)
     setPreviewColor(colorHex);
   };
 
@@ -193,12 +197,12 @@ function DatosForm({
           console.error("Error saving profile:", error);
           toast.error("Error al actualizar el perfil", { icon: "⚠️" });
         },
-      }
+      },
     );
   };
 
   const selectedCountry = COUNTRY_DIAL_CODES.find(
-    (c) => c.dialCode === countryCode
+    (c) => c.dialCode === countryCode,
   );
 
   return (
@@ -227,7 +231,9 @@ function DatosForm({
           type="email"
           defaultValue={user?.email ?? ""}
           disabled
-          placeholder={isPending ? "Cargando..." : "Ingresar correo electrónico"}
+          placeholder={
+            isPending ? "Cargando..." : "Ingresar correo electrónico"
+          }
           className="w-full rounded-sm border border-[#1C1D24] bg-[#0B0B10] px-4 py-3.5 text-sm text-[#5C5D66] outline-none opacity-70 cursor-not-allowed"
         />
       </div>
@@ -331,9 +337,7 @@ function DatosForm({
         />
       </div>
 
-      {/* Primer Divisor pegado a los inputs superiores */}
       <div className="md:col-span-2 mt-1 pt-4 border-t border-[#1C1D24] flex flex-col gap-4">
-        {/* Título de sección de compuestos */}
         <div className="flex items-center justify-between">
           <label className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.15em] text-[#93949F]">
             Elegí el compuesto para la carrera
@@ -346,7 +350,6 @@ function DatosForm({
           )}
         </div>
 
-        {/* Estantería de 2 niveles con 3 ruedas arriba y 2 abajo */}
         <div className="tire-shelf-container rounded-md border border-[#1C1D24] bg-[#0B0B10]/80 p-3 sm:p-8 pt-6 sm:pt-9 shadow-inner">
           <TireShelfPicker
             selectedColor={selectedColor}
@@ -355,7 +358,6 @@ function DatosForm({
         </div>
       </div>
 
-      {/* Segundo Divisor debajo de la estantería */}
       <div className="md:col-span-2 mt-1 pt-6 border-t border-[#1C1D24] flex items-center gap-4">
         <ButtonChecker
           type="submit"

@@ -30,7 +30,7 @@ export function useNotifications(userId?: string) {
       if (!item) return;
       queryClient.setQueryData<NotificationItem[]>(
         notificationQueryKeys.all(userId),
-        (old = []) => deduplicateNotifications([item, ...old])
+        (old = []) => deduplicateNotifications([item, ...old]),
       );
     };
 
@@ -65,14 +65,16 @@ export function useNotifications(userId?: string) {
       return markAsRead(id);
     },
     onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: notificationQueryKeys.all(userId) });
+      await queryClient.cancelQueries({
+        queryKey: notificationQueryKeys.all(userId),
+      });
       const current =
         queryClient.getQueryData<NotificationItem[]>(
-          notificationQueryKeys.all(userId)
+          notificationQueryKeys.all(userId),
         ) ?? getStoredNotifications(userId);
 
       const updated = current.map((n) =>
-        n.idNotificacion === id ? { ...n, leido: true } : n
+        n.idNotificacion === id ? { ...n, leido: true } : n,
       );
       queryClient.setQueryData(notificationQueryKeys.all(userId), updated);
       if (typeof window !== "undefined") {
@@ -90,10 +92,12 @@ export function useNotifications(userId?: string) {
       return markAllAsRead(unreadItems, userId);
     },
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: notificationQueryKeys.all(userId) });
+      await queryClient.cancelQueries({
+        queryKey: notificationQueryKeys.all(userId),
+      });
       const current =
         queryClient.getQueryData<NotificationItem[]>(
-          notificationQueryKeys.all(userId)
+          notificationQueryKeys.all(userId),
         ) ?? getStoredNotifications(userId);
 
       const updated = current.map((n) => ({ ...n, leido: true }));

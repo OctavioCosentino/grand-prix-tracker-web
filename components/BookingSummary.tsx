@@ -8,7 +8,11 @@ interface BookingSummaryProps {
 }
 
 /** Resumen del paquete en curso. El total es orientativo: el real lo calcula el back. */
-export default function BookingSummary({ lines, stay, children }: BookingSummaryProps) {
+export default function BookingSummary({
+  lines,
+  stay,
+  children,
+}: BookingSummaryProps) {
   const total = lines.reduce((acc, l) => acc + l.subtotal, 0);
 
   return (
@@ -31,8 +35,12 @@ export default function BookingSummary({ lines, stay, children }: BookingSummary
             {lines.map((line) => (
               <li key={line.id} className="flex justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="truncate text-base font-semibold text-[#F3F1EA]">{line.label}</p>
-                  <p className="font-mono text-xs text-[#93949F]">{line.detail}</p>
+                  <p className="truncate text-base font-semibold text-[#F3F1EA]">
+                    {line.label}
+                  </p>
+                  <p className="font-mono text-xs text-[#93949F]">
+                    {line.detail}
+                  </p>
                 </div>
                 <span className="shrink-0 font-mono text-base text-[#D8D7CE]">
                   {formatUsd(line.subtotal)}

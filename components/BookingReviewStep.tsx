@@ -28,7 +28,10 @@ interface BookingReviewStepProps {
   onConfirm: () => void;
 }
 
-function describePayment(pago: PaymentSelection | null, methods: MetodoPago[]): string {
+function describePayment(
+  pago: PaymentSelection | null,
+  methods: MetodoPago[],
+): string {
   if (!pago) return "Sin medio de pago";
   if (pago.kind === "nueva") {
     return `${describeCardType(pago.tarjeta.tipo)} •••• ${pago.tarjeta.ultimos4Digitos} (tarjeta nueva)`;
@@ -67,7 +70,10 @@ export default function BookingReviewStep({
         {productSteps.map(({ id, label }) => {
           const stepLines = lines.filter((l) => l.step === id);
           return (
-            <section key={id} className="border-b border-[#1C1D24] py-5 first:pt-0">
+            <section
+              key={id}
+              className="border-b border-[#1C1D24] py-5 first:pt-0"
+            >
               <div className="flex items-center justify-between">
                 <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-[#7C4DFF]">
                   {label}
@@ -82,7 +88,8 @@ export default function BookingReviewStep({
               </div>
               {id === "hotel" && stepLines.length > 0 && (
                 <p className="mt-1 font-mono text-xs text-[#5C5D66]">
-                  {formatDateES(stay.checkIn)} → {formatDateES(stay.checkOut)} · {stay.nights} noches
+                  {formatDateES(stay.checkIn)} → {formatDateES(stay.checkOut)} ·{" "}
+                  {stay.nights} noches
                 </p>
               )}
               {stepLines.length === 0 ? (
@@ -92,8 +99,12 @@ export default function BookingReviewStep({
                   {stepLines.map((line) => (
                     <li key={line.id} className="flex justify-between gap-4">
                       <div>
-                        <p className="text-base font-semibold text-[#F3F1EA]">{line.label}</p>
-                        <p className="font-mono text-xs text-[#93949F]">{line.detail}</p>
+                        <p className="text-base font-semibold text-[#F3F1EA]">
+                          {line.label}
+                        </p>
+                        <p className="font-mono text-xs text-[#93949F]">
+                          {line.detail}
+                        </p>
                       </div>
                       <span className="shrink-0 font-mono text-base text-[#D8D7CE]">
                         {formatUsd(line.subtotal)}

@@ -23,9 +23,7 @@ export default function SystemPanelCard({
         <p className="font-mono text-[10px] tracking-[0.2em] text-[#5C5D66]">
           {title}
         </p>
-        <p className="mt-3 text-sm leading-relaxed text-[#93949F]">
-          {body}
-        </p>
+        <p className="mt-3 text-sm leading-relaxed text-[#93949F]">{body}</p>
       </div>
     );
   }

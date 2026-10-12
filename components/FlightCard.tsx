@@ -56,11 +56,15 @@ export default function FlightCard({
 
       <div className="mt-4 grid grid-cols-2 gap-2 font-mono text-xs text-[#93949F]">
         <div>
-          <span className="block text-[10px] uppercase tracking-wider text-[#5C5D66]">Sale</span>
+          <span className="block text-[10px] uppercase tracking-wider text-[#5C5D66]">
+            Sale
+          </span>
           {formatDateTimeES(flight.fechaSalida)}
         </div>
         <div>
-          <span className="block text-[10px] uppercase tracking-wider text-[#5C5D66]">Llega</span>
+          <span className="block text-[10px] uppercase tracking-wider text-[#5C5D66]">
+            Llega
+          </span>
           {formatDateTimeES(flight.fechaLlegada)}
         </div>
       </div>
@@ -68,7 +72,8 @@ export default function FlightCard({
       <div className="mt-4 flex items-end justify-between">
         {notEnoughSeats && flight.stockAsientos > 0 ? (
           <span className="font-mono text-[10px] uppercase tracking-wider text-[#E7B33C]">
-            Solo {flight.stockAsientos} asiento{flight.stockAsientos > 1 ? "s" : ""}
+            Solo {flight.stockAsientos} asiento
+            {flight.stockAsientos > 1 ? "s" : ""}
           </span>
         ) : (
           <StockLabel stock={flight.stockAsientos} unit="asientos" />
@@ -77,7 +82,9 @@ export default function FlightCard({
           <span className="font-display text-xl font-900 text-[#E10600]">
             {formatUsd(flight.precioUsd)}
           </span>
-          <span className="ml-1 font-mono text-[10px] text-[#5C5D66]">/ pasajero</span>
+          <span className="ml-1 font-mono text-[10px] text-[#5C5D66]">
+            / pasajero
+          </span>
         </div>
       </div>
     </button>

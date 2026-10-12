@@ -2,7 +2,13 @@ import React from "react";
 import { Reserva } from "@/services/bookings";
 import { formatDateES, formatDateTimeES, formatUsd } from "@/utils/booking";
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <section className="border-t border-[#1C1D24] pt-6">
       <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7C4DFF]">
@@ -13,14 +19,24 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function Line({ label, detail, subtotal }: { label: string; detail: string; subtotal: number }) {
+function Line({
+  label,
+  detail,
+  subtotal,
+}: {
+  label: string;
+  detail: string;
+  subtotal: number;
+}) {
   return (
     <li className="flex justify-between gap-4">
       <div>
         <p className="text-sm font-semibold text-[#F3F1EA]">{label}</p>
         <p className="font-mono text-[11px] text-[#93949F]">{detail}</p>
       </div>
-      <span className="shrink-0 font-mono text-sm text-[#D8D7CE]">{formatUsd(subtotal)}</span>
+      <span className="shrink-0 font-mono text-sm text-[#D8D7CE]">
+        {formatUsd(subtotal)}
+      </span>
     </li>
   );
 }
@@ -29,7 +45,11 @@ function Line({ label, detail, subtotal }: { label: string; detail: string; subt
  * Detalle completo de una reserva tal como la devuelve el back.
  * Los precios son los de la compra, no los actuales.
  */
-export default function ReservationItinerary({ reserva }: { reserva: Reserva }) {
+export default function ReservationItinerary({
+  reserva,
+}: {
+  reserva: Reserva;
+}) {
   const { metodoPago } = reserva;
 
   return (
@@ -45,10 +65,10 @@ export default function ReservationItinerary({ reserva }: { reserva: Reserva }) 
             />
           ))}
           {reserva.incluyeTransporte && (
-            <Line 
-              label="Traslado Incluido" 
-              detail="Servicio de transporte ida y vuelta al circuito" 
-              subtotal={30} 
+            <Line
+              label="Traslado Incluido"
+              detail="Servicio de transporte ida y vuelta al circuito"
+              subtotal={30}
             />
           )}
         </Section>

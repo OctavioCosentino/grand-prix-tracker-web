@@ -5,10 +5,6 @@ interface PasswordStrengthMeterProps {
   password: string;
 }
 
-/**
- * Indicador visual de seguridad de contraseña al estilo luces de largada de F1,
- * acompañado de la grilla de verificación de requisitos.
- */
 export default function PasswordStrengthMeter({
   password,
 }: PasswordStrengthMeterProps) {

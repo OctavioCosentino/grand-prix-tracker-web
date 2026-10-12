@@ -5,7 +5,12 @@ import type { AuthError, User } from "@supabase/supabase-js";
  * internos, para que un link armado no pueda mandar al usuario a otro sitio.
  */
 export function safeNextPath(next: string | null | undefined): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//") || next.startsWith("/\\")) {
+  if (
+    !next ||
+    !next.startsWith("/") ||
+    next.startsWith("//") ||
+    next.startsWith("/\\")
+  ) {
     return "/";
   }
   return next;

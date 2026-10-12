@@ -3,7 +3,11 @@ import { Hotel } from "@/services/hotels";
 import { Entrada } from "@/services/tickets";
 import { Vuelo } from "@/services/flights";
 import { MetodoPago } from "@/services/paymentMethods";
-import { CheckoutRequest, PagoConTarjetaNueva, Reserva } from "@/services/bookings";
+import {
+  CheckoutRequest,
+  PagoConTarjetaNueva,
+  Reserva,
+} from "@/services/bookings";
 
 /* ======= FECHAS ===========
  * Las fechas del evento son "YYYY-MM-DD" sin hora. Se opera con Date.UTC para
@@ -23,7 +27,9 @@ export function addDaysISO(iso: string, days: number): string {
 }
 
 export function nightsBetween(checkIn: string, checkOut: string): number {
-  return Math.round((parseISODate(checkOut) - parseISODate(checkIn)) / 86_400_000);
+  return Math.round(
+    (parseISODate(checkOut) - parseISODate(checkIn)) / 86_400_000,
+  );
 }
 
 export function todayUtcISO(): string {
@@ -31,12 +37,17 @@ export function todayUtcISO(): string {
 }
 
 /** Usar fechaFin, no `estado`: hay eventos "Proximo" cuyas fechas ya pasaron. */
-export function hasEventEnded(fechaFin: string, today = todayUtcISO()): boolean {
+export function hasEventEnded(
+  fechaFin: string,
+  today = todayUtcISO(),
+): boolean {
   return fechaFin < today;
 }
 
 /** Regla de negocio: check-in 1 día antes del inicio, check-out 1 día después del fin. */
-export function getHotelStay(event: Pick<BackendEvent, "fechaInicio" | "fechaFin">) {
+export function getHotelStay(
+  event: Pick<BackendEvent, "fechaInicio" | "fechaFin">,
+) {
   const checkIn = addDaysISO(event.fechaInicio, -1);
   const checkOut = addDaysISO(event.fechaFin, 1);
   return { checkIn, checkOut, nights: nightsBetween(checkIn, checkOut) };
@@ -189,12 +200,20 @@ export function bookingReducer(
     case "setRoom":
       return {
         ...state,
-        habitaciones: setQuantity(state.habitaciones, action.idHabitacion, action.cantidad),
+        habitaciones: setQuantity(
+          state.habitaciones,
+          action.idHabitacion,
+          action.cantidad,
+        ),
       };
     case "setTicket":
       return {
         ...state,
-        entradas: setQuantity(state.entradas, action.idEntrada, action.cantidad),
+        entradas: setQuantity(
+          state.entradas,
+          action.idEntrada,
+          action.cantidad,
+        ),
       };
     case "setFlight":
       return action.sentido === "IDA"
@@ -205,7 +224,11 @@ export function bookingReducer(
     case "setPayment":
       return { ...state, pago: action.pago };
     case "stockConflict":
-      return { ...state, step: action.conflict.step, conflict: action.conflict };
+      return {
+        ...state,
+        step: action.conflict.step,
+        conflict: action.conflict,
+      };
     case "clearConflict":
       return { ...state, conflict: null };
     case "setTraslado":
@@ -325,7 +348,10 @@ export function validateBooking(
   const issues: ValidationIssue[] = [];
 
   if (!hasAnyItem(state)) {
-    issues.push({ step: "hotel", message: "Elegí al menos un producto para armar el paquete." });
+    issues.push({
+      step: "hotel",
+      message: "Elegí al menos un producto para armar el paquete.",
+    });
   }
 
   for (const hotel of catalog.hotels) {
@@ -352,13 +378,19 @@ export function validateBooking(
 
   const pasajeros = getPassengers(state);
   if (!Number.isInteger(pasajeros) || pasajeros < 1) {
-    issues.push({ step: "vuelos", message: "La cantidad de pasajeros tiene que ser al menos 1." });
+    issues.push({
+      step: "vuelos",
+      message: "La cantidad de pasajeros tiene que ser al menos 1.",
+    });
   }
   for (const id of [state.vueloIda, state.vueloVuelta]) {
     if (!id) continue;
     const flight = catalog.flights.find((f) => f.idVuelo === id);
     if (!flight) {
-      issues.push({ step: "vuelos", message: "Uno de los vuelos elegidos ya no está disponible." });
+      issues.push({
+        step: "vuelos",
+        message: "Uno de los vuelos elegidos ya no está disponible.",
+      });
     } else if (pasajeros > flight.stockAsientos) {
       issues.push({
         step: "vuelos",
@@ -373,12 +405,23 @@ export function validateBooking(
     const idMetodoPago = state.pago.idMetodoPago;
     const card = paymentMethods.find((m) => m.idMetodoPago === idMetodoPago);
     if (!card || card.vencida) {
-      issues.push({ step: "pago", message: "La tarjeta elegida no está disponible o está vencida." });
+      issues.push({
+        step: "pago",
+        message: "La tarjeta elegida no está disponible o está vencida.",
+      });
     }
   } else {
-    const { ultimos4Digitos, fechaExpiracion, proveedorToken } = state.pago.tarjeta;
-    if (!/^\d{4}$/.test(ultimos4Digitos) || !isValidExpiry(fechaExpiracion) || !proveedorToken) {
-      issues.push({ step: "pago", message: "Revisá los datos de la tarjeta nueva." });
+    const { ultimos4Digitos, fechaExpiracion, proveedorToken } =
+      state.pago.tarjeta;
+    if (
+      !/^\d{4}$/.test(ultimos4Digitos) ||
+      !isValidExpiry(fechaExpiracion) ||
+      !proveedorToken
+    ) {
+      issues.push({
+        step: "pago",
+        message: "Revisá los datos de la tarjeta nueva.",
+      });
     }
   }
 
@@ -402,10 +445,12 @@ export function buildCheckoutRequest(
         fechaCheckOut: stay.checkOut,
       })),
   );
-  const entradas = Object.entries(state.entradas).map(([idEntrada, cantidad]) => ({
-    idEntrada,
-    cantidad,
-  }));
+  const entradas = Object.entries(state.entradas).map(
+    ([idEntrada, cantidad]) => ({
+      idEntrada,
+      cantidad,
+    }),
+  );
   const pasajeros = getPassengers(state);
   const vuelos = [state.vueloIda, state.vueloVuelta]
     .filter((id): id is string => id !== null)
@@ -443,12 +488,14 @@ export function findStockConflict(
   for (const hotel of catalog.hotels) {
     for (const room of hotel.habitaciones) {
       const cantidad = state.habitaciones[room.idHabitacion];
-      if (cantidad && cantidad > room.stockDisponible) byStep.hotel.push(room.idHabitacion);
+      if (cantidad && cantidad > room.stockDisponible)
+        byStep.hotel.push(room.idHabitacion);
     }
   }
   for (const ticket of catalog.tickets) {
     const cantidad = state.entradas[ticket.idEntrada];
-    if (cantidad && cantidad > ticket.stockDisponible) byStep.entradas.push(ticket.idEntrada);
+    if (cantidad && cantidad > ticket.stockDisponible)
+      byStep.entradas.push(ticket.idEntrada);
   }
   const pasajeros = getPassengers(state);
   for (const id of [state.vueloIda, state.vueloVuelta]) {
@@ -479,6 +526,9 @@ export function getReservationEndDate(reserva: Reserva): string {
   return dates.sort().at(-1)!;
 }
 
-export function isReservationPast(reserva: Reserva, today = todayUtcISO()): boolean {
+export function isReservationPast(
+  reserva: Reserva,
+  today = todayUtcISO(),
+): boolean {
   return getReservationEndDate(reserva) < today;
 }

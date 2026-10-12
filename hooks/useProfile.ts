@@ -41,18 +41,20 @@ export function useProfile() {
             ...old,
             color,
           };
-        }
+        },
       );
     },
-    [queryClient, user?.id]
+    [queryClient, user?.id],
   );
 
   const updateMutation = useMutation({
     mutationFn: (payload: UpdateProfilePayload) => updateUserProfile(payload),
     onMutate: async (newPayload) => {
-      await queryClient.cancelQueries({ queryKey: profileQueryKeys.me(user?.id) });
+      await queryClient.cancelQueries({
+        queryKey: profileQueryKeys.me(user?.id),
+      });
       const previous = queryClient.getQueryData<UserProfile | null>(
-        profileQueryKeys.me(user?.id)
+        profileQueryKeys.me(user?.id),
       );
 
       if (previous) {
@@ -61,7 +63,7 @@ export function useProfile() {
           {
             ...previous,
             ...newPayload,
-          }
+          },
         );
       }
 
@@ -69,11 +71,16 @@ export function useProfile() {
     },
     onError: (_err, _variables, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(profileQueryKeys.me(user?.id), context.previous);
+        queryClient.setQueryData(
+          profileQueryKeys.me(user?.id),
+          context.previous,
+        );
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: profileQueryKeys.me(user?.id) });
+      queryClient.invalidateQueries({
+        queryKey: profileQueryKeys.me(user?.id),
+      });
     },
   });
 

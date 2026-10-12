@@ -9,4 +9,4 @@ export default function useScrolled(thresholdPx = 8) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [thresholdPx]);
   return scrolled;
-};
+}

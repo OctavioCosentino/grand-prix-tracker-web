@@ -31,7 +31,9 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet, headers) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          );
           supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options),
@@ -71,6 +73,8 @@ export async function updateSession(request: NextRequest) {
 /** Un redirect nuevo pierde las cookies refrescadas: se copian a mano. */
 function redirectKeepingCookies(url: URL, supabaseResponse: NextResponse) {
   const redirect = NextResponse.redirect(url);
-  supabaseResponse.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+  supabaseResponse.cookies
+    .getAll()
+    .forEach((cookie) => redirect.cookies.set(cookie));
   return redirect;
 }

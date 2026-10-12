@@ -32,7 +32,11 @@ import {
   todayUtcISO,
   validateBooking,
 } from "@/utils/booking";
-import { clearBookingDraft, loadBookingDraft, saveBookingDraft } from "@/utils/bookingDraft";
+import {
+  clearBookingDraft,
+  loadBookingDraft,
+  saveBookingDraft,
+} from "@/utils/bookingDraft";
 import Eyebrow from "./EyeBrow";
 import ButtonChecker from "./ButtonChecker";
 import ButtonOutline from "./ButtonOutline";
@@ -101,10 +105,18 @@ export default function BookingWizard({ eventId }: { eventId: string }) {
   // Sin usuario después de cargar solo pasa si la sesión venció: authFetch ya está redirigiendo
   if (isLoading || !user) return <WizardLoading />;
 
-  return <BookingWizardContent key={user.id} eventId={eventId} userId={user.id} />;
+  return (
+    <BookingWizardContent key={user.id} eventId={eventId} userId={user.id} />
+  );
 }
 
-function BookingWizardContent({ eventId, userId }: { eventId: string; userId: string }) {
+function BookingWizardContent({
+  eventId,
+  userId,
+}: {
+  eventId: string;
+  userId: string;
+}) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -229,8 +241,10 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
       const orderNum = result.codigoConfirmacion.replace(/^#/, "");
       const country = event.circuito?.ciudad?.pais?.nombre;
       const gpName = country
-        ? (country.toLowerCase().startsWith("de ") ? country : `de ${country}`)
-        : (race?.name || "");
+        ? country.toLowerCase().startsWith("de ")
+          ? country
+          : `de ${country}`
+        : race?.name || "";
       const ticketName =
         result.entradas?.[0]?.nombreTribuna || "Pase de Acceso";
 
@@ -240,7 +254,9 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
         mensaje: `Se ha procesado tu compra para el Gran Premio ${gpName}. ${ticketName} activado.`,
         tipo: "ORDER_CONFIRMATION",
         urlDestino: "/profile?tab=reservas",
-      }).catch((e) => console.error("Error al registrar notificación de compra:", e));
+      }).catch((e) =>
+        console.error("Error al registrar notificación de compra:", e),
+      );
 
       window.scrollTo({ top: 0 });
     } catch (error) {
@@ -323,7 +339,9 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
           />
         </div>
       ) : (
-        <div className={`mt-10 grid grid-cols-1 gap-8 ${state.step === "entradas" ? "lg:grid-cols-1" : "lg:grid-cols-[1fr_400px]"}`}>
+        <div
+          className={`mt-10 grid grid-cols-1 gap-8 ${state.step === "entradas" ? "lg:grid-cols-1" : "lg:grid-cols-[1fr_400px]"}`}
+        >
           <div className="min-w-0">
             {state.step === "hotel" && (
               <BookingHotelStep
@@ -395,7 +413,8 @@ function BookingWizardContent({ eventId, userId }: { eventId: string; userId: st
       <BookingErrorModal
         isOpen={isErrorModalOpen}
         errorMessage={
-          submitError || "Hubo un problema en el servidor. Intentá de nuevo en unos minutos."
+          submitError ||
+          "Hubo un problema en el servidor. Intentá de nuevo en unos minutos."
         }
         isSubmitting={createBooking.isPending || isResolvingConflict}
         onRetry={() => {

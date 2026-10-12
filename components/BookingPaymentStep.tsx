@@ -29,9 +29,9 @@ export default function BookingPaymentStep({
   const [modalInitialData, setModalInitialData] = useState<any>(null);
   const pago = state.pago;
   const [tempNewCard, setTempNewCard] = useState<any>(
-    pago?.kind === "nueva" ? pago.tarjeta : null
+    pago?.kind === "nueva" ? pago.tarjeta : null,
   );
-  
+
   const { user } = useAuth();
   const defaultName = user ? getDisplayName(user) : "Piloto";
 
@@ -55,12 +55,20 @@ export default function BookingPaymentStep({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {paymentQuery.data.map((card) => {
               const selected =
-                pago?.kind === "guardada" && pago.idMetodoPago === card.idMetodoPago;
-              
+                pago?.kind === "guardada" &&
+                pago.idMetodoPago === card.idMetodoPago;
+
               return (
-                <div key={card.idMetodoPago} className={card.vencida ? "opacity-40 cursor-not-allowed" : ""}>
+                <div
+                  key={card.idMetodoPago}
+                  className={
+                    card.vencida ? "opacity-40 cursor-not-allowed" : ""
+                  }
+                >
                   <PaymentCard
-                    brand={card.marca || getBrandFromLast4(card.ultimos4Digitos)}
+                    brand={
+                      card.marca || getBrandFromLast4(card.ultimos4Digitos)
+                    }
                     last4={card.ultimos4Digitos}
                     holderName={card.nombre_titular || defaultName}
                     tipo={card.tipo}
@@ -70,12 +78,21 @@ export default function BookingPaymentStep({
                       if (!card.vencida) {
                         dispatch({
                           type: "setPayment",
-                          pago: selected ? null : { kind: "guardada", idMetodoPago: card.idMetodoPago },
+                          pago: selected
+                            ? null
+                            : {
+                                kind: "guardada",
+                                idMetodoPago: card.idMetodoPago,
+                              },
                         });
                       }
                     }}
                   />
-                  {card.vencida && <p className="mt-1 text-xs text-[#E10600]">Tarjeta vencida</p>}
+                  {card.vencida && (
+                    <p className="mt-1 text-xs text-[#E10600]">
+                      Tarjeta vencida
+                    </p>
+                  )}
                 </div>
               );
             })}
@@ -94,7 +111,10 @@ export default function BookingPaymentStep({
                     if (pago?.kind === "nueva") {
                       dispatch({ type: "setPayment", pago: null });
                     } else {
-                      dispatch({ type: "setPayment", pago: { kind: "nueva", tarjeta: tempNewCard } });
+                      dispatch({
+                        type: "setPayment",
+                        pago: { kind: "nueva", tarjeta: tempNewCard },
+                      });
                     }
                   }}
                 />
@@ -108,7 +128,7 @@ export default function BookingPaymentStep({
         <h2 className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7C4DFF]">
           Tarjeta nueva
         </h2>
-        
+
         <button
           onClick={() => {
             setModalMode("add");
@@ -130,11 +150,11 @@ export default function BookingPaymentStep({
         mode={modalMode}
         initialData={modalInitialData}
         onConfirm={async (cardData) => {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           setTempNewCard(cardData);
-          dispatch({ 
-            type: "setPayment", 
-            pago: { kind: "nueva", tarjeta: cardData } 
+          dispatch({
+            type: "setPayment",
+            pago: { kind: "nueva", tarjeta: cardData },
           });
           setShowAddModal(false);
         }}

@@ -21,7 +21,6 @@ export default function ProfilePage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  // Permite abrir una pestaña desde un link, ej. /profile?tab=reservas después de comprar
   const { tab } = use(searchParams);
   const initialTab = TABS.find((t) => t === tab) ?? "datos";
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
@@ -38,7 +37,7 @@ export default function ProfilePage({
       <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-8 px-4 sm:px-6 pb-24 md:flex-row">
         <aside className="flex w-full flex-col gap-2 md:w-72 md:flex-shrink-0">
           <div className="relative mb-6 overflow-hidden rounded-md border border-[#1C1D24] bg-[#0E0E13] p-6 shadow-xl">
-            <div 
+            <div
               className="franco-profile-bg absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 grayscale"
               style={{ backgroundImage: "url('/franco.webp')" }}
             />
@@ -50,7 +49,9 @@ export default function ProfilePage({
                 disableSpin={true}
               />
               <div>
-                <h2 className="font-display text-lg font-900 tracking-tight">{displayName}</h2>
+                <h2 className="font-display text-lg font-900 tracking-tight">
+                  {displayName}
+                </h2>
                 <span className="pilot-active-text font-mono text-[10px] tracking-[0.15em] text-[#34D399]">
                   PILOTO ACTIVO
                 </span>
@@ -59,20 +60,20 @@ export default function ProfilePage({
           </div>
 
           <nav className="flex flex-col gap-2">
-            <TabButton 
-              active={activeTab === "datos"} 
+            <TabButton
+              active={activeTab === "datos"}
               onClick={() => setActiveTab("datos")}
               label="Telemetría"
               sublabel="Tus datos personales"
             />
-            <TabButton 
-              active={activeTab === "reservas"} 
+            <TabButton
+              active={activeTab === "reservas"}
               onClick={() => setActiveTab("reservas")}
               label="Historial de Pista"
               sublabel="Paquetes y reservas"
             />
-            <TabButton 
-              active={activeTab === "pagos"} 
+            <TabButton
+              active={activeTab === "pagos"}
               onClick={() => setActiveTab("pagos")}
               label="Billetera"
               sublabel="Métodos de pago"
@@ -95,7 +96,6 @@ export default function ProfilePage({
           {activeTab === "reservas" && <ReservasView />}
           {activeTab === "pagos" && <PagosView />}
         </main>
-
       </div>
 
       {/* MODALS */}
@@ -116,4 +116,4 @@ export default function ProfilePage({
       />
     </div>
   );
-};
+}

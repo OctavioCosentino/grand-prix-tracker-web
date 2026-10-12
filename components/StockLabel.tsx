@@ -14,20 +14,21 @@ export default function StockLabel({
   lowThreshold = 5,
   className,
 }: StockLabelProps) {
-  const baseClass = className || "font-mono text-[10px] uppercase tracking-wider";
+  const baseClass =
+    className || "font-mono text-[10px] uppercase tracking-wider";
 
   if (stock === 0) {
-    return (
-      <span className={`${baseClass} text-[#E10600]`}>
-        Agotado
-      </span>
-    );
+    return <span className={`${baseClass} text-[#E10600]`}>Agotado</span>;
   }
 
   return (
     <span
       className={`${baseClass} ${
-        stock <= lowThreshold ? "text-[#E7B33C]" : className ? "" : "text-[#5C5D66]"
+        stock <= lowThreshold
+          ? "text-[#E7B33C]"
+          : className
+            ? ""
+            : "text-[#5C5D66]"
       }`}
     >
       {stock <= lowThreshold ? "Últimos " : ""}

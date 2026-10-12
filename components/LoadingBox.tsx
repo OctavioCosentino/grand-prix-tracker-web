@@ -19,7 +19,9 @@ export default function LoadingBox({
 
   const resolvedMinHeight =
     minHeight ??
-    (className.includes("min-h-") || className.includes("h-") || className.includes("flex-1")
+    (className.includes("min-h-") ||
+    className.includes("h-") ||
+    className.includes("flex-1")
       ? ""
       : "min-h-[200px]");
 

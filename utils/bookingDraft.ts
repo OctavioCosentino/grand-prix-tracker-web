@@ -16,7 +16,11 @@ interface BookingDraft {
   state: BookingState;
 }
 
-export function saveBookingDraft(userId: string, eventId: string, state: BookingState): void {
+export function saveBookingDraft(
+  userId: string,
+  eventId: string,
+  state: BookingState,
+): void {
   try {
     const draft: BookingDraft = { userId, eventId, state };
     sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
@@ -26,7 +30,10 @@ export function saveBookingDraft(userId: string, eventId: string, state: Booking
 }
 
 /** Solo devuelve el borrador si es del mismo usuario y del mismo evento. */
-export function loadBookingDraft(userId: string, eventId: string): BookingState | null {
+export function loadBookingDraft(
+  userId: string,
+  eventId: string,
+): BookingState | null {
   try {
     const raw = sessionStorage.getItem(DRAFT_KEY);
     if (!raw) return null;

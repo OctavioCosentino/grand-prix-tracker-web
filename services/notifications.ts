@@ -59,12 +59,16 @@ export function isMockOrder(item: NotificationItem): boolean {
   if (item.idNotificacion === "mock-1") return true;
   if (item.idNotificacion.startsWith("mock")) return true;
   if (item.titulo.includes("GP-8492")) return true;
-  if (item.urlDestino === "#como-funciona" || item.urlDestino === "#servicios") return true;
-  if (item.mensaje.includes("Paddock Pass") && item.mensaje.includes("Brasil")) return true;
+  if (item.urlDestino === "#como-funciona" || item.urlDestino === "#servicios")
+    return true;
+  if (item.mensaje.includes("Paddock Pass") && item.mensaje.includes("Brasil"))
+    return true;
   return false;
 }
 
-export function deduplicateNotifications(items: NotificationItem[]): NotificationItem[] {
+export function deduplicateNotifications(
+  items: NotificationItem[],
+): NotificationItem[] {
   const seenIds = new Set<string>();
   const result: NotificationItem[] = [];
 
@@ -73,10 +77,7 @@ export function deduplicateNotifications(items: NotificationItem[]): Notificatio
 
     // Normalizar cualquier notificación previa que diga "Pedido" para que diga "Compra"
     let item = rawItem;
-    if (
-      item.tipo === "ORDER_CONFIRMATION" &&
-      item.titulo.includes("Pedido")
-    ) {
+    if (item.tipo === "ORDER_CONFIRMATION" && item.titulo.includes("Pedido")) {
       item = {
         ...item,
         titulo: item.titulo
@@ -91,7 +92,9 @@ export function deduplicateNotifications(items: NotificationItem[]): Notificatio
   }
 
   // Ordenar de más reciente a más antigua
-  result.sort((a, b) => new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime());
+  result.sort(
+    (a, b) => new Date(b.creadoEn).getTime() - new Date(a.creadoEn).getTime(),
+  );
 
   return result;
 }
@@ -143,20 +146,20 @@ export function getStoredNotifications(userId?: string): NotificationItem[] {
 
 export function saveStoredNotifications(
   items: NotificationItem[],
-  userId?: string
+  userId?: string,
 ): void {
   if (typeof window === "undefined") return;
   try {
     const deduped = deduplicateNotifications(items);
     localStorage.setItem(getStorageKey(userId), JSON.stringify(deduped));
     window.dispatchEvent(
-      new CustomEvent("gpt_notifications_changed", { detail: deduped })
+      new CustomEvent("gpt_notifications_changed", { detail: deduped }),
     );
   } catch {}
 }
 
 export async function addNotification(
-  dto: CreateNotificationDto
+  dto: CreateNotificationDto,
 ): Promise<NotificationItem> {
   const localNotif: NotificationItem = {
     idNotificacion: `notif-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
@@ -170,13 +173,16 @@ export async function addNotification(
 
   const userId = dto.idUsuario ?? undefined;
   const current = getStoredNotifications(userId);
-  const updated = [localNotif, ...current.filter((n) => n.idNotificacion !== localNotif.idNotificacion)];
+  const updated = [
+    localNotif,
+    ...current.filter((n) => n.idNotificacion !== localNotif.idNotificacion),
+  ];
   saveStoredNotifications(updated, userId);
 
   // Notificar evento específico de nueva notificación (para toast y sonido)
   if (typeof window !== "undefined") {
     window.dispatchEvent(
-      new CustomEvent("gpt_notification_added", { detail: localNotif })
+      new CustomEvent("gpt_notification_added", { detail: localNotif }),
     );
   }
 
@@ -192,7 +198,7 @@ export async function addNotification(
       const synched = updated.map((n) =>
         n.idNotificacion === localNotif.idNotificacion
           ? { ...n, idNotificacion: remote.idNotificacion }
-          : n
+          : n,
       );
       saveStoredNotifications(synched, userId);
       return remote;
@@ -207,17 +213,20 @@ export async function addNotification(
 const SIMULATED_OFFERS = [
   {
     titulo: "Oferta Relámpago",
-    mensaje: "¡15% OFF en entradas VIP para el GP de Las Vegas por tiempo limitado!",
+    mensaje:
+      "¡15% OFF en entradas VIP para el GP de Las Vegas por tiempo limitado!",
     urlDestino: "/calendar",
   },
   {
     titulo: "Promo Exclusiva: Paddock Club",
-    mensaje: "2x1 en pases de hospitality para el GP de Silverstone reservando hoy.",
+    mensaje:
+      "2x1 en pases de hospitality para el GP de Silverstone reservando hoy.",
     urlDestino: "/calendar",
   },
   {
     titulo: "Tarifa Especial en Hoteles",
-    mensaje: "Hasta 25% de descuento en hoteles seleccionados cercanos al circuito de Monza.",
+    mensaje:
+      "Hasta 25% de descuento en hoteles seleccionados cercanos al circuito de Monza.",
     urlDestino: "/calendar",
   },
   {
@@ -227,7 +236,8 @@ const SIMULATED_OFFERS = [
   },
   {
     titulo: "Acceso VIP a Boxes",
-    mensaje: "Pase libre a boxes antes de la clasificación en Spa con tu reserva.",
+    mensaje:
+      "Pase libre a boxes antes de la clasificación en Spa con tu reserva.",
     urlDestino: "/calendar",
   },
 ];
@@ -235,9 +245,10 @@ const SIMULATED_OFFERS = [
 let simulatedOfferCursor = 0;
 
 export async function simulateOfferNotification(
-  userId?: string
+  userId?: string,
 ): Promise<NotificationItem> {
-  const offer = SIMULATED_OFFERS[simulatedOfferCursor % SIMULATED_OFFERS.length];
+  const offer =
+    SIMULATED_OFFERS[simulatedOfferCursor % SIMULATED_OFFERS.length];
   simulatedOfferCursor++;
 
   return addNotification({
@@ -252,11 +263,13 @@ export async function simulateOfferNotification(
 
 export async function fetchNotifications(
   userId?: string,
-  unreadOnly: boolean = false
+  unreadOnly: boolean = false,
 ): Promise<NotificationItem[]> {
   const isUuid =
     userId &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      userId,
+    );
 
   const params = new URLSearchParams();
   if (isUuid) params.append("userId", userId);
@@ -265,7 +278,9 @@ export async function fetchNotifications(
   const url = `${API_BASE_URL}/notifications${params.toString() ? `?${params.toString()}` : ""}`;
   const res = await fetch(url, { signal: AbortSignal.timeout(4500) });
   if (!res.ok) {
-    throw new Error(`Error ${res.status}: No se pudieron obtener las notificaciones`);
+    throw new Error(
+      `Error ${res.status}: No se pudieron obtener las notificaciones`,
+    );
   }
   const json: ApiResponse<NotificationItem[]> = await res.json();
   return json.data || [];
@@ -274,7 +289,9 @@ export async function fetchNotifications(
 export async function fetchUnreadCount(userId?: string): Promise<number> {
   const isUuid =
     userId &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      userId,
+    );
 
   const url = isUuid
     ? `${API_BASE_URL}/notifications/unread-count?userId=${encodeURIComponent(userId)}`
@@ -291,7 +308,7 @@ export async function fetchUnreadCount(userId?: string): Promise<number> {
 }
 
 export async function createNotification(
-  dto: CreateNotificationDto
+  dto: CreateNotificationDto,
 ): Promise<NotificationItem> {
   const res = await fetch(`${API_BASE_URL}/notifications`, {
     method: "POST",
@@ -339,17 +356,19 @@ export async function markAsRead(id: string): Promise<NotificationItem> {
 
 export async function markAllAsRead(
   unreadItems: NotificationItem[],
-  userId?: string
+  userId?: string,
 ): Promise<void> {
   const isUuid =
     userId &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      userId,
+    );
 
   if (isUuid) {
     try {
       const res = await fetch(
         `${API_BASE_URL}/notifications/read-all?userId=${encodeURIComponent(userId)}`,
-        { method: "PATCH", signal: AbortSignal.timeout(4000) }
+        { method: "PATCH", signal: AbortSignal.timeout(4000) },
       );
       if (res.ok) return;
     } catch {}
@@ -357,8 +376,8 @@ export async function markAllAsRead(
 
   const remoteItems = unreadItems.filter((item) =>
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      item.idNotificacion
-    )
+      item.idNotificacion,
+    ),
   );
 
   await Promise.allSettled(
@@ -366,7 +385,7 @@ export async function markAllAsRead(
       fetch(`${API_BASE_URL}/notifications/${item.idNotificacion}/read`, {
         method: "PATCH",
         signal: AbortSignal.timeout(4000),
-      })
-    )
+      }),
+    ),
   );
 }

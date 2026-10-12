@@ -9,10 +9,10 @@ import Home from "./Home";
 import ProfileCircle from "./ProfileCircle";
 
 export interface NavbarProps {
-    scrolled: boolean;
-    menuOpen: boolean;
-    setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+  scrolled: boolean;
+  menuOpen: boolean;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 import { NotificationBell } from "./NotificationBell";
 import { useAuth } from "./providers/AuthProvider";
@@ -20,96 +20,100 @@ import { useProfile } from "@/hooks/useProfile";
 import { getDisplayName } from "@/utils/auth";
 import ThemeToggle from "./ThemeToggle";
 
-export default function Navbar({scrolled, menuOpen, setMenuOpen}: NavbarProps) {
-    const router = useRouter();
-    const { user, isLoading } = useAuth();
-    const { profile } = useProfile();
-    const isLogged = Boolean(user);
-    const name = user ? getDisplayName(user) : undefined;
+export default function Navbar({
+  scrolled,
+  menuOpen,
+  setMenuOpen,
+}: NavbarProps) {
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+  const { profile } = useProfile();
+  const isLogged = Boolean(user);
+  const name = user ? getDisplayName(user) : undefined;
 
-    return (
-        <header
-            className={
-            "fixed inset-x-0 top-0 z-50 transition-colors duration-300 " +
-            (scrolled
-                ? "bg-[#0B0B10]/90 backdrop-blur border-b border-[#1C1D24]"
-                : "bg-transparent border-b border-transparent")
-            }
-        >
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-            <Home />
+  return (
+    <header
+      className={
+        "fixed inset-x-0 top-0 z-50 transition-colors duration-300 " +
+        (scrolled
+          ? "bg-[#0B0B10]/90 backdrop-blur border-b border-[#1C1D24]"
+          : "bg-transparent border-b border-transparent")
+      }
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <Home />
 
-            <nav className="hidden items-center gap-8 md:flex">
-                {NAV_LINKS.map((link) => (
-                <a
-                    key={link.href}
-                    href={link.href}
-                    className="group relative text-sm text-[#D8D7CE] transition-colors hover:text-[#F3F1EA]"
-                >
-                    {link.label}
-                    <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#E10600] transition-all duration-300 group-hover:w-full" />
-                </a>
-                ))}
-            </nav>
+        <nav className="hidden items-center gap-8 md:flex">
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="group relative text-sm text-[#D8D7CE] transition-colors hover:text-[#F3F1EA]"
+            >
+              {link.label}
+              <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#E10600] transition-all duration-300 group-hover:w-full" />
+            </a>
+          ))}
+        </nav>
 
-            <div className="hidden md:flex items-center gap-4">
-                {isLogged && <NotificationBell />}
-                {/* Sin esperar la sesión, se vería "Iniciar sesión" un instante aunque estés logueado */}
-                {!isLoading && (
-                    <ProfileCircle 
-                        isLoggedIn={isLogged} 
-                        name={name} 
-                        color={profile?.color}
-                        onLoginClick={() => router.push("/login")}
-                        onProfileClick={() => router.push("/profile")}
-                    />
-                )}
-                <ThemeToggle />
-            </div>
+        <div className="hidden md:flex items-center gap-4">
+          {isLogged && <NotificationBell />}
+          {/* Sin esperar la sesión, se vería "Iniciar sesión" un instante aunque estés logueado */}
+          {!isLoading && (
+            <ProfileCircle
+              isLoggedIn={isLogged}
+              name={name}
+              color={profile?.color}
+              onLoginClick={() => router.push("/login")}
+              onProfileClick={() => router.push("/profile")}
+            />
+          )}
+          <ThemeToggle />
+        </div>
 
-            <div className="flex items-center gap-3 md:hidden">
-                <ThemeToggle />
-                {isLogged && <NotificationBell />}
-                <button
-                    aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-                    onClick={() => setMenuOpen((v) => !v)}
-                    className="text-[#F3F1EA]"
-                >
-                    {menuOpen ? (
-                        <IconClose className="h-6 w-6" />
-                        ) : (
-                        <IconMenu className="h-6 w-6" />
-                    )}
-                </button>
-            </div>
-            </div>
-
-            {/* Menu */}
-            {menuOpen && (
-                <div className="border-t border-[#1C1D24] bg-[#0B0B10] px-6 pb-6 md:hidden">
-                <nav className="flex flex-col gap-4 pt-4">
-                    {NAV_LINKS.map((link) => (
-                    <a
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setMenuOpen(false)}
-                        className="text-sm text-[#D8D7CE] hover:text-[#F3F1EA]"
-                    >
-                        {link.label}
-                    </a>
-                    ))}
-                    {!isLoading && (
-                        <ProfileCircle 
-                            isLoggedIn={isLogged} 
-                            name={name} 
-                            color={profile?.color}
-                            onLoginClick={() => router.push("/login")}
-                            onProfileClick={() => router.push("/profile")}
-                        />
-                    )}
-                </nav>
-                </div>
+        <div className="flex items-center gap-3 md:hidden">
+          <ThemeToggle />
+          {isLogged && <NotificationBell />}
+          <button
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+            onClick={() => setMenuOpen((v) => !v)}
+            className="text-[#F3F1EA]"
+          >
+            {menuOpen ? (
+              <IconClose className="h-6 w-6" />
+            ) : (
+              <IconMenu className="h-6 w-6" />
             )}
-        </header>
-    );
+          </button>
+        </div>
+      </div>
+
+      {/* Menu */}
+      {menuOpen && (
+        <div className="border-t border-[#1C1D24] bg-[#0B0B10] px-6 pb-6 md:hidden">
+          <nav className="flex flex-col gap-4 pt-4">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="text-sm text-[#D8D7CE] hover:text-[#F3F1EA]"
+              >
+                {link.label}
+              </a>
+            ))}
+            {!isLoading && (
+              <ProfileCircle
+                isLoggedIn={isLogged}
+                name={name}
+                color={profile?.color}
+                onLoginClick={() => router.push("/login")}
+                onProfileClick={() => router.push("/profile")}
+              />
+            )}
+          </nav>
+        </div>
+      )}
+    </header>
+  );
 }
