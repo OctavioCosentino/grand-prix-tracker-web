@@ -60,7 +60,6 @@ const STEP_INTRO: Record<BookingStep, string> = {
 function getSubmitErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
     if (error.isValidationError) {
-      // Mensaje técnico del back: solo para debug
       console.error("Checkout rechazado por validación:", error.message);
       return "No pudimos procesar la reserva con los datos ingresados. Revisá el paquete e intentá de nuevo.";
     }

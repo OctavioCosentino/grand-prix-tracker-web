@@ -600,3 +600,10 @@ html.light .gpt-outline-btn:hover {
   color: #E10600 !important;
   background-color: rgba(225, 6, 0, 0.05) !important;
 }
+
+/* Banner de Error en Formularios de Auth (Modo Claro) */
+html.light .auth-error-banner {
+  background-color: rgba(225, 6, 0, 0.06) !important;
+  border-color: rgba(225, 6, 0, 0.25) !important;
+  border-left-color: #E10600 !important;
+}
