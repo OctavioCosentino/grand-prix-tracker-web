@@ -10,11 +10,10 @@ export const DESTINATIONS = [
   },
   {
     id: "b3ebbdfa-a64b-4e3f-a0a8-782af0b5b472",
-    name: "Austin",
-    circuit: "Circuit of the Americas",
-    img: "/races/austin.webp",
-    blurb:
-      "Peraltes, desnivel y un ambiente que mezcla previa de fútbol americano con paddock de Fórmula 1.",
+    name: "Interlagos",
+    circuit: "Autódromo José Carlos Pace",
+    img: "/races/interlagos.webp",
+    blurb: "Carreras impredecibles, clima cambiante y la 'S' de Senna.",
     badge: "Favorito del público",
   },
 ];
