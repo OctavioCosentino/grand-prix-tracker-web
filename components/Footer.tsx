@@ -11,8 +11,8 @@ export default function Footer() {
           <div>
             <Home disableHoverScale={true} />
             <p className="mt-4 max-w-xs text-sm text-[#5C5D66]">
-              Hoteles, translados, entradas y vuelos para tu próximo Gran
-              Premio, en un solo lugar.
+              Hoteles, traslados, entradas y vuelos para tu próximo Gran Premio,
+              en un solo lugar.
             </p>
           </div>
 
