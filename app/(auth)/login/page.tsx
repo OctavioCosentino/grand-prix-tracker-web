@@ -8,6 +8,7 @@ import PasswordInput from "@/components/PasswordInput";
 import ButtonChecker from "@/components/ButtonChecker";
 import ForgotPasswordModal from "@/components/ForgotPasswordModal";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
+import AuthErrorMessage from "@/components/AuthErrorMessage";
 import { createClient } from "@/lib/supabase/client";
 import { authErrorMessage, safeNextPath } from "@/utils/auth";
 
@@ -118,12 +119,10 @@ export default function LoginPage({
             </div>
 
             {error && (
-              <span
-                role="alert"
-                className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]"
-              >
-                ✕ {error}
-              </span>
+              <AuthErrorMessage
+                message={error}
+                title="Error de autenticación"
+              />
             )}
 
             <ButtonChecker

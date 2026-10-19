@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import EmailInput from "@/components/EmailInput";
 import ButtonChecker from "@/components/ButtonChecker";
+import AuthErrorMessage from "@/components/AuthErrorMessage";
 import { createClient } from "@/lib/supabase/client";
 import { authErrorMessage } from "@/utils/auth";
 
@@ -91,9 +92,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }: ForgotPasswordM
                 placeholder="piloto@escuderia.com"
               />
               {error && (
-                <span role="alert" className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]">
-                  ✕ {error}
-                </span>
+                <AuthErrorMessage message={error} title="Error al enviar correo" />
               )}
               <ButtonChecker
                 type="submit"

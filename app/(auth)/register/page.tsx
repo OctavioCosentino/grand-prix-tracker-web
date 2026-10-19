@@ -7,6 +7,7 @@ import EmailInput from "@/components/EmailInput";
 import PasswordInput from "@/components/PasswordInput";
 import ButtonChecker from "@/components/ButtonChecker";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
+import AuthErrorMessage from "@/components/AuthErrorMessage";
 import PasswordStrengthMeter from "@/components/PasswordStrengthMeter";
 import PasswordRequirements from "@/utils/passwordRequirements";
 import { createClient } from "@/lib/supabase/client";
@@ -152,12 +153,7 @@ export default function RegisterPage() {
             </div>
 
             {error && (
-              <span
-                role="alert"
-                className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#E10600]"
-              >
-                ✕ {error}
-              </span>
+              <AuthErrorMessage message={error} title="Error de registro" />
             )}
 
             {awaitingConfirmation && (
