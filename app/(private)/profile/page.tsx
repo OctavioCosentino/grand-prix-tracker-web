@@ -91,7 +91,7 @@ export default function ProfilePage({
           </button>
         </aside>
 
-        <main className="flex-grow rounded-md border-0 sm:border border-[#1C1D24] bg-transparent sm:bg-[#0E0E13] p-0 sm:p-8 sm:shadow-2xl flex flex-col">
+        <main className="profile-main-container flex-grow rounded-md border-0 sm:border border-[#1C1D24] bg-transparent sm:bg-[#0E0E13] p-0 sm:p-8 sm:shadow-2xl flex flex-col">
           {activeTab === "datos" && <DatosView />}
           {activeTab === "reservas" && <ReservasView />}
           {activeTab === "pagos" && <PagosView />}

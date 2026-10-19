@@ -380,7 +380,7 @@ export default function DatosView() {
   if (isPending && !profile) {
     return (
       <div className="animate-in fade-in duration-300">
-        <h3 className="font-display mb-6 text-2xl font-900 tracking-tight">
+        <h3 className="font-display mb-6 text-2xl font-900 tracking-tight text-[#F3F1EA]">
           Telemetría del Piloto
         </h3>
         <div className="py-16 text-center font-mono text-xs text-[#93949F]">
@@ -392,7 +392,7 @@ export default function DatosView() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-      <h3 className="font-display mb-6 text-2xl font-900 tracking-tight">
+      <h3 className="font-display mb-6 text-2xl font-900 tracking-tight text-[#F3F1EA]">
         Telemetría del Piloto
       </h3>
       <DatosForm

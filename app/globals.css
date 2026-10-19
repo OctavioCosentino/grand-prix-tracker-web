@@ -217,6 +217,12 @@ html.light .bg-\[\#0E0E13\] {
 html.light .bg-\[\#0E0E13\]\/80 {
   background-color: rgba(236, 238, 242, 0.85) !important;
 }
+@media (min-width: 640px) {
+  html.light .sm\:bg-\[\#0E0E13\],
+  html.light .profile-main-container {
+    background-color: #eceef2 !important;
+  }
+}
 
 /* Bloques de asfalto / microcontenedores */
 html.light .bg-\[\#1C1D24\] {

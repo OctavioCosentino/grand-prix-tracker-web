@@ -59,7 +59,7 @@ export default function PagosView() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-      <h3 className="font-display mb-6 text-2xl font-900 tracking-tight">
+      <h3 className="font-display mb-6 text-2xl font-900 tracking-tight text-[#F3F1EA]">
         Caja de Herramientas
       </h3>
 

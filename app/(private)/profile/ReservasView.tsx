@@ -14,7 +14,7 @@ function Group({ title, reservas }: { title: string; reservas: Reserva[] }) {
   if (!reservas.length) return null;
   return (
     <section className="mb-10">
-      <h3 className="font-display mb-6 text-2xl font-900 tracking-tight">
+      <h3 className="font-display mb-6 text-2xl font-900 tracking-tight text-[#F3F1EA]">
         {title}
       </h3>
       {reservas.map((reserva) => (
