@@ -11,6 +11,7 @@ import {
   purgeMockOrders,
   playNotificationSound,
 } from "@/services/notifications";
+import { isInternalPath } from "@/utils/auth";
 
 let lastToastTime = 0;
 
@@ -286,7 +287,8 @@ export function NotificationBell() {
                   key={notif.idNotificacion}
                   onClick={() => {
                     if (!notif.leido) handleMarkAsRead(notif.idNotificacion);
-                    if (notif.urlDestino) {
+                    // Solo rutas internas: urlDestino viene del back o de localStorage
+                    if (isInternalPath(notif.urlDestino)) {
                       setIsOpen(false);
                       router.push(notif.urlDestino);
                     }

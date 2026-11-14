@@ -1,4 +1,6 @@
 import { NotificationItem, NotificationType } from "@/app/types/notification";
+import { createClient } from "@/lib/supabase/client";
+import { getClientAuthHeaders } from "@/services/http";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
@@ -261,22 +263,44 @@ export async function simulateOfferNotification(
   });
 }
 
+/**
+ * Headers con el access token de la sesión de Supabase. El back toma el usuario
+ * del JWT. Devuelve null si no hay sesión: en ese caso no se llama al back y se
+ * sigue con lo local (localStorage).
+ *
+ * No usa authFetch a propósito: las notificaciones se consultan en segundo plano
+ * y un 401 no debe mandar al login; los fallos se manejan en silencio.
+ */
+async function getNotificationAuthHeaders(): Promise<Record<
+  string,
+  string
+> | null> {
+  try {
+    const {
+      data: { session },
+    } = await createClient().auth.getSession();
+    return session ? getClientAuthHeaders(session.access_token) : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchNotifications(
-  userId?: string,
   unreadOnly: boolean = false,
 ): Promise<NotificationItem[]> {
-  const isUuid =
-    userId &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      userId,
-    );
+  const authHeaders = await getNotificationAuthHeaders();
+  if (!authHeaders) {
+    throw new Error("Sin sesión: se usan las notificaciones locales");
+  }
 
   const params = new URLSearchParams();
-  if (isUuid) params.append("userId", userId);
   if (unreadOnly) params.append("unreadOnly", "true");
 
   const url = `${API_BASE_URL}/notifications${params.toString() ? `?${params.toString()}` : ""}`;
-  const res = await fetch(url, { signal: AbortSignal.timeout(4500) });
+  const res = await fetch(url, {
+    headers: authHeaders,
+    signal: AbortSignal.timeout(4500),
+  });
   if (!res.ok) {
     throw new Error(
       `Error ${res.status}: No se pudieron obtener las notificaciones`,
@@ -286,19 +310,15 @@ export async function fetchNotifications(
   return json.data || [];
 }
 
-export async function fetchUnreadCount(userId?: string): Promise<number> {
-  const isUuid =
-    userId &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      userId,
-    );
-
-  const url = isUuid
-    ? `${API_BASE_URL}/notifications/unread-count?userId=${encodeURIComponent(userId)}`
-    : `${API_BASE_URL}/notifications/unread-count`;
-
+export async function fetchUnreadCount(): Promise<number> {
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(3500) });
+    const authHeaders = await getNotificationAuthHeaders();
+    if (!authHeaders) return 0;
+
+    const res = await fetch(`${API_BASE_URL}/notifications/unread-count`, {
+      headers: authHeaders,
+      signal: AbortSignal.timeout(3500),
+    });
     if (!res.ok) return 0;
     const json: ApiResponse<{ unreadCount: number }> = await res.json();
     return json.data?.unreadCount ?? 0;
@@ -310,9 +330,14 @@ export async function fetchUnreadCount(userId?: string): Promise<number> {
 export async function createNotification(
   dto: CreateNotificationDto,
 ): Promise<NotificationItem> {
+  const authHeaders = await getNotificationAuthHeaders();
+  if (!authHeaders) {
+    throw new Error("Sin sesión: la notificación queda solo local");
+  }
+
   const res = await fetch(`${API_BASE_URL}/notifications`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...authHeaders },
     body: JSON.stringify(dto),
     signal: AbortSignal.timeout(4500),
   });
@@ -331,13 +356,17 @@ export async function markAsRead(id: string): Promise<NotificationItem> {
 
   if (isUuid) {
     try {
-      const res = await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
-        method: "PATCH",
-        signal: AbortSignal.timeout(4000),
-      });
-      if (res.ok) {
-        const json: ApiResponse<NotificationItem> = await res.json();
-        return json.data;
+      const authHeaders = await getNotificationAuthHeaders();
+      if (authHeaders) {
+        const res = await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
+          method: "PATCH",
+          headers: authHeaders,
+          signal: AbortSignal.timeout(4000),
+        });
+        if (res.ok) {
+          const json: ApiResponse<NotificationItem> = await res.json();
+          return json.data;
+        }
       }
     } catch {
       // Si la API falla, offline o timeout, consideramos marcada localmente sin romper el cliente
@@ -356,23 +385,19 @@ export async function markAsRead(id: string): Promise<NotificationItem> {
 
 export async function markAllAsRead(
   unreadItems: NotificationItem[],
-  userId?: string,
 ): Promise<void> {
-  const isUuid =
-    userId &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      userId,
-    );
+  const authHeaders = await getNotificationAuthHeaders();
+  // Sin sesión: ya quedaron marcadas en local, no se llama al back
+  if (!authHeaders) return;
 
-  if (isUuid) {
-    try {
-      const res = await fetch(
-        `${API_BASE_URL}/notifications/read-all?userId=${encodeURIComponent(userId)}`,
-        { method: "PATCH", signal: AbortSignal.timeout(4000) },
-      );
-      if (res.ok) return;
-    } catch {}
-  }
+  try {
+    const res = await fetch(`${API_BASE_URL}/notifications/read-all`, {
+      method: "PATCH",
+      headers: authHeaders,
+      signal: AbortSignal.timeout(4000),
+    });
+    if (res.ok) return;
+  } catch {}
 
   const remoteItems = unreadItems.filter((item) =>
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
@@ -384,6 +409,7 @@ export async function markAllAsRead(
     remoteItems.map((item) =>
       fetch(`${API_BASE_URL}/notifications/${item.idNotificacion}/read`, {
         method: "PATCH",
+        headers: authHeaders,
         signal: AbortSignal.timeout(4000),
       }),
     ),

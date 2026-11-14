@@ -1,19 +1,26 @@
 import type { AuthError, User } from "@supabase/supabase-js";
 
 /**
+ * True si `path` es una ruta interna de la app: empieza con "/" pero no con
+ * "//" ni "/\" (que el navegador interpreta como URL de otro host).
+ */
+export function isInternalPath(
+  path: string | null | undefined,
+): path is string {
+  return (
+    !!path &&
+    path.startsWith("/") &&
+    !path.startsWith("//") &&
+    !path.startsWith("/\\")
+  );
+}
+
+/**
  * Valida el `?next=` al que se vuelve después de loguearse. Solo acepta paths
  * internos, para que un link armado no pueda mandar al usuario a otro sitio.
  */
 export function safeNextPath(next: string | null | undefined): string {
-  if (
-    !next ||
-    !next.startsWith("/") ||
-    next.startsWith("//") ||
-    next.startsWith("/\\")
-  ) {
-    return "/";
-  }
-  return next;
+  return isInternalPath(next) ? next : "/";
 }
 
 /** Mensaje apto para el usuario a partir de un error de Supabase Auth. */

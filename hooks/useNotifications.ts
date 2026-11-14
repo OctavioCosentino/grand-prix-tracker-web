@@ -43,7 +43,7 @@ export function useNotifications(userId?: string) {
     queryFn: async () => {
       const local = getStoredNotifications(userId);
       try {
-        const remote = await fetchNotifications(userId);
+        const remote = await fetchNotifications();
         // Priorizar las locales para conservar estado leído y nuevas ofertas/compras inmediatas
         const merged = deduplicateNotifications([...local, ...remote]);
         if (typeof window !== "undefined") {
@@ -89,7 +89,7 @@ export function useNotifications(userId?: string) {
 
   const markAllReadMutation = useMutation({
     mutationFn: async (unreadItems: NotificationItem[]) => {
-      return markAllAsRead(unreadItems, userId);
+      return markAllAsRead(unreadItems);
     },
     onMutate: async () => {
       await queryClient.cancelQueries({
