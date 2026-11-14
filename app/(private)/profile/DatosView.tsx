@@ -10,6 +10,7 @@ import { UserProfile, UpdateProfilePayload } from "@/services/users";
 import TireShelfPicker from "@/components/TireShelfPicker";
 import type { User } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
+import { ApiError } from "@/services/http";
 
 function formatDni(value: string | number): string {
   const digits = String(value).replace(/\D/g, "").slice(0, 8);
@@ -195,7 +196,13 @@ function DatosForm({
         },
         onError: (error) => {
           console.error("Error saving profile:", error);
-          toast.error("Error al actualizar el perfil", { icon: "⚠️" });
+          const message =
+            error instanceof ApiError
+              ? error.isValidationError
+                ? "Revisá los datos ingresados"
+                : error.message
+              : "Error al actualizar el perfil";
+          toast.error(message, { icon: "⚠️" });
         },
       },
     );
