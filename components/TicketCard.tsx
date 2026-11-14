@@ -1,6 +1,6 @@
 import React from "react";
 import { Entrada } from "@/services/tickets";
-import { formatUsd } from "@/utils/booking";
+import { formatUsd, MAX_CANTIDAD_POR_ITEM } from "@/utils/booking";
 import QuantityStepper from "./QuantityStepper";
 import StockLabel from "./StockLabel";
 import { tireColors } from "@/utils/tireColors";
@@ -66,14 +66,21 @@ export default function TicketCard({
           </div>
           <span className="font-mono text-xs text-[#5C5D66]">/ entrada</span>
         </div>
-        <QuantityStepper
-          value={cantidad}
-          max={ticket.stockDisponible}
-          // Si se agotó con la entrada ya elegida, se permite bajar la cantidad
-          disabled={soldOut && cantidad === 0}
-          onChange={onChange}
-          label="Entradas"
-        />
+        <div className="flex flex-col items-end gap-1">
+          <QuantityStepper
+            value={cantidad}
+            max={Math.min(ticket.stockDisponible, MAX_CANTIDAD_POR_ITEM)}
+            // Si se agotó con la entrada ya elegida, se permite bajar la cantidad
+            disabled={soldOut && cantidad === 0}
+            onChange={onChange}
+            label="Entradas"
+          />
+          {cantidad >= MAX_CANTIDAD_POR_ITEM && (
+            <span className="font-mono text-[10px] text-[#93949F]">
+              Máximo {MAX_CANTIDAD_POR_ITEM} por compra
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

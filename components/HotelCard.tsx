@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Hotel } from "@/services/hotels";
-import { formatUsd } from "@/utils/booking";
+import { formatUsd, MAX_ITEMS_POR_TIPO } from "@/utils/booking";
 import QuantityStepper from "./QuantityStepper";
 import StockLabel from "./StockLabel";
 
@@ -36,6 +36,9 @@ export default function HotelCard({
     ),
   );
   const hasSelection = hotel.habitaciones.some((h) => selected[h.idHabitacion]);
+  // `selected` incluye las habitaciones de todos los hoteles: el tope es por compra
+  const totalRooms = Object.values(selected).reduce((acc, n) => acc + n, 0);
+  const roomsLeft = Math.max(0, MAX_ITEMS_POR_TIPO - totalRooms);
 
   return (
     <div
@@ -144,6 +147,9 @@ export default function HotelCard({
             const cantidad = selected[room.idHabitacion] ?? 0;
             const soldOut = room.stockDisponible === 0;
             const hasConflict = conflictIds.includes(room.idHabitacion);
+            // Hay stock para sumar una más, pero se llegó al tope de la compra
+            const atPurchaseLimit =
+              roomsLeft === 0 && cantidad < room.stockDisponible;
 
             return (
               <li
@@ -175,13 +181,20 @@ export default function HotelCard({
                       noches
                     </span>
                   </div>
-                  <QuantityStepper
-                    value={cantidad}
-                    max={room.stockDisponible}
-                    disabled={soldOut && cantidad === 0}
-                    onChange={(n) => onRoomChange(room.idHabitacion, n)}
-                    label="Habitaciones"
-                  />
+                  <div className="flex flex-col items-end gap-1">
+                    <QuantityStepper
+                      value={cantidad}
+                      max={Math.min(room.stockDisponible, cantidad + roomsLeft)}
+                      disabled={soldOut && cantidad === 0}
+                      onChange={(n) => onRoomChange(room.idHabitacion, n)}
+                      label="Habitaciones"
+                    />
+                    {atPurchaseLimit && (
+                      <span className="font-mono text-[10px] text-[#93949F]">
+                        Máximo {MAX_ITEMS_POR_TIPO} por compra
+                      </span>
+                    )}
+                  </div>
                 </div>
               </li>
             );

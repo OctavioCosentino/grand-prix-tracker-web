@@ -118,6 +118,15 @@ export function simulateCardToken(): string {
   return `tok_sim_${crypto.randomUUID()}`;
 }
 
+/* ======= TOPES POR COMPRA ===========
+ * Los aplica el back en POST /bookings (400 si se superan).
+ */
+
+/** Máximo de entradas por tribuna y de pasajeros por vuelo. */
+export const MAX_CANTIDAD_POR_ITEM = 10;
+/** Máximo de ítems en cada lista del POST (entradas, habitaciones, vuelos). */
+export const MAX_ITEMS_POR_TIPO = 10;
+
 /* ======= ESTADO DEL WIZARD =========== */
 
 export const BOOKING_STEPS = [
@@ -248,6 +257,11 @@ export function countTickets(state: BookingState): number {
   return Object.values(state.entradas).reduce((acc, n) => acc + n, 0);
 }
 
+/** Total de habitaciones elegidas. Cada una es un ítem del POST. */
+export function countRooms(state: BookingState): number {
+  return Object.values(state.habitaciones).reduce((acc, n) => acc + n, 0);
+}
+
 export function getPassengers(state: BookingState): number {
   return state.pasajeros ?? Math.max(1, countTickets(state));
 }
@@ -366,6 +380,13 @@ export function validateBooking(
     }
   }
 
+  if (countRooms(state) > MAX_ITEMS_POR_TIPO) {
+    issues.push({
+      step: "hotel",
+      message: `Podés reservar hasta ${MAX_ITEMS_POR_TIPO} habitaciones por compra.`,
+    });
+  }
+
   for (const ticket of catalog.tickets) {
     const cantidad = state.entradas[ticket.idEntrada];
     if (cantidad && cantidad > ticket.stockDisponible) {
@@ -376,11 +397,36 @@ export function validateBooking(
     }
   }
 
+  for (const [idEntrada, cantidad] of Object.entries(state.entradas)) {
+    if (cantidad > MAX_CANTIDAD_POR_ITEM) {
+      const ticket = catalog.tickets.find((t) => t.idEntrada === idEntrada);
+      issues.push({
+        step: "entradas",
+        message: `Podés comprar hasta ${MAX_CANTIDAD_POR_ITEM} entradas por tribuna${ticket ? ` (${ticket.nombreTribuna})` : ""}.`,
+      });
+    }
+  }
+
+  if (Object.keys(state.entradas).length > MAX_ITEMS_POR_TIPO) {
+    issues.push({
+      step: "entradas",
+      message: `Podés elegir hasta ${MAX_ITEMS_POR_TIPO} tribunas por compra.`,
+    });
+  }
+
   const pasajeros = getPassengers(state);
   if (!Number.isInteger(pasajeros) || pasajeros < 1) {
     issues.push({
       step: "vuelos",
       message: "La cantidad de pasajeros tiene que ser al menos 1.",
+    });
+  } else if (
+    (state.vueloIda || state.vueloVuelta) &&
+    pasajeros > MAX_CANTIDAD_POR_ITEM
+  ) {
+    issues.push({
+      step: "vuelos",
+      message: `Podés reservar vuelos para hasta ${MAX_CANTIDAD_POR_ITEM} pasajeros por compra.`,
     });
   }
   for (const id of [state.vueloIda, state.vueloVuelta]) {

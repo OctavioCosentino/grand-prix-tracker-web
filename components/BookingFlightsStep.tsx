@@ -3,7 +3,13 @@
 import React from "react";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Vuelo } from "@/services/flights";
-import { BookingAction, BookingState, countTickets, getPassengers } from "@/utils/booking";
+import {
+  BookingAction,
+  BookingState,
+  countTickets,
+  getPassengers,
+  MAX_CANTIDAD_POR_ITEM,
+} from "@/utils/booking";
 import FlightCard from "./FlightCard";
 import QuantityStepper from "./QuantityStepper";
 import EmptyState from "./EmptyState";
@@ -53,13 +59,20 @@ export default function BookingFlightsStep({
               : "Aplica a la ida y a la vuelta."}
           </p>
         </div>
-        <QuantityStepper
-          value={pasajeros}
-          min={1}
-          max={Math.max(maxSeats, pasajeros)}
-          onChange={(cantidad) => dispatch({ type: "setPassengers", cantidad })}
-          label="Pasajeros"
-        />
+        <div className="flex flex-col items-start gap-1 sm:items-end">
+          <QuantityStepper
+            value={pasajeros}
+            min={1}
+            max={Math.min(Math.max(maxSeats, pasajeros), MAX_CANTIDAD_POR_ITEM)}
+            onChange={(cantidad) => dispatch({ type: "setPassengers", cantidad })}
+            label="Pasajeros"
+          />
+          {pasajeros >= MAX_CANTIDAD_POR_ITEM && (
+            <span className="font-mono text-[10px] text-[#93949F]">
+              Máximo {MAX_CANTIDAD_POR_ITEM} por compra
+            </span>
+          )}
+        </div>
       </div>
 
       {flights.length === 0 ? (
