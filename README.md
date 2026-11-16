@@ -266,4 +266,4 @@ La experiencia visual está construida sobre una paleta cromática inspirada en 
 ### Microinteracciones y Rendimiento de Animación
 
 - **Aceleración por GPU:** Las animaciones visuales (como las líneas de velocidad `gpt-streak`, las marquesinas `gpt-marquee` y los halos de los neumáticos) operan sobre propiedades de transformación y opacidad (`transform`, `opacity`), evitando recalcular el diseño (*reflow*) y garantizando una tasa de refresco constante de 60/120 FPS.
-- **Tipografías Optimizadas:** Integración de fuentes Google Fonts mediante `next/font` con estrategia `display: swap` y variables CSS (`--font-display`, `--font-body`, `--font-mono`), eliminando el parpadeo de texto sin estilo (*FOUT*).
+- **Tipografías Optimizadas:** Integración de fuentes Google Fonts mediante `next/font` con estrategia `display: swap` y variables CSS (`--font-display`, `--font-body`, `--font-mono`), eliminando el parpadeo de texto sin estilo (*FOUT*),
